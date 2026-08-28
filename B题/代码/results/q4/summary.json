@@ -1,0 +1,922 @@
+{
+  "model_bayesian": "Q4-M2",
+  "model_robust": "Q4-M3",
+  "algorithms": [
+    "Q4-A1",
+    "Q4-A2"
+  ],
+  "evidence_marker": "DEMO_ONLY_NOT_OFFICIAL_DATA",
+  "sampling_plan": "fixed_n",
+  "policy_domains": {
+    "q2_per_case": 16,
+    "q3": 65536
+  },
+  "mc": {
+    "quick": false,
+    "explore_seed": 2024,
+    "confirm_seed": 12024,
+    "z_for_paired_gap": 3.0,
+    "plan": {
+      "q2": {
+        "explore_min": 5000,
+        "confirm_min": 2000,
+        "batch": 500,
+        "explore_max": 10000,
+        "confirm_max": 5000
+      },
+      "q3": {
+        "explore_min": 100,
+        "confirm_min": 100,
+        "batch": 20,
+        "explore_max": 1000,
+        "confirm_max": 1000
+      }
+    },
+    "rule": "仅当探索和独立确认最优策略相同，且两批最优—第二名配对差距均大于 3 倍配对 MC 标准误时为 SUCCESS_MC_TOL；否则 MC_NOT_CONVERGED。"
+  },
+  "checks": {
+    "evidence_schema_and_conditioning": "PASS",
+    "beta_posterior_parameters": "PASS",
+    "q2_nominal_evaluator_consistency": "PASS",
+    "q3_nominal_evaluator_consistency": "PASS",
+    "bayesian_optimal_frequency_sums_to_one": "PASS",
+    "bayesian_regret_nonnegative": "PASS",
+    "q2_full_policy_coverage": true,
+    "q3_full_policy_coverage": true,
+    "robust_worst_not_above_nominal": "PASS",
+    "demo_marker_written": true,
+    "q2_nominal_status_counts": {
+      "SUCCESS_EXACT": 60,
+      "NON_ABSORBING": 36
+    },
+    "q3_nominal_status_counts": {
+      "NON_ABSORBING": 48476,
+      "SUCCESS_EXACT": 17060
+    },
+    "max_q2_linear_residual": 6.505134606881982e-17,
+    "max_q3_local_residual": 1.7671503183206688e-16
+  },
+  "q2": {
+    "case_1": {
+      "bayesian": {
+        "uniform": {
+          "explore_best_bits": "1101",
+          "confirm_best_bits": "1101",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 1.0187366946079361,
+            "paired_mc_se": 0.014517675521969343,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 1.0254076123756146,
+            "paired_mc_se": 0.023450844953399105,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          }
+        },
+        "jeffreys": {
+          "explore_best_bits": "1101",
+          "confirm_best_bits": "1101",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.8244129545458527,
+            "paired_mc_se": 0.01404902431964893,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.8309861024987057,
+            "paired_mc_se": 0.022664992722722495,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          }
+        }
+      },
+      "robust": {
+        "90": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.045870556724087796,
+              0.18307901081197556
+            ],
+            "p2": [
+              0.045870556724087796,
+              0.18307901081197556
+            ],
+            "pf": [
+              0.045870556724087796,
+              0.18307901081197556
+            ]
+          }
+        },
+        "95": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.04119586025090358,
+              0.19418377920641908
+            ],
+            "p2": [
+              0.04119586025090358,
+              0.19418377920641908
+            ],
+            "pf": [
+              0.04119586025090358,
+              0.19418377920641908
+            ]
+          }
+        }
+      }
+    },
+    "case_2": {
+      "bayesian": {
+        "uniform": {
+          "explore_best_bits": "1101",
+          "confirm_best_bits": "1101",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 2.2091729723987283,
+            "paired_mc_se": 0.002713953734063686,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 2.212682611639896,
+            "paired_mc_se": 0.004393773710737838,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          }
+        },
+        "jeffreys": {
+          "explore_best_bits": "1101",
+          "confirm_best_bits": "1101",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 2.2243847136384707,
+            "paired_mc_se": 0.0026897983565595026,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 2.2265998073674345,
+            "paired_mc_se": 0.0043606620673080606,
+            "near_optimal_bits": [
+              "1101"
+            ]
+          }
+        }
+      },
+      "robust": {
+        "90": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.12150361354262595,
+              0.29976586184001947
+            ],
+            "p2": [
+              0.12150361354262595,
+              0.29976586184001947
+            ],
+            "pf": [
+              0.12150361354262595,
+              0.29976586184001947
+            ]
+          }
+        },
+        "95": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.11361675058609902,
+              0.31245182531573273
+            ],
+            "p2": [
+              0.11361675058609902,
+              0.31245182531573273
+            ],
+            "pf": [
+              0.11361675058609902,
+              0.31245182531573273
+            ]
+          }
+        }
+      }
+    },
+    "case_3": {
+      "bayesian": {
+        "uniform": {
+          "explore_best_bits": "1111",
+          "confirm_best_bits": "1111",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.2944221407070078,
+            "paired_mc_se": 0.015137334701971351,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.2899223881077635,
+            "paired_mc_se": 0.02343679432080824,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          }
+        },
+        "jeffreys": {
+          "explore_best_bits": "1111",
+          "confirm_best_bits": "1111",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.16333669359280556,
+            "paired_mc_se": 0.014759484981128734,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.15593902063556442,
+            "paired_mc_se": 0.022981386213742405,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          }
+        }
+      },
+      "robust": {
+        "90": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.045870556724087796,
+              0.18307901081197556
+            ],
+            "p2": [
+              0.045870556724087796,
+              0.18307901081197556
+            ],
+            "pf": [
+              0.045870556724087796,
+              0.18307901081197556
+            ]
+          }
+        },
+        "95": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.04119586025090358,
+              0.19418377920641908
+            ],
+            "p2": [
+              0.04119586025090358,
+              0.19418377920641908
+            ],
+            "pf": [
+              0.04119586025090358,
+              0.19418377920641908
+            ]
+          }
+        }
+      }
+    },
+    "case_4": {
+      "bayesian": {
+        "uniform": {
+          "explore_best_bits": "1111",
+          "confirm_best_bits": "1111",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 5.381052257611875,
+            "paired_mc_se": 0.025330234851261072,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 5.348295624694298,
+            "paired_mc_se": 0.04100855463355315,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          }
+        },
+        "jeffreys": {
+          "explore_best_bits": "1111",
+          "confirm_best_bits": "1111",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 5.239076006040932,
+            "paired_mc_se": 0.025104784661222023,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 5.218401797903942,
+            "paired_mc_se": 0.04069951262820856,
+            "near_optimal_bits": [
+              "1111"
+            ]
+          }
+        }
+      },
+      "robust": {
+        "90": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.12150361354262595,
+              0.29976586184001947
+            ],
+            "p2": [
+              0.12150361354262595,
+              0.29976586184001947
+            ],
+            "pf": [
+              0.12150361354262595,
+              0.29976586184001947
+            ]
+          }
+        },
+        "95": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.11361675058609902,
+              0.31245182531573273
+            ],
+            "p2": [
+              0.11361675058609902,
+              0.31245182531573273
+            ],
+            "pf": [
+              0.11361675058609902,
+              0.31245182531573273
+            ]
+          }
+        }
+      }
+    },
+    "case_5": {
+      "bayesian": {
+        "uniform": {
+          "explore_best_bits": "0110",
+          "confirm_best_bits": "0110",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.08254570448566056,
+            "paired_mc_se": 0.007073885625719679,
+            "near_optimal_bits": [
+              "0110"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.08404106023119873,
+            "paired_mc_se": 0.011170903706209455,
+            "near_optimal_bits": [
+              "0110"
+            ]
+          }
+        },
+        "jeffreys": {
+          "explore_best_bits": "0100",
+          "confirm_best_bits": "0100",
+          "status": "MC_NOT_CONVERGED",
+          "explore": {
+            "draws": 10000,
+            "batches": 20,
+            "stop_reason": "B_max_reached_without_gap_tolerance",
+            "gap": 0.006690173214533246,
+            "paired_mc_se": 0.004936474744872149,
+            "near_optimal_bits": [
+              "0100",
+              "0110"
+            ]
+          },
+          "confirm": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "B_max_reached_without_gap_tolerance",
+            "gap": 0.0007915331509043,
+            "paired_mc_se": 0.006890333255700142,
+            "near_optimal_bits": [
+              "0100",
+              "0110"
+            ]
+          }
+        }
+      },
+      "robust": {
+        "90": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.045870556724087796,
+              0.18307901081197556
+            ],
+            "p2": [
+              0.12150361354262595,
+              0.29976586184001947
+            ],
+            "pf": [
+              0.045870556724087796,
+              0.18307901081197556
+            ]
+          }
+        },
+        "95": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.04119586025090358,
+              0.19418377920641908
+            ],
+            "p2": [
+              0.11361675058609902,
+              0.31245182531573273
+            ],
+            "pf": [
+              0.04119586025090358,
+              0.19418377920641908
+            ]
+          }
+        }
+      }
+    },
+    "case_6": {
+      "bayesian": {
+        "uniform": {
+          "explore_best_bits": "1000",
+          "confirm_best_bits": "1000",
+          "status": "MC_NOT_CONVERGED",
+          "explore": {
+            "draws": 9500,
+            "batches": 19,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.030587737895569234,
+            "paired_mc_se": 0.009930862422722385,
+            "near_optimal_bits": [
+              "1000"
+            ]
+          },
+          "confirm": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "B_max_reached_without_gap_tolerance",
+            "gap": 0.039545311092410884,
+            "paired_mc_se": 0.013816169730427142,
+            "near_optimal_bits": [
+              "0000",
+              "1000"
+            ]
+          }
+        },
+        "jeffreys": {
+          "explore_best_bits": "0000",
+          "confirm_best_bits": "0000",
+          "status": "SUCCESS_MC_TOL",
+          "explore": {
+            "draws": 5000,
+            "batches": 10,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.16338792147929126,
+            "paired_mc_se": 0.012859350384955316,
+            "near_optimal_bits": [
+              "0000"
+            ]
+          },
+          "confirm": {
+            "draws": 2000,
+            "batches": 4,
+            "stop_reason": "gap_exceeds_3_paired_se",
+            "gap": 0.14138042113983573,
+            "paired_mc_se": 0.02082144014807029,
+            "near_optimal_bits": [
+              "0000"
+            ]
+          }
+        }
+      },
+      "robust": {
+        "90": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.014769078866146416,
+              0.11871223214172374
+            ],
+            "p2": [
+              0.014769078866146416,
+              0.11871223214172374
+            ],
+            "pf": [
+              0.014769078866146416,
+              0.11871223214172374
+            ]
+          }
+        },
+        "95": {
+          "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+          "counterexamples": [],
+          "structure_conditions": {
+            "fixed_strategy": true,
+            "perfect_detection": true,
+            "one_sale_revenue": true,
+            "real_quality_recovery": true,
+            "independent_defects": true,
+            "nonnegative_costs": true,
+            "no_extra_or_negative_income": true
+          },
+          "finite_difference_passed": true,
+          "intervals": {
+            "p1": [
+              0.01239359116324143,
+              0.12833698620661416
+            ],
+            "p2": [
+              0.01239359116324143,
+              0.12833698620661416
+            ],
+            "pf": [
+              0.01239359116324143,
+              0.12833698620661416
+            ]
+          }
+        }
+      }
+    }
+  },
+  "q3": {
+    "bayesian": {
+      "uniform": {
+        "explore_best_id": 63487,
+        "confirm_best_id": 63487,
+        "status": "SUCCESS_MC_TOL",
+        "explore": {
+          "draws": 100,
+          "batches": 5,
+          "stop_reason": "gap_exceeds_3_paired_se",
+          "gap": 1.8057727277012035,
+          "paired_mc_se": 0.12792350773258815,
+          "near_optimal_ids": [
+            63487
+          ]
+        },
+        "confirm": {
+          "draws": 100,
+          "batches": 5,
+          "stop_reason": "gap_exceeds_3_paired_se",
+          "gap": 1.5223178440288407,
+          "paired_mc_se": 0.15088802386285058,
+          "near_optimal_ids": [
+            63487
+          ]
+        }
+      },
+      "jeffreys": {
+        "explore_best_id": 63487,
+        "confirm_best_id": 63487,
+        "status": "SUCCESS_MC_TOL",
+        "explore": {
+          "draws": 100,
+          "batches": 5,
+          "stop_reason": "gap_exceeds_3_paired_se",
+          "gap": 1.9589532968690833,
+          "paired_mc_se": 0.06043384472576633,
+          "near_optimal_ids": [
+            63487
+          ]
+        },
+        "confirm": {
+          "draws": 100,
+          "batches": 5,
+          "stop_reason": "gap_exceeds_3_paired_se",
+          "gap": 1.6950227364113886,
+          "paired_mc_se": 0.14835786101971712,
+          "near_optimal_ids": [
+            63487
+          ]
+        }
+      }
+    },
+    "robust": {
+      "90": {
+        "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+        "counterexamples": [],
+        "structure_conditions": {
+          "fixed_strategy": true,
+          "perfect_detection": true,
+          "one_sale_revenue": true,
+          "real_quality_recovery": true,
+          "independent_defects": true,
+          "nonnegative_costs": true,
+          "no_extra_or_negative_income": true
+        },
+        "finite_difference_passed": true,
+        "intervals": {
+          "part_1": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "part_2": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "part_3": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "part_4": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "part_5": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "part_6": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "part_7": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "part_8": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "semi_1": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "semi_2": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "semi_3": [
+            0.037201814163155066,
+            0.20465301704801628
+          ],
+          "final": [
+            0.037201814163155066,
+            0.20465301704801628
+          ]
+        }
+      },
+      "95": {
+        "status": "ROBUST_CERTIFIED_BY_MONOTONICITY",
+        "counterexamples": [],
+        "structure_conditions": {
+          "fixed_strategy": true,
+          "perfect_detection": true,
+          "one_sale_revenue": true,
+          "real_quality_recovery": true,
+          "independent_defects": true,
+          "nonnegative_costs": true,
+          "no_extra_or_negative_income": true
+        },
+        "finite_difference_passed": true,
+        "intervals": {
+          "part_1": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "part_2": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "part_3": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "part_4": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "part_5": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "part_6": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "part_7": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "part_8": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "semi_1": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "semi_2": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "semi_3": [
+            0.03374073098523301,
+            0.21460433585920963
+          ],
+          "final": [
+            0.03374073098523301,
+            0.21460433585920963
+          ]
+        }
+      }
+    }
+  },
+  "robust_statement": "结构性单调耦合论证成立且被代码条件校验、有限差分实现抽查同时通过时，固定策略在矩形 Bonferroni 区间的最坏点为全部缺陷率上界；有限差分并非唯一认证依据。",
+  "q3_evaluator": "复用修正后的回收再检测局部闭环评价器；回收件再次检测计费但不重复采购。"
+}

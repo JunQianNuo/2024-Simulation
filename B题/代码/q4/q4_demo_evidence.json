@@ -1,0 +1,17 @@
+{
+  "mode": "DEMO_ONLY_NOT_OFFICIAL_DATA",
+  "sampling_plan": "fixed_n",
+  "note": "演示证据仅用于复现 Q4 算法流程，不是题目提供的企业抽样数据，也不能据此作真实企业结论。",
+  "q2": {
+    "case_1": {"p1": {"N": 100, "K": 10, "conditioning": "component"}, "p2": {"N": 100, "K": 10, "conditioning": "component"}, "pf": {"N": 100, "K": 10, "conditioning": "all_inputs_good"}},
+    "case_2": {"p1": {"N": 100, "K": 20, "conditioning": "component"}, "p2": {"N": 100, "K": 20, "conditioning": "component"}, "pf": {"N": 100, "K": 20, "conditioning": "all_inputs_good"}},
+    "case_3": {"p1": {"N": 100, "K": 10, "conditioning": "component"}, "p2": {"N": 100, "K": 10, "conditioning": "component"}, "pf": {"N": 100, "K": 10, "conditioning": "all_inputs_good"}},
+    "case_4": {"p1": {"N": 100, "K": 20, "conditioning": "component"}, "p2": {"N": 100, "K": 20, "conditioning": "component"}, "pf": {"N": 100, "K": 20, "conditioning": "all_inputs_good"}},
+    "case_5": {"p1": {"N": 100, "K": 10, "conditioning": "component"}, "p2": {"N": 100, "K": 20, "conditioning": "component"}, "pf": {"N": 100, "K": 10, "conditioning": "all_inputs_good"}},
+    "case_6": {"p1": {"N": 100, "K": 5, "conditioning": "component"}, "p2": {"N": 100, "K": 5, "conditioning": "component"}, "pf": {"N": 100, "K": 5, "conditioning": "all_inputs_good"}}
+  },
+  "q3": {
+    "part_1": {"N": 100, "K": 10, "conditioning": "component"}, "part_2": {"N": 100, "K": 10, "conditioning": "component"}, "part_3": {"N": 100, "K": 10, "conditioning": "component"}, "part_4": {"N": 100, "K": 10, "conditioning": "component"}, "part_5": {"N": 100, "K": 10, "conditioning": "component"}, "part_6": {"N": 100, "K": 10, "conditioning": "component"}, "part_7": {"N": 100, "K": 10, "conditioning": "component"}, "part_8": {"N": 100, "K": 10, "conditioning": "component"},
+    "semi_1": {"N": 100, "K": 10, "conditioning": "all_inputs_good"}, "semi_2": {"N": 100, "K": 10, "conditioning": "all_inputs_good"}, "semi_3": {"N": 100, "K": 10, "conditioning": "all_inputs_good"}, "final": {"N": 100, "K": 10, "conditioning": "all_inputs_good"}
+  }
+}

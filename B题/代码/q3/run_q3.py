@@ -38,8 +38,8 @@ def solve_loop(reward, repeat):
     return value[0], float(residual)
 
 
-def leaf(leaf_id, inspect):
-    defect, buy, test = LEAVES[leaf_id]
+def leaf(leaf_id, inspect, leaves=LEAVES):
+    defect, buy, test = leaves[leaf_id]
     r = zero(); r[ci("purchase")] = buy
     if not inspect: return 1 - defect, r, 0.0, 0.0, 0
     r[ci("part_inspection")] = test; r[ei("expected_part_inspections")] = 1; r[ei(f"expected_part_inspections_{leaf_id}")] = 1
@@ -47,23 +47,23 @@ def leaf(leaf_id, inspect):
     return 1.0, value, defect, residual, 1
 
 
-def input_batch(ids, inspections):
+def input_batch(ids, inspections, leaves=LEAVES, cache=BATCH_CACHE):
     """精确处理一组叶件的“补购后从头重检”流程，等价于 Q2 的 prepare 状态机。"""
     key = (tuple(ids), tuple(inspections))
-    if key in BATCH_CACHE: return BATCH_CACHE[key]
+    if key in cache: return cache[key]
     n = len(ids); start = (0, (-1,) * n); states=[start]; index={start:0}; queue=deque([start]); raw={}
     while queue:
         phase, quality = queue.popleft(); r=zero(); trans=[]; good=0.0
         if phase == 0:
             missing=[j for j,q in enumerate(quality) if q<0]
-            for j in missing: r[ci("purchase")] += LEAVES[ids[j]][1]
-            outcomes=[[(quality[j],1.0)] if quality[j]>=0 else [(1,.9),(0,.1)] for j in range(n)]
+            for j in missing: r[ci("purchase")] += leaves[ids[j]][1]
+            outcomes=[[(quality[j],1.0)] if quality[j]>=0 else [(1,1-leaves[ids[j]][0]),(0,leaves[ids[j]][0])] for j in range(n)]
             for combo in np.array(np.meshgrid(*[np.arange(len(x)) for x in outcomes])).T.reshape(-1,n):
                 q=tuple(outcomes[j][combo[j]][0] for j in range(n)); p=float(np.prod([outcomes[j][combo[j]][1] for j in range(n)])); trans.append(((1,q),p))
         else:
             j=phase-1
             if inspections[j]:
-                r[ci("part_inspection")] += LEAVES[ids[j]][2]; r[ei("expected_part_inspections")] += 1; r[ei(f"expected_part_inspections_{ids[j]}")] += 1
+                r[ci("part_inspection")] += leaves[ids[j]][2]; r[ei("expected_part_inspections")] += 1; r[ei(f"expected_part_inspections_{ids[j]}")] += 1
                 if quality[j]==0:
                     q=list(quality);q[j]=-1;trans=[((0,tuple(q)),1.0)]
                 elif phase==n: good=float(all(q==1 for q in quality))
@@ -79,40 +79,40 @@ def input_batch(ids, inspections):
         for nxt,p in trans:P[i,index[nxt]]+=p
     A=np.eye(m)-P; X=np.linalg.solve(A,np.column_stack([R,g])); residual=np.linalg.norm(A@X-np.column_stack([R,g]),ord=np.inf)/(np.linalg.norm(R,ord=np.inf)+1)
     result=float(X[0,-1]),X[0,:-1],float(residual),1
-    BATCH_CACHE[key]=result;return result
+    cache[key]=result;return result
 
 
-def retest_children(children, policy):
+def retest_children(children, policy, leaves=LEAVES, nodes=NODES):
     """安全拆解后的同一批已知合格直接子件：只重检，不采购或重装。"""
     _, parts, semis, _, _, _ = policy
     r = zero()
     for child in children:
         if isinstance(child, int):
             if parts[child - 1]:
-                r[ci("part_inspection")] += LEAVES[child][2]
+                r[ci("part_inspection")] += leaves[child][2]
                 r[ei("expected_part_inspections")] += 1; r[ei(f"expected_part_inspections_{child}")] += 1
         else:
             i = int(child[1]) - 1
             if semis[i]:
-                r[ci("semi_inspection")] += NODES[child][3]
+                r[ci("semi_inspection")] += nodes[child][3]
                 r[ei("expected_semi_inspections")] += 1
     return r
 
 
-def node(name, policy):
+def node(name, policy, leaves=LEAVES, nodes=NODES, replacement=REPLACEMENT, kernel_cache=KERNEL_CACHE, batch_cache=BATCH_CACHE):
     """返回 (良率、奖励、最大重复概率、最大真实残差、局部方程数)。"""
     bits, parts, semis, yf, dis_semis, zf = policy
     if name != "root":
         i = int(name[1]) - 1; start, stop = ((0, 3), (3, 6), (6, 8))[i]
         key = (name, parts[start:stop], semis[i], dis_semis[i])
-        if key in KERNEL_CACHE: return KERNEL_CACHE[key]
-    children, defect, assembly, inspection, disassembly = NODES[name]
+        if key in kernel_cache: return kernel_cache[key]
+    children, defect, assembly, inspection, disassembly = nodes[name]
     root = name == "root"
     if all(isinstance(c, int) for c in children):
-        q_batch, r_batch, batch_residual, batch_count = input_batch(children, [parts[c-1] for c in children])
+        q_batch, r_batch, batch_residual, batch_count = input_batch(children, [parts[c-1] for c in children], leaves, batch_cache)
         child = [(q_batch, r_batch, 0.0, batch_residual, batch_count)]
     else:
-        child = [node(c, policy) for c in children]
+        child = [node(c, policy, leaves, nodes, replacement, kernel_cache, batch_cache) for c in children]
     q = (1 - defect) * float(np.prod([x[0] for x in child]))
     first = sum((x[1] for x in child), zero())
     asm_cost, asm_event = ("final_assembly", "expected_final_assemblies") if root else ("semi_assembly", "expected_semi_assemblies")
@@ -126,36 +126,56 @@ def node(name, policy):
     if tested and dismantle and not all_good: raise ValueError("NON_ABSORBING")
     if root and not tested and dismantle:
         if not all_good: raise ValueError("NON_ABSORBING")
-        cycle = zero(); cycle[ci(asm_cost)] = assembly; cycle[ci(dis_cost)] = defect * disassembly; cycle[ci("replacement_loss")] = defect * REPLACEMENT
+        cycle = zero(); cycle[ci(asm_cost)] = assembly; cycle[ci(dis_cost)] = defect * disassembly; cycle[ci("replacement_loss")] = defect * replacement
         cycle[ei(asm_event)] = 1; cycle[ei(dis_event)] = defect; cycle[ei("expected_replacements")] = defect
-        cycle += defect * retest_children(children, policy)
+        cycle += defect * retest_children(children, policy, leaves, nodes)
         value, residual = solve_loop(cycle, defect)
         return 1.0, sum((x[1] for x in child), zero()) + value, max(base_loop, defect), max(base_residual, residual), base_count + 1
     if not tested:
         result = q, first, base_loop, base_residual, base_count
-        if not root: KERNEL_CACHE[key] = result
+        if not root: kernel_cache[key] = result
         return result
     first[ci(inspect_cost)] += inspection; first[ei(inspect_event)] += 1
     if not dismantle:
         value, residual = solve_loop(first, 1 - q)
         result = 1.0, value, max(base_loop, 1 - q), max(base_residual, residual), base_count + 1
-        if not root: KERNEL_CACHE[key] = result
+        if not root: kernel_cache[key] = result
         return result
     # 安全拆解：失败仅来自条件装配缺陷；回收后的直接子件按原策略再次检测。
     cycle = zero(); cycle[ci(asm_cost)] = assembly; cycle[ci(inspect_cost)] = inspection; cycle[ci(dis_cost)] = defect * disassembly
     cycle[ei(asm_event)] = 1; cycle[ei(inspect_event)] = 1; cycle[ei(dis_event)] = defect
-    cycle += defect * retest_children(children, policy)
+    cycle += defect * retest_children(children, policy, leaves, nodes)
     value, residual = solve_loop(cycle, defect)
     result = 1.0, sum((x[1] for x in child), zero()) + value, max(base_loop, defect), max(base_residual, residual), base_count + 1
-    if not root: KERNEL_CACHE[key] = result
+    if not root: kernel_cache[key] = result
     return result
 
 
-def evaluate(strategy_id):
+def q3_nominal_parameters():
+    """返回仅含 12 个不确定缺陷率的显式参数字典。"""
+    return {**{f"part_{i}": LEAVES[i][0] for i in range(1, 9)}, **{f"semi_{i}": NODES[f"s{i}"][1] for i in range(1, 4)}, "final": NODES["root"][1]}
+
+
+def _config_from_parameters(parameters):
+    expected = {f"part_{i}" for i in range(1, 9)} | {"semi_1", "semi_2", "semi_3", "final"}
+    if set(parameters) != expected or any(not 0 <= float(v) < 1 for v in parameters.values()):
+        raise ValueError("Q3 参数必须恰为 8 个 part、3 个 semi 和 final 的 [0,1) 缺陷率")
+    leaves = {i: (float(parameters[f"part_{i}"]), buy, test) for i, (_, buy, test) in LEAVES.items()}
+    nodes = {name: (children, float(parameters[f"semi_{int(name[1])}"]) if name != "root" else float(parameters["final"]), assembly, inspection, disassembly) for name, (children, _, assembly, inspection, disassembly) in NODES.items()}
+    return leaves, nodes
+
+
+def evaluate(strategy_id, parameters=None, _context=None):
+    """固定策略的精确评价；传入 parameters 时不读写全局缓存。"""
     bits, parts, semis, yf, dis_semis, zf = decode(strategy_id)
+    if _context is not None:
+        leaves, nodes, kernel_cache, batch_cache = _context
+    else:
+        leaves, nodes = (LEAVES, NODES) if parameters is None else _config_from_parameters(parameters)
+        kernel_cache, batch_cache = (KERNEL_CACHE, BATCH_CACHE) if parameters is None else ({}, {})
     row = {"strategy_id": strategy_id, "strategy_bits": "".join(map(str, bits)), **{f"x{i}": parts[i - 1] for i in range(1, 9)}, **{f"y{i}": semis[i - 1] for i in range(1, 4)}, "yf": yf, **{f"z{i}": dis_semis[i - 1] for i in range(1, 4)}, "zf": zf, "status": "SUCCESS_EXACT"}
     try:
-        q, reward, loop, residual, count = node("root", (bits, parts, semis, yf, dis_semis, zf))
+        q, reward, loop, residual, count = node("root", (bits, parts, semis, yf, dis_semis, zf), leaves, nodes, REPLACEMENT, kernel_cache, batch_cache)
         if not yf and not zf:
             reward[ci("replacement_loss")] += (1 - q) * REPLACEMENT; reward[ei("expected_replacements")] += 1 - q
             reward, r = solve_loop(reward, 1 - q); residual = max(residual, r); loop = max(loop, 1 - q); count += 1
@@ -168,6 +188,18 @@ def evaluate(strategy_id):
         if str(exc) != "NON_ABSORBING": raise
         row.update({"status": "NON_ABSORBING", "local_loop_equations": np.nan, "max_local_loop_probability": 1.0, "max_local_equation_residual": np.nan, "one_pass_success_no_inspection": .9 ** 12})
     return row
+
+
+def evaluate_q3_policy(parameters, strategy_id):
+    """Q4 使用的纯接口：参数和策略均显式传入，不写结果文件或复用名义缓存。"""
+    return evaluate(strategy_id, parameters)
+
+
+def make_q3_evaluator(parameters):
+    """为同一显式参数向量建立可复用局部缓存的纯批量评价闭包。"""
+    leaves, nodes = _config_from_parameters(parameters)
+    context = (leaves, nodes, {}, {})
+    return lambda strategy_id: evaluate(strategy_id, _context=context)
 
 
 def explicit_two(policy):
