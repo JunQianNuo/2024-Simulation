@@ -1,0 +1,39 @@
+{
+  "problem": "2024-CUMCM-B-Q1",
+  "model": "Q1-M5",
+  "algorithm": "Q1-A1",
+  "status": "SUCCESS_EXACT",
+  "n_candidates": 34,
+  "p_grid": [
+    0.01,
+    0.03,
+    0.05,
+    0.07,
+    0.08,
+    0.09,
+    0.1,
+    0.11,
+    0.12,
+    0.13,
+    0.15,
+    0.2,
+    0.3
+  ],
+  "worst_mass_residual": 8.681944052568724e-14,
+  "baseline": {
+    "U_0.90(22,0)": 0.09937197978872149,
+    "L_0.95(2,2)": 0.22360679774997907
+  },
+  "recommended": {
+    "省样本型": "t_opt=25,N_max=50",
+    "均衡型": "t_opt=25,N_max=800",
+    "低未决型": "t_opt=200,N_max=3200"
+  },
+  "first_accept_t_all_good": 49,
+  "pareto_front_size": {
+    "equal": 12,
+    "near_threshold": 12,
+    "far_threshold": 13
+  },
+  "optimality_claim": "预先声明的有限候选网格内的精确 Pareto 前沿；不宣称对连续 t_opt 或所有可能停止规则全局最优"
+}
