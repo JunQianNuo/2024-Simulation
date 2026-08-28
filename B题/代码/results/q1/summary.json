@@ -1,0 +1,43 @@
+{
+  "problem": "2024-CUMCM-B-Q1",
+  "method": "pre-specified five-stage group-sequential sampling with one-sided Clopper-Pearson bounds",
+  "p0": 0.1,
+  "stages": [
+    40,
+    80,
+    160,
+    320,
+    800
+  ],
+  "alpha_reject": [
+    0.01,
+    0.01,
+    0.01,
+    0.01,
+    0.01
+  ],
+  "alpha_accept": [
+    0.04,
+    0.025,
+    0.015,
+    0.012,
+    0.008
+  ],
+  "p_grid": [
+    0.01,
+    0.03,
+    0.05,
+    0.07,
+    0.08,
+    0.09,
+    0.1,
+    0.11,
+    0.12,
+    0.13,
+    0.15,
+    0.2,
+    0.3
+  ],
+  "worst_mass_residual": 1.7763568394002505e-15,
+  "decision_at_n800": "undecided / recommend additional inspection when neither boundary is met"
+}
