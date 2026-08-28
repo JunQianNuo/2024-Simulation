@@ -1,0 +1,91 @@
+---
+config:
+  theme: base
+  themeVariables:
+    background: "#ffffff"
+    primaryTextColor: "#172033"
+    lineColor: "#52657d"
+    fontFamily: "Microsoft YaHei, Noto Sans CJK SC, Arial, sans-serif"
+  flowchart:
+    curve: basis
+    nodeSpacing: 34
+    rankSpacing: 50
+---
+flowchart TB
+  TITLE(["2024 CUMCM B题：已确认模型—算法总体架构<br/>模型规定‘优化什么’ · 算法负责‘怎样可靠计算’"])
+
+  subgraph INPUT["① 问题与证据层"]
+    direction LR
+    I1["Q1抽样流<br/>时刻 t · 累计次品数 K_t<br/>标称次品率 p₀=0.10"]
+    I2["Q2表1参数<br/>2个零件 · 成品<br/>成本、售价与调换损失"]
+    I3["Q3表2与装配树<br/>8零件 · 3半成品 · 1成品<br/>多级检测、装配与拆解"]
+    I4["Q4抽样证据<br/>(N_j,K_j)<br/>含内部节点条件抽样定义"]
+  end
+
+  subgraph MODEL["② 优化模型层：定义决策变量、目标与约束"]
+    direction LR
+    M1["Q1-M5<br/>置信约束下多目标序贯抽样优化<br/>min 加权ASN与未决率<br/>s.t. 两类错误概率约束"]
+    M2["Q2-M2<br/>状态增强的吸收Markov奖励模型<br/>4位固定策略<br/>最大化期望利润"]
+    M3["Q3-M3<br/>装配树—吸收Markov闭环模型<br/>16位固定策略 · 物料守恒<br/>最大化期望利润"]
+    M4B["Q4-M2<br/>Bayesian后验期望利润模型<br/>复用Q2/Q3利润函数 Π(d;p)<br/>max E[Π(d;p) | 抽样证据]"]
+    M4R["Q4-M3<br/>矩形不确定集max–min模型<br/>复用Q2/Q3利润函数 Π(d;p)<br/>max_d min_p Π(d;p)"]
+  end
+
+  subgraph ALGO["③ 条件化求解算法层：不与优化模型混称"]
+    direction LR
+    A1["Q1-A1<br/>双单侧Bernoulli CS首次越界<br/>ConfSeq + 独立反演<br/>路径DP + 34组候选Pareto搜索"]
+    A2["Q2-A1<br/>16策略完整枚举<br/>可达状态图 · SCC/吸收裕度<br/>稀疏LU多右端求解"]
+    A3["Q3-A1<br/>后序局部状态核缓存<br/>65536策略分布式完整搜索<br/>确定性归并与残差复核"]
+    A4B["Q4-A1<br/>Uniform/Jeffreys双先验<br/>全策略共同后验样本<br/>误差停止 + 独立确认批次"]
+    A4R["Q4-A2<br/>Q1同族simultaneous CS构集<br/>单调性认证优先<br/>角点 + SHGO + DE + 区间定界"]
+  end
+
+  subgraph OUTPUT["④ 决策输出与结论称谓层"]
+    direction LR
+    O1["Q1输出<br/>省样本型 · 均衡型 · 低未决型<br/>候选网格内Pareto方案"]
+    O2["Q2输出<br/>16策略利润表、分账与残差<br/>固定策略域精确最优集合"]
+    O3["Q3输出<br/>65536策略排名、分账与残差<br/>固定策略域精确最优集合"]
+    O4B["Q4 Bayesian输出<br/>后验期望利润 · 可信区间<br/>最优概率 · 遗憾 · MC误差"]
+    O4R["Q4稳健输出<br/>最坏利润 · 最坏参数点<br/>certified / numerical / uncertified"]
+  end
+
+  GATE["结论门禁<br/>全策略覆盖 → 才称固定策略域精确最优<br/>独立确认批次通过 → 才确认Bayesian排序<br/>区间gap达标 → 才称ROBUST_CERTIFIED"]
+
+  FINAL(["综合决策<br/>点估计最优 + Bayesian排序 + 稳健门禁<br/>形成可解释、可复核的抽检与生产方案"])
+
+  NOTE["实现工具详见阶段3算法设计报告<br/>Python 3.10 · ConfSeq · SciPy · JAX/CUDA · Ray/Dask · Zarr<br/>Julia区间工具/IBEX · pytest/Hypothesis<br/>支撑全部算法，不改变模型定义"]
+
+  TITLE --> I1
+  TITLE --> I2
+  TITLE --> I3
+  TITLE --> I4
+
+  I1 --> M1 --> A1 --> O1
+  I2 --> M2 --> A2 --> O2
+  I3 --> M3 --> A3 --> O3
+  I4 --> M4B --> A4B --> O4B
+  I4 --> M4R --> A4R --> O4R
+
+  O1 --> GATE
+  O2 --> GATE
+  O3 --> GATE
+  O4B --> GATE
+  O4R --> GATE
+  GATE --> FINAL
+  NOTE -.-> GATE
+
+  classDef title fill:#1f4e79,stroke:#153652,color:#ffffff,stroke-width:2px;
+  classDef input fill:#eef4ff,stroke:#3973c4,color:#172033;
+  classDef model fill:#eefaf3,stroke:#2f855a,color:#173726,stroke-width:1.5px;
+  classDef algorithm fill:#fff7e8,stroke:#d4871c,color:#4b3110;
+  classDef output fill:#f3efff,stroke:#7656b5,color:#2f2050;
+  classDef gate fill:#fff0f0,stroke:#c53030,color:#681b1b,stroke-width:1.5px;
+  classDef note fill:#f7f7f7,stroke:#7a7a7a,color:#333333,stroke-dasharray:4 3;
+
+  class TITLE,FINAL title;
+  class I1,I2,I3,I4 input;
+  class M1,M2,M3,M4B,M4R model;
+  class A1,A2,A3,A4B,A4R algorithm;
+  class O1,O2,O3,O4B,O4R output;
+  class GATE gate;
+  class NOTE note;

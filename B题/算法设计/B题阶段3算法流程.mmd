@@ -1,0 +1,132 @@
+---
+config:
+  theme: base
+  themeVariables:
+    background: "#ffffff"
+    primaryColor: "#eef4ff"
+    primaryTextColor: "#172033"
+    primaryBorderColor: "#3973c4"
+    lineColor: "#50627a"
+    secondaryColor: "#eefaf3"
+    tertiaryColor: "#fff7e8"
+  flowchart:
+    curve: basis
+    nodeSpacing: 32
+    rankSpacing: 48
+---
+flowchart TB
+    START(["阶段2已确认模型<br/>Q1-M5 · Q2-M2 · Q3-M3 · Q4-M2/M3"])
+    FREEZE["冻结输入 schema、策略位序、容差、随机种子与版本"]
+    START --> FREEZE
+
+    subgraph Q1["Q1-A1：序贯抽样优化算法"]
+      direction LR
+      Q1I["候选 t_opt × N_max<br/>代表性次品率网格"]
+      Q1CS["官方 ConfSeq 计算 CS<br/>SciPy 独立反演复核"]
+      Q1CHK{"端点差 ≤ 1e-8？"}
+      Q1DP["有限状态路径 DP<br/>精确算 ASN 与未决率"]
+      Q1PAR["删除被支配方案<br/>输出三类 Pareto 方案"]
+      Q1FAIL["CS_CROSSCHECK_FAILED<br/>高精度复算或禁用候选"]
+      Q1I --> Q1CS --> Q1CHK
+      Q1CHK -- "是" --> Q1DP --> Q1PAR
+      Q1CHK -- "否" --> Q1FAIL
+    end
+
+    subgraph Q2["Q2-A1：16策略精确枚举"]
+      direction LR
+      Q2I["表1参数 + 4位策略"]
+      Q2S["生成可达状态图<br/>质量·信息·来源"]
+      Q2A{"SCC闭类与谱半径<br/>双重吸收检查"}
+      Q2LU["稀疏 LU 一次分解<br/>多右端奖励求解"]
+      Q2O["16策略利润、分账、残差<br/>并列最优集合"]
+      Q2FAIL["NON_ABSORBING / ILL_CONDITIONED<br/>失败关闭并高精度复核"]
+      Q2I --> Q2S --> Q2A
+      Q2A -- "通过" --> Q2LU --> Q2O
+      Q2A -- "失败" --> Q2FAIL
+    end
+
+    subgraph Q3["Q3-A1：65536策略精确搜索"]
+      direction LR
+      Q3I["装配树 + 固定位序16位策略"]
+      Q3K["后序遍历<br/>构造并缓存局部状态核"]
+      Q3E["Ray/Dask确定性分片<br/>Numba批量评价全部策略"]
+      Q3V{"65536个唯一ID齐全<br/>守恒、吸收、残差通过？"}
+      Q3O["归并 Parquet<br/>全局最优固定策略集合"]
+      Q3FAIL["INCOMPLETE_POLICY_SET<br/>重跑分片或扩容，不改用GA/SA"]
+      Q3I --> Q3K --> Q3E --> Q3V
+      Q3V -- "是" --> Q3O
+      Q3V -- "否" --> Q3FAIL
+    end
+
+    FREEZE --> Q1I
+    FREEZE --> Q2I
+    FREEZE --> Q3I
+
+    EVAL["经基准检验的生产策略评价器<br/>NetworkX + SciPy sparse + JAX"]
+    Q2O --> EVAL
+    Q3O --> EVAL
+
+    subgraph Q4B["Q4-A1：全策略后验比较"]
+      direction LR
+      BI["抽样证据 (N_j,K_j)<br/>Uniform / Jeffreys 双先验"]
+      BD["共同参数样本<br/>全部策略同样本评价"]
+      BA["分批探索<br/>配对利润差与最优概率误差停止"]
+      BC{"独立固定确认批次<br/>是否复核领先顺序？"}
+      BO["后验利润、可信区间<br/>最优概率、遗憾、MC误差"]
+      BFAIL["MC_NOT_CONVERGED<br/>只报告近优集合"]
+      BI --> BD --> BA --> BC
+      BC -- "是" --> BO
+      BC -- "否" --> BFAIL
+    end
+
+    subgraph Q4R["Q4-A2：联合CS稳健搜索"]
+      direction LR
+      RI["Bonferroni联合CS<br/>90%主分析 · 95%敏感性"]
+      RM{"结构耦合 + JAX反例搜索<br/>+ 区间导数能否认证单调？"}
+      RE["认证维度取上端点<br/>单端点或降维评价"]
+      RG["角点 + SHGO<br/>≥10种子DE交叉搜索"]
+      RC["Julia区间分支定界 / IBEX<br/>给出内层上下界"]
+      RS{"区间 gap 达标？"}
+      RO["ROBUST_CERTIFIED<br/>认证最坏利润与稳健策略"]
+      RN["ROBUST_NUMERICAL / UNCERTIFIED<br/>降低称谓或增加预算"]
+      RI --> RM
+      RM -- "全部或部分可证" --> RE --> RC
+      RM -- "不可证维度" --> RG --> RC
+      RC --> RS
+      RS -- "是" --> RO
+      RS -- "否" --> RN
+    end
+
+    FREEZE --> BI
+    FREEZE --> RI
+    EVAL --> BD
+    EVAL --> RM
+    EVAL --> RG
+
+    QA["pytest + Hypothesis + mpmath<br/>基准、守恒、残差、退化与复现检查"]
+    Q1PAR --> QA
+    Q2O --> QA
+    Q3O --> QA
+    BO --> QA
+    RO --> QA
+    RN --> QA
+
+    ART["阶段3产物<br/>算法契约 · 工具栈 · 流程图 · 失败路径 · 确认单"]
+    QA --> ART
+    ART --> GATE{"用户确认阶段3？"}
+    GATE -- "确认" --> NEXT(["进入阶段4：模型检验方案设计"])
+    GATE -- "修改" --> FREEZE
+
+    classDef start fill:#1f4e79,color:#ffffff,stroke:#153652,stroke-width:2px;
+    classDef input fill:#eef4ff,stroke:#3973c4,color:#172033;
+    classDef compute fill:#eefaf3,stroke:#2f855a,color:#173726;
+    classDef decision fill:#fff7e8,stroke:#d4871c,color:#4b3110;
+    classDef fail fill:#fff0f0,stroke:#c53030,color:#681b1b;
+    classDef output fill:#f3efff,stroke:#7656b5,color:#2f2050;
+
+    class START,NEXT start;
+    class FREEZE,Q1I,Q2I,Q3I,BI,RI input;
+    class Q1CS,Q1DP,Q2S,Q2LU,Q3K,Q3E,EVAL,BD,BA,RE,RG,RC,QA compute;
+    class Q1CHK,Q2A,Q3V,BC,RM,RS,GATE decision;
+    class Q1FAIL,Q2FAIL,Q3FAIL,BFAIL,RN fail;
+    class Q1PAR,Q2O,Q3O,BO,RO,ART output;

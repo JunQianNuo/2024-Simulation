@@ -1,0 +1,23 @@
+---
+raw_title: Optimal Stopping for Interval Estimation in Bernoulli Trials
+subject: Optimal Stopping for Interval Estimation in Bernoulli Trials
+source: Optimal Stopping for Interval Estimation in Bernoulli Trials.pdf
+status: mineru解析
+parser: mineru
+---
+
+Optimal Stopping for Interval Estimation in Bernoulli Trials
+
+作者: Yaacoub, Tony ; Moustakides, George V. ; Mei, Yajun
+
+主题: optimal stopping ; Bayes methods ; Bayesian analysis ; binomial proportion ; Confidence intervals ; confidence intervals ; Estimation ; Monte Carlo methods ; Optimization ; Random variables ; Random walk theory ; sequential analysis ; Sequential estimation ; Statistical analysis ; Systems engineering and theory
+
+源自于: IEEE transactions on information theory, 2019-05, Vol.65 (5), p.3022-3033
+
+摘要: We propose an optimal sequential methodology for obtaining confidence intervals for a binomial proportion θ. Assuming that an independent and identically distributed sequence of Bernoulli ( θ) trials is observed sequentially, we are interested in designing: 1) a stopping time T that will decide the best time to stop sampling the process and 2) an optimum estimator θ<sub>̂</sub>\_(T) that will provide the optimum center of the interval estimate of θ. We follow a semi-Bayesian approach, where we assume that there exists a prior distribution for θ, and our goal is to minimize the average number of samples while we guarantee a minimal specified coverage probability level. The solution is obtained by applying standard optimal stopping theory and computing the optimum pair (T,θ<sub>̂</sub> \_(T)) numerically. Regarding the optimum stopping time component T, we demonstrate that it enjoys certain very interesting characteristics not commonly encountered in solutions of other classical optimal stopping problems. In particular, we prove that, for a particular prior (beta density), the optimum stopping time is always bounded from above and below; it needs to first accumulate a sufficient amount of information before deciding whether or not to stop, and it will always terminate before some finite deterministic time. We also conjecture that these properties are present with any prior. Finally, we compare our method with the optimum fixed-sample-size procedure as well as with existing alternative sequential schemes.
+
+出版社: New York: IEEE
+
+语种: 英语识别符: ISSN: 0018-9448; EISSN: 1557-9654; DOI: 10.1109/TIT.2018.2885405; CODEN: IETTAW
+
+来源: IEEE Electronic Library (IEL)

@@ -1,0 +1,54 @@
+{
+    "generated_at":  "2026-08-27T16:05:00+08:00",
+    "naming_rule":  "FirstAuthor[_Coauthor]_Year_ShortTitle",
+    "entries":  [
+                    {
+                        "old_directory":  "1-s2.0-S0377221705007265-main",
+                        "new_directory":  "VanVolsem_2007_Multistage_Inspection_Journal",
+                        "markdown":  "MD/VanVolsem_2007_Multistage_Inspection_Journal/VanVolsem_2007_Multistage_Inspection_Journal.md",
+                        "pdf":  "PDF/VanVolsem_2007_Multistage_Inspection_Journal.pdf"
+                    },
+                    {
+                        "old_directory":  "1-s2.0-S1026309812002027-main",
+                        "new_directory":  "FallahNezhad_2012_Bayesian_Acceptance_Sampling",
+                        "markdown":  "MD/FallahNezhad_2012_Bayesian_Acceptance_Sampling/FallahNezhad_2012_Bayesian_Acceptance_Sampling.md",
+                        "pdf":  "PDF/FallahNezhad_2012_Bayesian_Acceptance_Sampling.pdf"
+                    },
+                    {
+                        "old_directory":  "chevalier1997",
+                        "new_directory":  "Chevalier_Wein_1997_Circuit_Board_Inspection",
+                        "markdown":  "MD/Chevalier_Wein_1997_Circuit_Board_Inspection/Chevalier_Wein_1997_Circuit_Board_Inspection.md",
+                        "pdf":  "PDF/Chevalier_Wein_1997_Circuit_Board_Inspection.pdf"
+                    },
+                    {
+                        "old_directory":  "Duan_Zhang_2026_Electronic_Assembly_Quality_Control",
+                        "new_directory":  "Duan_Zhang_2026_Electronic_Assembly_Quality_Control",
+                        "markdown":  "MD/Duan_Zhang_2026_Electronic_Assembly_Quality_Control/Duan_Zhang_2026_Electronic_Assembly_Quality_Control.md",
+                        "pdf":  "PDF/Duan_Zhang_2026_Electronic_Assembly_Quality_Control.pdf"
+                    },
+                    {
+                        "old_directory":  "Sequential Tests of Statistical Hypotheses",
+                        "new_directory":  "Wald_1945_Sequential_Hypothesis_Tests",
+                        "markdown":  "MD/Wald_1945_Sequential_Hypothesis_Tests/Wald_1945_Sequential_Hypothesis_Tests.md",
+                        "pdf":  "PDF/Wald_1945_Sequential_Hypothesis_Tests.pdf"
+                    },
+                    {
+                        "old_directory":  "THE USE OF CONFIDENCE OR FIDUCIAL LIMITS ILLUSTRATED IN THE CASE OF THE BINOMIAL",
+                        "new_directory":  "Clopper_Pearson_1934_Exact_Binomial_Limits",
+                        "markdown":  "MD/Clopper_Pearson_1934_Exact_Binomial_Limits/Clopper_Pearson_1934_Exact_Binomial_Limits.md",
+                        "pdf":  "PDF/Clopper_Pearson_1934_Exact_Binomial_Limits.pdf"
+                    },
+                    {
+                        "old_directory":  "Van_Volsem_2007_Multistage_Inspection_Strategies",
+                        "new_directory":  "VanVolsem_2004_Multistage_Inspection_WorkingPaper",
+                        "markdown":  "MD/VanVolsem_2004_Multistage_Inspection_WorkingPaper/VanVolsem_2004_Multistage_Inspection_WorkingPaper.md",
+                        "pdf":  "PDF/VanVolsem_2004_Multistage_Inspection_WorkingPaper.pdf"
+                    },
+                    {
+                        "old_directory":  "Zhang_2023_Economic_Designing_of_Acceptance_Sampling_Plans",
+                        "new_directory":  "Zhang_2023_Imperfect_Inspection_Acceptance_Sampling",
+                        "markdown":  "MD/Zhang_2023_Imperfect_Inspection_Acceptance_Sampling/Zhang_2023_Imperfect_Inspection_Acceptance_Sampling.md",
+                        "pdf":  "PDF/Zhang_2023_Imperfect_Inspection_Acceptance_Sampling.pdf"
+                    }
+                ]
+}

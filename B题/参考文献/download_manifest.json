@@ -1,0 +1,75 @@
+{
+  "schema_version": "1.0",
+  "generated_at": "2026-08-27T15:35:44+08:00",
+  "policy": {
+    "public_open_access_only": true,
+    "scihub_disabled": true,
+    "institutional_mode": false,
+    "unpaywall_email_configured": false
+  },
+  "summary": {
+    "total": 8,
+    "downloaded": 3,
+    "not_downloaded": 5
+  },
+  "papers": [
+    {
+      "doi": "10.1093/biomet/26.4.404",
+      "status": "no_confirmed_open_pdf",
+      "file": null,
+      "reason": "Publisher access required; no confirmed legal OA copy found by configured resolvers."
+    },
+    {
+      "doi": "10.1214/aoms/1177731118",
+      "status": "temporarily_blocked",
+      "file": null,
+      "reason": "Project Euclid security check and JSTOR access page returned instead of PDF."
+    },
+    {
+      "doi": "10.1287/mnsc.43.9.1198",
+      "status": "repository_unreachable",
+      "file": null,
+      "reason": "UCLouvain repository PDF identified, but the host timed out from the current environment."
+    },
+    {
+      "doi": "10.1080/00207540410001704014",
+      "status": "publisher_access_required",
+      "file": null,
+      "reason": "Taylor & Francis returned 403 and no confirmed OA copy was found."
+    },
+    {
+      "doi": "10.1016/j.ejor.2005.03.054",
+      "status": "downloaded",
+      "source": "University of Antwerp repository via Semantic Scholar",
+      "file": "PDF/Van_Volsem_2007_Multistage_Inspection_Strategies.pdf",
+      "bytes": 387265,
+      "pages": 15,
+      "sha256": "88fe576e4c72f52c81073d6f7c89589cb2200603bc78ff5285a8a109f0feda6d"
+    },
+    {
+      "doi": "10.1016/j.scient.2012.09.009",
+      "status": "temporarily_blocked",
+      "file": null,
+      "reason": "Publisher marks the article open access, but ScienceDirect returned HTTP 403."
+    },
+    {
+      "doi": "10.3969/j.issn.1007-7375.2023.04.006",
+      "status": "downloaded",
+      "source": "Industrial Engineering Journal official PDF",
+      "file": "PDF/Zhang_2023_Economic_Designing_of_Acceptance_Sampling_Plans.pdf",
+      "bytes": 746928,
+      "pages": 8,
+      "sha256": "26ba7f2c1e988534e810f10d167e8cccbca2cf11cc308bd4d431c5ae611d4860"
+    },
+    {
+      "doi": "10.3390/jmmp10050170",
+      "status": "downloaded",
+      "source": "MDPI official static PDF",
+      "file": "PDF/Duan_Zhang_2026_Electronic_Assembly_Quality_Control.pdf",
+      "bytes": 10206239,
+      "pages": 18,
+      "sha256": "c1f93640155c0bb0bda93f8b186521bf1ecf0de1815db74f9404322019a2616f"
+    }
+  ]
+}
+

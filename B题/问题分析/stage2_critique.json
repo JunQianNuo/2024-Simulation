@@ -1,0 +1,35 @@
+{
+  "stage_id": 2,
+  "iteration": 1,
+  "scores": {
+    "1_subproblem_decomposition": {
+      "name": "子问题分解清晰度",
+      "score": 9,
+      "evidence": "Q1至Q4均有输入输出约束卡片"
+    },
+    "2_key_variables_count": {
+      "name": "关键变量识别",
+      "score": 9,
+      "evidence": "区分决策状态隐状态统计量与参数"
+    },
+    "3_math_skeleton_present": {
+      "name": "数学化程度",
+      "score": 8,
+      "evidence": "置信边界长期收益与装配树骨架齐全"
+    },
+    "4_data_alignment": {
+      "name": "数据契合度",
+      "score": 9,
+      "evidence": "已核对PDF表1表2与图1拓扑"
+    },
+    "5_subproblem_dependency_identified": {
+      "name": "子问题关联性",
+      "score": 9,
+      "evidence": "Q1至Q4接口及独立理由均已标注"
+    }
+  },
+  "min_score": 8,
+  "mean_score": 8.8,
+  "issues": [],
+  "verdict": "pass"
+}

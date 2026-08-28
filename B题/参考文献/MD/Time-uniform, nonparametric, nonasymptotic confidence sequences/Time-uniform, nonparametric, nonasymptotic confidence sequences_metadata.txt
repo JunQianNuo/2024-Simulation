@@ -1,0 +1,21 @@
+---
+raw_title: Time-uniform, nonparametric, nonasymptotic confidence sequences
+subject: Time-uniform, nonparametric, nonasymptotic confidence sequences
+source: Time-uniform, nonparametric, nonasymptotic confidence sequences.pdf
+status: mineru解析
+parser: mineru
+---
+
+Time-uniform, nonparametric, nonasymptotic confidence sequences
+
+作者: Howard, Steven R ; Ramdas, Aaditya ; McAuliffe, Jon ; Sekhon, Jasjeet
+
+主题: Mathematics - Probability ; Mathematics - Statistics Theory ; Statistics - Methodology ;Statistics - Theory
+
+摘要: Ann. Statist. 49(2): 1055-1080 (April 2021) A confidence sequence is a sequence of confidence intervals that is uniformly valid over an unbounded time horizon. Our work develops confidence sequences whose widths go to zero, with nonasymptotic coverage guarantees under nonparametric conditions. We draw connections between the Cramér-Chernoff method for exponential concentration, the law of the iterated logarithm (LIL), and the sequential probability ratio test – our confidence sequences are time-uniform extensions of the first; provide tight, nonasymptotic characterizations of the second; and generalize the third to nonparametric settings, including sub-Gaussian and Bernstein conditions, self-normalized processes, and matrix martingales. We illustrate the generality of our proof techniques by deriving an empirical-Bernstein bound growing at a LIL rate, as well as a novel upper LIL for the maximum eigenvalue of a sum of random matrices. Finally, we apply our methods to covariance matrix estimation and to estimation of sample average treatment effect under the Neyman-Rubin potential outcomes model.
+
+出版日期: 2022-08
+
+语种: 英语识别符: DOI: 10.48550/arxiv.1810.08240
+
+来源: arXiv.org
