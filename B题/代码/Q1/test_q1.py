@@ -8,22 +8,16 @@
     5. 阈值附近长尾      高未决率允许存在，但必须能被检出并报告
 
 运行：
-    cd B题/代码 && python -m pytest tests/ -v
+    cd B题/代码 && python -m pytest q1/test_q1.py -v
 """
 
 from __future__ import annotations
 
-import sys
-from pathlib import Path
-
 import numpy as np
 import pytest
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
-
-from common.schemas import ACT_ACCEPT, ACT_CONTINUE, ACT_REJECT, ACT_UNDECIDED
-from q1.bernoulli_cs import (
+from .schemas import ACT_ACCEPT, ACT_CONTINUE, ACT_REJECT, ACT_UNDECIDED
+from .bernoulli_cs import (
     clopper_pearson_lower,
     clopper_pearson_upper,
     cs_interval,
@@ -31,8 +25,8 @@ from q1.bernoulli_cs import (
     log_mixture_triangle_at_p0,
     mixture_prior,
 )
-from q1.exact_path_dp import evaluate_at_p, first_accept_time_all_good
-from q1.stopping_rule import apply_n_max, build_action_table, crosscheck_action_table
+from .exact_path_dp import evaluate_at_p, first_accept_time_all_good
+from .stopping_rule import apply_n_max, build_action_table, crosscheck_action_table
 
 P0 = 0.10
 ALPHA_R = 0.05

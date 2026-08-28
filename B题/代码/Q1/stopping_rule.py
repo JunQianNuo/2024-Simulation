@@ -24,13 +24,8 @@ from __future__ import annotations
 
 import numpy as np
 
-import sys
-from pathlib import Path
-
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
-
-from common.schemas import ACT_ACCEPT, ACT_CONTINUE, ACT_REJECT, ACT_UNDECIDED, Status
-from q1.bernoulli_cs import cs_interval, log_mixture_triangle_at_p0, mixture_prior
+from .schemas import ACT_ACCEPT, ACT_CONTINUE, ACT_REJECT, ACT_UNDECIDED, Status
+from .bernoulli_cs import cs_interval, log_mixture_triangle_at_p0, mixture_prior
 
 __all__ = ["build_action_table", "apply_n_max", "crosscheck_action_table", "boundary_table"]
 
@@ -44,7 +39,7 @@ def build_action_table(
     t_opt_R: int | None = None,
     t_opt_A: int | None = None,
 ) -> np.ndarray:
-    """构造动作表 act[t, k]，t = 0..n_max，k = 0..t，取值见 common.schemas 的 ACT_*。
+    """构造动作表 act[t, k]，t = 0..n_max，k = 0..t，取值见 q1.schemas 的 ACT_*。
 
     此处**不**写入 ACT_UNDECIDED；截尾由 apply_n_max 施加，
     这样同一张表可以被不同 N_max 的候选复用（表只依赖 t_opt）。

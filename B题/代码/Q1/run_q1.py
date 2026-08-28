@@ -9,16 +9,15 @@
     5. 导出推荐方案的边界表       -> 题目要求的"具体结果"(1)(2)
 
 用法：
-    python q1/run_q1.py                    # 全网格，约 1-3 分钟
-    python q1/run_q1.py --quick            # 缩减网格，冒烟测试用
-    python q1/run_q1.py --outdir results   # 指定输出目录
+    python -m q1.run_q1                    # 全网格，约 1-3 分钟
+    python -m q1.run_q1 --quick            # 缩减网格，冒烟测试用
+    python -m q1.run_q1 --outdir results/q1-custom  # 指定输出目录
 """
 
 from __future__ import annotations
 
 import argparse
 import json
-import sys
 import time
 from pathlib import Path
 
@@ -26,15 +25,14 @@ import numpy as np
 import pandas as pd
 import yaml
 
-sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from .schemas import Candidate, CandidateResult, Q1Problem, Status
+from .bernoulli_cs import clopper_pearson_lower, clopper_pearson_upper
+from .exact_path_dp import evaluate_at_p, first_accept_time_all_good
+from .pareto_search import aggregate_objectives, pareto_front, recommend_three, select_knee
+from .stopping_rule import apply_n_max, boundary_table, build_action_table, crosscheck_action_table
 
-from common.schemas import Candidate, CandidateResult, Q1Problem, Status
-from q1.bernoulli_cs import clopper_pearson_lower, clopper_pearson_upper
-from q1.exact_path_dp import evaluate_at_p, first_accept_time_all_good
-from q1.pareto_search import aggregate_objectives, pareto_front, recommend_three, select_knee
-from q1.stopping_rule import apply_n_max, boundary_table, build_action_table, crosscheck_action_table
-
-ROOT = Path(__file__).resolve().parents[1]
+PACKAGE_DIR = Path(__file__).resolve().parent
+CODE_DIR = PACKAGE_DIR.parent
 
 
 # --------------------------------------------------------------------------
@@ -203,8 +201,8 @@ def export_boundary(act: np.ndarray, cand: Candidate, outdir: Path) -> pd.DataFr
 # --------------------------------------------------------------------------
 def main() -> None:
     ap = argparse.ArgumentParser(description="2024 CUMCM B题 问题一 (Q1-M5 / Q1-A1)")
-    ap.add_argument("--config", default=str(ROOT / "config" / "q1_grid.yaml"))
-    ap.add_argument("--outdir", default=str(ROOT / "results"))
+    ap.add_argument("--config", default=str(PACKAGE_DIR / "q1_grid.yaml"))
+    ap.add_argument("--outdir", default=str(CODE_DIR / "results" / "q1"))
     ap.add_argument("--quick", action="store_true", help="缩减网格，冒烟测试")
     ap.add_argument("--no-crosscheck", action="store_true", help="跳过交叉核验（调试用）")
     args = ap.parse_args()
@@ -353,7 +351,7 @@ def main() -> None:
     print("=" * 78)
     print(f"结果已写入 {outdir}/")
     print("    q1_operating_characteristics.csv  每个候选 × 每个 p 的精确性能")
-    print("    q1_candidate_objectives.csv       34 个候选的加权目标 (ASN_w, U_w)")
+    print(f"    q1_candidate_objectives.csv       {len(candidates)} 个候选的加权目标 (ASN_w, U_w)")
     print("    q1_decision_boundary.csv          推荐方案的接收/拒收边界表")
     print("    q1_summary.json                   运行摘要与最优性称谓")
 

@@ -1,22 +1,24 @@
-"""在没有 pytest 的环境里跑 tests/test_q1.py。
+"""在没有 pytest 的环境里运行 q1.test_q1。
 
-比赛机上装了 pytest 就直接用 `python -m pytest tests/ -v`，
+比赛机上装了 pytest 就直接用 `python -m pytest q1/test_q1.py -v`，
 这个脚本只是没网/没装包时的等价回退：注入一个最小 pytest 垫片，
 再逐个执行 test_* 函数（含 parametrize 展开）。
 
-用法：python tests/run_tests_nopytest.py
+用法：python q1/run_tests_nopytest.py（或 python -m q1.run_tests_nopytest）
 """
 
 from __future__ import annotations
 
-import itertools
+import os
 import sys
 import traceback
 import types
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT))
+# 直接执行文件时，转交给规范的包模块入口；不修改 sys.path。
+if __package__ in (None, ""):
+    os.chdir(Path(__file__).resolve().parent.parent)
+    os.execv(sys.executable, [sys.executable, "-m", "q1.run_tests_nopytest"])
 
 
 # --------------------------------------------------------------------------
@@ -63,7 +65,7 @@ sys.modules["pytest"] = _pytest
 # 执行
 # --------------------------------------------------------------------------
 def main() -> int:
-    import tests.test_q1 as mod  # noqa: E402
+    from . import test_q1 as mod
 
     passed = failed = 0
     failures: list[tuple[str, str]] = []
