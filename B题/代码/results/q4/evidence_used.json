@@ -169,5 +169,5 @@
     }
   },
   "source_path": "/home/clmbr/Projects/CUMCM/2024-Simulation/B题/代码/q4/q4_demo_evidence.json",
-  "demo_marker": "DEMO_ONLY_NOT_OFFICIAL_DATA"
+  "evidence_marker": "DEMO_ONLY_NOT_OFFICIAL_DATA"
 }

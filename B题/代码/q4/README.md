@@ -1,24 +1,33 @@
 # 2024 CUMCM B 题问题四
 
+Q4 不另造生产模型，而是把抽样得到的次品率不确定性传入已验收的 Q2 吸收 Markov 收益模型和 Q3 装配树闭环模型。
+
 ```bash
 cd B题/代码
-python -m q4.run_q4
+../../.venv/bin/python -m q4.run_q4 --quick
+../../.venv/bin/python -m unittest q4.test_q4 -v
 ```
 
-`--quick` 只用于流程调试；它使用小样本且全部 Bayesian 结果强制标记为 `MC_NOT_CONVERGED`。
+去掉 `--quick` 后使用 `config.json` 中的正式 Monte Carlo 预算。快速模式仍覆盖 Q2 每情形 16 策略和 Q3 全部 65536 策略，但一律标为 `MC_NOT_CONVERGED`，只用于验证数据流。
 
-也可指定真实证据文件：
+## 证据接口
+
+题面没有提供真实 `(N,K)`，因此默认 `q4_demo_evidence.json` 明确标记为 `DEMO_ONLY_NOT_OFFICIAL_DATA`，不能写成企业实测结论。可用：
 
 ```bash
-python -m q4.run_q4 --evidence q4/your_evidence.json
+../../.venv/bin/python -m q4.run_q4 --evidence q4/your_evidence.json
 ```
 
-无参数时使用 `q4_demo_evidence.json`。其中的 `N,K` **明确是 `DEMO_ONLY_NOT_OFFICIAL_DATA`**：题目没有给出真实抽样证据，演示输出只用于复现算法，不能作为企业结论。
+每个记录必须有 `N,K,conditioning`。零件的 `conditioning` 是 `component`，装配次品率必须是 `all_inputs_good`。固定样本用 Bonferroni–Clopper–Pearson 联合区间；若某记录来自序贯停止，需额外给出 `"stopping_rule":"sequential_cs"` 和 `t_opt`，程序才会调用 Q1-A1 的 Beta–Binomial 置信序列端点。
 
-证据为固定样本 JSON。Q2 每个情形给出 `p1,p2,pf`；Q3 给出 `part_1..part_8,semi_1..semi_3,final`。每条都有整数 `N,K` 和 `conditioning`。零件必须为 `component`；半成品和最终装配缺陷率必须为 `all_inputs_good`，否则程序返回 `INVALID_CONDITIONING`。自适应停止的证据没有可用置信序列记录时会返回 `INVALID_DATA`，不会误用固定样本区间。
+## Q4-M2 / Q4-A1
 
-Q4-M2 用 Uniform Beta(1,1) 与 Jeffreys Beta(0.5,0.5) 后验，在共同随机数下完整枚举 Q2 的每情形 16 策略和 Q3 的全部 65536 策略。默认 Q2 探索至少 5000、确认至少 2000；Q3 两批各至少 100。每批都评价完整策略域。只有探索与独立确认批选中同一最优策略，且两批“最优—第二名”的**配对**后验利润均值差都大于 3 倍配对 MC 标准误，才标记 `SUCCESS_MC_TOL`；否则达到上限后标记 `MC_NOT_CONVERGED` 并保留近优集合。样本少于 20 时不输出 P05/P95，也不能以“最优频率 1”作为收敛证据。后验利润分位数反映参数后验不确定性；`mc_standard_error` 只反映 Monte Carlo 数值积分误差，两者不是同一种区间。
+Uniform `Beta(1,1)` 是主基准，Jeffreys `Beta(1/2,1/2)` 是先验敏感性。同一后验参数样本下比较全部策略，输出后验期望利润、5%/50%/95% 可信分位数、策略最优概率、亏损概率、后验遗憾和 MC 标准误。可信区间与 MC 数值误差分开报告。
 
-Q4-M3 对固定终止时点证据构造 90% 与 95% 同时 Bonferroni Clopper–Pearson 区间。认证依据首先是结构性耦合：对固定检测/拆解策略，高缺陷率系统可由低缺陷率系统额外把部分好事件改坏而得。每订单售价只计一次，缺陷不创造收入，采购/检测/装配/拆解/调换成本非负；故更高缺陷只会增加或保持重购、重检、重装、报废、拆解和调换。于是，在当前完美检测、真实质量回收、独立缺陷参数模型中，固定策略利润对各缺陷率单调不增，矩形最坏点为全部上界。程序还显式检查这些结构条件、证据 conditioning，并做有限差分抽查作为实现错误防线；三者均通过才标记 `ROBUST_CERTIFIED_BY_MONOTONICITY`。有限差分不是认证的唯一依据；任一条件不满足或出现反例均为 `ROBUST_UNCERTIFIED`。
+探索批只有同时满足配对利润差 Student-t 半宽、领先策略最优概率 MC SE、至少 8 批和连续 3 个稳定 checkpoint，再被独立固定确认批复核，才标 `SUCCESS_MC_TOL`。否则输出近优集，不强行声称唯一最优。
 
-Q3 利润评价复用修正后的局部闭环评价器：拆解回收件保留真实质量；若原检测决策为 1，回收后再次检测并计检测费，但不重复采购。所有金额均为最终交付一件合格品的期望净利润/成本，售价只计一次。所谓“最优”分别仅指 Q2 的 16 策略域或 Q3 的 65536 策略域，不是无条件全局最优。
+## Q4-M3 / Q4-A2
+
+90% 联合矩形集是主稳健口径，95% 作敏感性。Q2 遍历全部角点，正式模式再用 SHGO 和 DE 互证；Q3 在完整外层策略域上评价两端、中心和固定随机盒内点。快速模式一律是 `ROBUST_UNCERTIFIED`；正式 Q2 全局搜索互证后最高只标 `ROBUST_NUMERICAL`。Q3 和严格结论均需区间分支定界证书，否则不得称为矩形集内严格全局稳健最优。
+
+输出在 `results/q4/`：全策略表、Bayesian 近优集、数值稳健方案、`summary.json`、`evidence_used.json` 和 `reproducibility.json`。利润口径始终是最终交付一件合格品，回收件保留真实质量，与 Q2/Q3 一致。

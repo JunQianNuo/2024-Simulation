@@ -1,0 +1,15 @@
+{
+  "evidence_marker": "DEMO_ONLY_NOT_OFFICIAL_DATA",
+  "accounting_unit": "最终交付一件合格品的期望净利润",
+  "bayesian_claim": "快速验收批未达 MC 容差，只可报告近优集；正式运行达 SUCCESS_MC_TOL 后才可报领先策略。",
+  "robust_claim": "快速验收仅 ROBUST_UNCERTIFIED；正式 Q2 互证最高为 ROBUST_NUMERICAL；无区间证书不可称严格全局稳健最优。",
+  "q2_bayesian_near_optimal_file": "q2_bayesian_near_optimal.csv",
+  "q3_bayesian_near_optimal_file": "q3_bayesian_near_optimal.csv",
+  "q2_robust_numerical_file": "q2_robust_numerical_best.csv",
+  "q3_robust_numerical_file": "q3_robust_numerical_best.csv",
+  "limitations": [
+    "题面未给真实 N,K，默认数值是演示",
+    "矩形联合集忽略参数相关性",
+    "完美检测、条件独立与回收件真实质量保留沿用 Q2/Q3 锁定假设"
+  ]
+}

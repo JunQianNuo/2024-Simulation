@@ -1,1 +1,4 @@
 .venv
+# Large generated Q4 result files
+B题/代码/results/q4/q3_robust_all_policies.csv
+B题/代码/results/q4/q3_bayesian_all_policies.csv
