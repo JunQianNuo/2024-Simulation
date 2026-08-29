@@ -1,0 +1,33 @@
+{
+  "status": "SUCCESS_EXACT",
+  "claim": "exact Pareto front within the declared 34-candidate finite grid only",
+  "balanced_reference": {
+    "t_opt": 200,
+    "N_max": 800,
+    "ASN_w_equal": 393.3277610424072,
+    "U_w_equal": 0.3384570869778877
+  },
+  "alternative_recommendations": {
+    "sample_saving": {
+      "t_opt": 25,
+      "N_max": 50,
+      "ASN_w_equal": 43.130885676793206,
+      "U_w_equal": 0.7282583996646002
+    },
+    "low_undecided": {
+      "t_opt": 1600,
+      "N_max": 3200,
+      "ASN_w_equal": 1035.5164520675278,
+      "U_w_equal": 0.17459872281721636
+    }
+  },
+  "evidence": {
+    "candidate_objectives": "results/q1/candidate_objectives.csv",
+    "operating_characteristics": "results/q1/operating_characteristics.csv",
+    "decision_boundary": "results/q1/decision_boundary.csv",
+    "crosscheck": "results/q1/cs_crosscheck.csv",
+    "sensitivity": "results/q1/sensitivity_recommendations.csv",
+    "figure": "results/q1/pareto_front.svg"
+  },
+  "warning": "UNDECIDED_CAP is evidence insufficiency; do not continue sampling outside the declared rule."
+}

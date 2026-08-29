@@ -1,29 +1,10 @@
 {
   "problem": "2024-CUMCM-B-Q1",
-  "method": "pre-specified five-stage group-sequential sampling with one-sided Clopper-Pearson bounds",
-  "p0": 0.1,
-  "stages": [
-    40,
-    80,
-    160,
-    320,
-    800
-  ],
-  "alpha_reject": [
-    0.01,
-    0.01,
-    0.01,
-    0.01,
-    0.01
-  ],
-  "alpha_accept": [
-    0.04,
-    0.025,
-    0.015,
-    0.012,
-    0.008
-  ],
-  "p_grid": [
+  "model": "Q1-M5",
+  "algorithm": "Q1-A1",
+  "status": "SUCCESS_EXACT",
+  "candidate_count": 34,
+  "representative_p": [
     0.01,
     0.03,
     0.05,
@@ -38,6 +19,46 @@
     0.2,
     0.3
   ],
-  "worst_mass_residual": 1.7763568394002505e-15,
-  "decision_at_n800": "undecided / recommend additional inspection when neither boundary is met"
+  "baseline": {
+    "U_0.90(22,0)": 0.09937197978872149,
+    "L_0.95(2,2)": 0.22360679774997896
+  },
+  "worst_mass_residual": 8.282263763703668e-14,
+  "worst_cs_endpoint_error": 5.015987625256457e-13,
+  "error_constraint_check": {
+    "max_reject_at_p0": 0.03498348688830048,
+    "max_accept_at_p0_right_limit": 0.09302250841810013
+  },
+  "pareto_sizes": {
+    "equal": 17,
+    "near_threshold": 13,
+    "far_threshold": 20
+  },
+  "recommendations": {
+    "sample_saving": {
+      "t_opt": 25,
+      "N_max": 50,
+      "ASN_w_equal": 43.130885676793206,
+      "U_w_equal": 0.7282583996646002
+    },
+    "balanced": {
+      "t_opt": 200,
+      "N_max": 800,
+      "ASN_w_equal": 393.3277610424072,
+      "U_w_equal": 0.3384570869778877
+    },
+    "low_undecided": {
+      "t_opt": 1600,
+      "N_max": 3200,
+      "ASN_w_equal": 1035.5164520675278,
+      "U_w_equal": 0.17459872281721636
+    }
+  },
+  "knee_selection": {
+    "criteria_agree": false,
+    "ideal_index": 8,
+    "curvature_index": 13
+  },
+  "optimality_claim": "exact Pareto front within the declared 34-candidate finite grid only",
+  "undecided_action": "UNDECIDED_CAP; no unbudgeted continued inspection"
 }
