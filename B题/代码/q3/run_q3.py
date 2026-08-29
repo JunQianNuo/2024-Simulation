@@ -6,7 +6,7 @@ import argparse
 import hashlib
 import json
 import platform
-import resource
+import subprocess
 import sys
 import time
 from copy import deepcopy
@@ -15,11 +15,17 @@ from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["svg.hashsalt"] = "cumcm-q3-results"
 import matplotlib.pyplot as plt
 import mpmath
 import numpy as np
 import pandas as pd
 import scipy
+
+try:
+    import resource
+except ImportError:  # Windows
+    resource = None
 
 try:
     from .model import (
@@ -53,7 +59,10 @@ def enumerate_policies(context=None, recovery_mode="physical_retention"):
 
 
 def feasible(frame):
-    return frame[frame.status.isin(["SUCCESS_EXACT", "NEAR_NONABSORBING"])].copy()
+    hp = frame.get("high_precision_reward_solve", False)
+    if hasattr(hp, "fillna"):
+        hp = hp.fillna(False).astype(bool)
+    return frame[(frame.status == "SUCCESS_EXACT") | ((frame.status == "NEAR_NONABSORBING") & hp)].copy()
 
 
 def select_best(frame):
@@ -115,22 +124,29 @@ def audit(frame):
 
 
 def scan_best(context=None, recovery_mode="physical_retention"):
-    best, runner_up, counts = [], [], {}
+    items, counts = [], {}
     for strategy_id in range(65536):
         row = evaluate(strategy_id, _context=context, recovery_mode=recovery_mode)
         counts[row["status"]] = counts.get(row["status"], 0) + 1
-        if row["status"] not in {"SUCCESS_EXACT", "NEAR_NONABSORBING"}:
+        if row["status"] != "SUCCESS_EXACT" and not (
+            row["status"] == "NEAR_NONABSORBING" and row.get("high_precision_reward_solve", False)
+        ):
             continue
-        item = (row["expected_profit"], strategy_id)
-        if not best or item[0] > best[0][0] + 1e-12:
-            runner_up, best = best, [item]
-        elif abs(item[0] - best[0][0]) <= 1e-12:
-            best.append(item)
-        elif not runner_up or item[0] > runner_up[0][0] + 1e-12:
-            runner_up = [item]
-        elif abs(item[0] - runner_up[0][0]) <= 1e-12:
-            runner_up.append(item)
-    return best, runner_up, counts
+        items.append((row["expected_profit"], strategy_id))
+    items.sort(key=lambda item: (-item[0], item[1]))
+    if not items:
+        return [], [], counts
+
+    tolerance = CONFIG["tie_relative_tolerance"]
+
+    def tied(a, b):
+        return abs(a - b) <= tolerance * max(1.0, abs(a), abs(b))
+
+    best_profit = items[0][0]
+    best = [item for item in items if tied(item[0], best_profit)]
+    remaining = [item for item in items if not tied(item[0], best_profit)]
+    second = [] if not remaining else [item for item in remaining if tied(item[0], remaining[0][0])]
+    return best, second, counts
 
 
 def sensitivity_analysis(nominal_best):
@@ -187,7 +203,7 @@ def figures(top, sensitivity):
     ax.grid(axis="y", alpha=0.25)
     fig.tight_layout()
     fig.savefig(OUTDIR / "top_policy_profit.png", dpi=220)
-    fig.savefig(OUTDIR / "top_policy_profit.svg")
+    save_svg(fig, OUTDIR / "top_policy_profit.svg")
     plt.close(fig)
 
     fig, ax = plt.subplots(figsize=(9, 4.8))
@@ -204,12 +220,32 @@ def figures(top, sensitivity):
     ax.legend(frameon=False)
     fig.tight_layout()
     fig.savefig(OUTDIR / "sensitivity_profit_gap.png", dpi=220)
-    fig.savefig(OUTDIR / "sensitivity_profit_gap.svg")
+    save_svg(fig, OUTDIR / "sensitivity_profit_gap.svg")
     plt.close(fig)
+
+
+def save_svg(fig, path):
+    fig.savefig(path, metadata={"Date": None})
+    path.write_text(
+        "\n".join(line.rstrip() for line in path.read_text(encoding="utf-8").splitlines()) + "\n",
+        encoding="utf-8",
+    )
 
 
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def normalized_sha256(path):
+    data = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(data).hexdigest()
+
+
+def git_value(*args):
+    try:
+        return subprocess.check_output(["git", *args], cwd=HERE, text=True).strip()
+    except (OSError, subprocess.SubprocessError):
+        return "unavailable"
 
 
 def clean_record(record):
@@ -231,6 +267,7 @@ def main():
     nominal_best = ";".join(map(str, best.strategy_id.astype(int)))
     kernel_registry = {
         "schema_version": CONFIG["kernel_schema_version"],
+        "model_scope": "compositional kernel solver for the specified three-level assembly tree",
         "tree_and_parameter_sha256": sha256(HERE / "table2.json"),
         "bit_order": ["x1", "x2", "x3", "x4", "x5", "x6", "x7", "x8", "y1", "y2", "y3", "yf", "z1", "z2", "z3", "zf"],
         "state_fields": ["phase", "quality", "information", "source"],
@@ -279,22 +316,29 @@ def main():
         figures(top, sensitivity)
 
     runtime = time.perf_counter() - started
+    source_files = [HERE.parent / "component_state.py"] + [HERE / name for name in (
+        "model.py", "run_q3.py", "test_q3.py", "config.json", "table2.json",
+        "requirements.txt", "README.md",
+    )]
     metadata = {
         "schema_version": CONFIG["schema_version"], "kernel_schema_version": CONFIG["kernel_schema_version"],
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
         "command": "cd B题/代码 && python -m q3.run_q3",
-        "runtime_seconds": runtime, "peak_rss_kib": resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
+        "runtime_seconds": runtime,
+        "peak_rss_kib": None if resource is None else resource.getrusage(resource.RUSAGE_SELF).ru_maxrss,
         "python": sys.version, "platform": platform.platform(),
         "versions": {"numpy": np.__version__, "pandas": pd.__version__, "scipy": scipy.__version__,
                      "matplotlib": matplotlib.__version__, "mpmath": mpmath.__version__},
         "input_sha256": sha256(HERE / "table2.json"), "config_sha256": sha256(HERE / "config.json"),
-        "code_sha256": {
-            "component_state.py": sha256(HERE.parent / "component_state.py"),
-            **{name: sha256(HERE / name) for name in ("model.py", "run_q3.py")},
-        },
+        "git_commit": git_value("rev-parse", "HEAD"),
+        "git_dirty": bool(git_value("status", "--porcelain")),
+        "source_snapshot": "exact and LF-normalized SHA-256 hashes are authoritative when git_dirty is true",
+        "source_sha256": {str(path.relative_to(HERE.parent)): sha256(path) for path in source_files},
+        "normalized_source_sha256": {str(path.relative_to(HERE.parent)): normalized_sha256(path) for path in source_files},
     }
     summary = {
         "model": "Q3-M3", "algorithm": "Q3-A1", "metadata": metadata,
+        "model_scope": "specified three-level assembly tree; not a general tree generator",
         "policies_total": 65536, "status_counts": {str(k): int(v) for k, v in all_rows.status.value_counts().items()},
         "feasible_policies": len(ok), "best_profit": float(best.expected_profit.max()),
         "best_policies": [clean_record(x) for x in best.to_dict(orient="records")],
@@ -323,7 +367,12 @@ def main():
              "table": "sensitivity.csv", "figure": "sensitivity_profit_gap.svg",
              "conditions": "Defect bounds use Tables 1-2 observed range; cost scenarios are hypothetical +/-25%."},
         ],
-        "caution": "quality_reset_rebuild is a structural stress scenario, not the main physical model.",
+        "extension_validation": {
+            "case": "part_1 defect=1e-12, all other upstream defects=0, final defect=0.1, strategy=32768",
+            "expected_status": "NON_ABSORBING",
+            "validation": "test_tiny_positive_defect_remains_structurally_nonabsorbing",
+        },
+        "caution": "The implementation targets the specified three-level assembly tree; it is not a general assembly-tree generator. quality_reset_rebuild is structural stress only.",
     }
     (OUTDIR / "code_to_writer.json").write_text(json.dumps(writer, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     figure_index = {

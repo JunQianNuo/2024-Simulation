@@ -25,5 +25,10 @@
       "conditions": "Defect bounds use Tables 1-2 observed range; cost scenarios are hypothetical +/-25%."
     }
   ],
-  "caution": "quality_reset_rebuild is a structural stress scenario, not the main physical model."
+  "extension_validation": {
+    "case": "part_1 defect=1e-12, all other upstream defects=0, final defect=0.1, strategy=32768",
+    "expected_status": "NON_ABSORBING",
+    "validation": "test_tiny_positive_defect_remains_structurally_nonabsorbing"
+  },
+  "caution": "The implementation targets the specified three-level assembly tree; it is not a general assembly-tree generator. quality_reset_rebuild is structural stress only."
 }

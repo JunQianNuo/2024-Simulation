@@ -6,12 +6,14 @@ import hashlib
 import itertools
 import json
 import platform
+import subprocess
 import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 import matplotlib
 matplotlib.use("Agg")
+matplotlib.rcParams["svg.hashsalt"] = "cumcm-q2-best-profit"
 import matplotlib.pyplot as plt
 import mpmath
 import numpy as np
@@ -47,7 +49,8 @@ def load_inputs():
 
 
 def feasible_rows(frame):
-    return frame[frame["status"].isin(["SUCCESS_EXACT", "NEAR_NONABSORBING"])].copy()
+    hp = frame.get("high_precision_reward_solve", False)
+    return frame[(frame["status"] == "SUCCESS_EXACT") | ((frame["status"] == "NEAR_NONABSORBING") & hp)].copy()
 
 
 def select_best(frame, config):
@@ -88,7 +91,7 @@ def enumerate_nominal(cases, config):
     for case in cases:
         for policy in POLICIES:
             result = evaluate_policy(policy, case, config, include_graph=True)
-            states, p, success, edges = result.pop("_graph")
+            states, p, success, rewards, edges = result.pop("_graph")
             policy_id = "".join(map(str, policy))
             rows.append(result)
             for i, state in enumerate(states):
@@ -96,6 +99,8 @@ def enumerate_nominal(cases, config):
                     "case": case["case"], "policy": policy_id, "state_id": i,
                     **state._asdict(), "transient_probability": float(p[i].sum()),
                     "success_probability": float(success[i]),
+                    **{f"immediate_cost_{name}": float(rewards[i, j]) for j, name in enumerate(COMPONENTS)},
+                    **{f"immediate_{name}": float(rewards[i, len(COMPONENTS) + j]) for j, name in enumerate(EVENTS)},
                 })
             for source, target, probability in edges:
                 edge_rows.append({
@@ -156,12 +161,29 @@ def plot_best(best):
     ax.grid(axis="y", alpha=0.25)
     fig.tight_layout()
     fig.savefig(OUTDIR / "best_profit_by_case.png", dpi=220)
-    fig.savefig(OUTDIR / "best_profit_by_case.svg")
+    svg_path = OUTDIR / "best_profit_by_case.svg"
+    fig.savefig(svg_path, metadata={"Date": None})
+    svg_path.write_text(
+        "\n".join(line.rstrip() for line in svg_path.read_text(encoding="utf-8").splitlines()) + "\n",
+        encoding="utf-8",
+    )
     plt.close(fig)
 
 
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def normalized_sha256(path):
+    data = path.read_bytes().replace(b"\r\n", b"\n").replace(b"\r", b"\n")
+    return hashlib.sha256(data).hexdigest()
+
+
+def git_value(*args):
+    try:
+        return subprocess.check_output(["git", *args], cwd=HERE, text=True).strip()
+    except (OSError, subprocess.SubprocessError):
+        return "unavailable"
 
 
 def json_value(value):
@@ -200,6 +222,10 @@ def main():
     structural.to_csv(OUTDIR / "structural_comparison.csv", index=False, encoding="utf-8-sig")
     plot_best(best)
 
+    source_files = [HERE.parent / "component_state.py"] + [HERE / name for name in (
+        "model.py", "run_q2.py", "test_q2.py", "config.json", "table1.json",
+        "requirements.txt", "README.md",
+    )]
     metadata = {
         "schema_version": config["schema_version"],
         "generated_at_utc": datetime.now(timezone.utc).isoformat(),
@@ -211,7 +237,11 @@ def main():
         },
         "input_sha256": sha256(HERE / "table1.json"),
         "config_sha256": sha256(HERE / "config.json"),
-        "code_sha256": {name: sha256(HERE / name) for name in ("model.py", "run_q2.py")},
+        "git_commit": git_value("rev-parse", "HEAD"),
+        "git_dirty": bool(git_value("status", "--porcelain")),
+        "source_snapshot": "exact and LF-normalized SHA-256 hashes are authoritative when git_dirty is true",
+        "source_sha256": {str(path.relative_to(HERE.parent)): sha256(path) for path in source_files},
+        "normalized_source_sha256": {str(path.relative_to(HERE.parent)): normalized_sha256(path) for path in source_files},
     }
     summary = {
         "model": "Q2-M2", "algorithm": "Q2-A1", "metadata": metadata,
@@ -222,6 +252,7 @@ def main():
         "max_row_sum_error": float(all_policies["row_sum_error"].max()),
         "max_linear_residual": float(feasible["linear_residual"].max()),
         "minimum_success_absorption_margin": float(feasible["absorption_margin"].min()),
+        "near_nonabsorbing_selection_gate": "80-digit reward-equation solve required",
         "case_results": [
             {
                 "case": case["case"],
@@ -236,12 +267,31 @@ def main():
         "artifacts": [
             "all_policies.csv", "best_policies.csv", "state_table.csv", "transition_edges.csv",
             "sensitivity.csv", "structural_comparison.csv", "best_profit_by_case.png",
-            "best_profit_by_case.svg", "run_metadata.json",
-            "code_to_writer.md",
+            "best_profit_by_case.svg", "run_metadata.json", "repro_manifest.json",
+            "code_to_writer.json", "figure_index.json",
         ],
     }
     (OUTDIR / "run_metadata.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    (OUTDIR / "repro_manifest.json").write_text(json.dumps(metadata, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     (OUTDIR / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2, default=json_value) + "\n", encoding="utf-8")
+    writer = {
+        "claims": [{
+            "claim": "Q2 nominal optimum by case",
+            "accounting_unit": summary["accounting_unit"],
+            "table": "best_policies.csv",
+            "figure": "best_profit_by_case.svg",
+            "validation": "9 acceptance tests, state-level rewards, SCC absorption and accounting audit",
+        }],
+        "caution": "NEAR_NONABSORBING policies enter optimization only after 80-digit reward-equation verification.",
+    }
+    (OUTDIR / "code_to_writer.json").write_text(json.dumps(writer, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    figure_index = {
+        "best_profit_by_case.svg": {
+            "source": "best_policies.csv", "supports": "nominal optimum expected profit for six cases",
+        },
+        "command": metadata["command"],
+    }
+    (OUTDIR / "figure_index.json").write_text(json.dumps(figure_index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     print("最优策略（x1,x2,y,z）：")
     print(best[["case", "x1", "x2", "y", "z", "expected_profit", "absorption_margin"]].to_string(index=False, float_format=lambda x: f"{x:.6f}"))

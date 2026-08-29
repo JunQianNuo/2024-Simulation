@@ -1,0 +1,7 @@
+{
+  "best_profit_by_case.svg": {
+    "source": "best_policies.csv",
+    "supports": "nominal optimum expected profit for six cases"
+  },
+  "command": "python B题/代码/q2/run_q2.py"
+}

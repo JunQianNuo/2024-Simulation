@@ -15,7 +15,7 @@ python -m q2.run_q2
 python -m unittest q2.test_q2 -v
 ```
 
-主程序使用正概率边的 SCC 判定闭合暂态类，再计算谱半径与吸收裕度。裕度不大于 `1e-10` 时标记 `NEAR_NONABSORBING` 并用 80 位精度复核；数值阈值不参与图结构分类。可吸收策略使用稀疏 LU 一次求解多个成本/事件右端，并进行残差检查。
+主程序使用正概率边的 SCC 判定闭合暂态类，再计算谱半径与吸收裕度。裕度不大于 `1e-10` 时标记 `NEAR_NONABSORBING`，用 80 位精度同时复核谱半径和全部奖励方程；高精度求解未通过的策略不得参与选优。数值阈值不参与图结构分类。
 
 ## 输出
 
@@ -23,7 +23,7 @@ python -m unittest q2.test_q2 -v
 
 - `all_policies.csv`：96 个策略的状态、谱信息、成本分项和事件次数。
 - `best_policies.csv`：各情形最优策略，并列解全部保留。
-- `state_table.csv` 和 `transition_edges.csv`：可追溯的状态/边表。
+- `state_table.csv` 和 `transition_edges.csv`：可追溯的状态/边表，状态表同时包含本步成本和事件奖励。
 - `sensitivity.csv`：检测、调换和拆解费用的单因素分析，范围依据为表 1 已观测值。
 - `structural_comparison.csv`：物理质量保持与传统质量重置近似的结构对照。
 - `summary.json` 和 `run_metadata.json`：汇总、版本、配置与 SHA-256 哈希。

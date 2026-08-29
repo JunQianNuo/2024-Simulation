@@ -1,0 +1,12 @@
+{
+  "claims": [
+    {
+      "claim": "Q2 nominal optimum by case",
+      "accounting_unit": "one finally delivered qualified product",
+      "table": "best_policies.csv",
+      "figure": "best_profit_by_case.svg",
+      "validation": "9 acceptance tests, state-level rewards, SCC absorption and accounting audit"
+    }
+  ],
+  "caution": "NEAR_NONABSORBING policies enter optimization only after 80-digit reward-equation verification."
+}

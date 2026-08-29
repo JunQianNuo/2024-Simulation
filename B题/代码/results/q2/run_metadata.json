@@ -1,6 +1,6 @@
 {
   "schema_version": "q2-results-v2",
-  "generated_at_utc": "2026-08-29T05:24:02.820444+00:00",
+  "generated_at_utc": "2026-08-29T09:25:45.431485+00:00",
   "command": "python B题/代码/q2/run_q2.py",
   "python": "3.14.7 (main, Aug 10 2026, 00:00:00) [GCC 16.1.1 20260515 (Red Hat 16.1.1-2)]",
   "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43",
@@ -9,12 +9,31 @@
     "pandas": "3.0.5",
     "scipy": "1.18.1",
     "matplotlib": "3.11.1",
-    "mpmath": "1.3.0"
+    "mpmath": "1.4.1"
   },
   "input_sha256": "ac7710a169089f0d67440ed2663f5eb9ec0ad43b4b4278055537bc469c09f045",
   "config_sha256": "87867483b29cfc4b8d6a14ce566c7c01a8f57ce79d5cf81bf518461624f0355a",
-  "code_sha256": {
-    "model.py": "9b19d4946e72e159733759d70a18b98a7ec9dc1dd2bb3aa963bb0e6ca2eed893",
-    "run_q2.py": "530f6fcfa76c4c195abe4829bd4b8b4eeb364d0fdac96335654e886c64876b63"
+  "git_commit": "7dc2dbafb4d1dfcd915f22d1c85b4982dc2f955e",
+  "git_dirty": true,
+  "source_snapshot": "exact and LF-normalized SHA-256 hashes are authoritative when git_dirty is true",
+  "source_sha256": {
+    "component_state.py": "223fe11a0a734a98ce87baeb94a3b13053e26871357a14089dedb3aa7246ee88",
+    "q2/model.py": "24966ff0461df11be358e819543c43b0a411847a31ef7b1d1f795e92f193eb49",
+    "q2/run_q2.py": "be7ffb94c160bbd857788a4dd3744b8858667cca58e5fc7e032cb6a1ff1314a6",
+    "q2/test_q2.py": "c44a8ea9a21b14cb22c00adb6200547073b6b7f5dbf8d7331a3fe8ad0a7d4449",
+    "q2/config.json": "87867483b29cfc4b8d6a14ce566c7c01a8f57ce79d5cf81bf518461624f0355a",
+    "q2/table1.json": "ac7710a169089f0d67440ed2663f5eb9ec0ad43b4b4278055537bc469c09f045",
+    "q2/requirements.txt": "2ac7ae174b474c2762b629b640846d8c6d308edfc38045562e47c3a4ac07c20b",
+    "q2/README.md": "785f26607443098f29d0e6943eeee3632cb0caae693605e7cfe9ef371ff0b15d"
+  },
+  "normalized_source_sha256": {
+    "component_state.py": "223fe11a0a734a98ce87baeb94a3b13053e26871357a14089dedb3aa7246ee88",
+    "q2/model.py": "24966ff0461df11be358e819543c43b0a411847a31ef7b1d1f795e92f193eb49",
+    "q2/run_q2.py": "be7ffb94c160bbd857788a4dd3744b8858667cca58e5fc7e032cb6a1ff1314a6",
+    "q2/test_q2.py": "c44a8ea9a21b14cb22c00adb6200547073b6b7f5dbf8d7331a3fe8ad0a7d4449",
+    "q2/config.json": "87867483b29cfc4b8d6a14ce566c7c01a8f57ce79d5cf81bf518461624f0355a",
+    "q2/table1.json": "ac7710a169089f0d67440ed2663f5eb9ec0ad43b4b4278055537bc469c09f045",
+    "q2/requirements.txt": "2ac7ae174b474c2762b629b640846d8c6d308edfc38045562e47c3a4ac07c20b",
+    "q2/README.md": "785f26607443098f29d0e6943eeee3632cb0caae693605e7cfe9ef371ff0b15d"
   }
 }

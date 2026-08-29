@@ -101,12 +101,20 @@ class Q2AcceptanceTests(unittest.TestCase):
         self.assertEqual(result["status"], "NON_ABSORBING")
         self.assertGreaterEqual(result["closed_class_count"], 1)
 
+    def test_graph_exposes_state_level_rewards(self):
+        result = evaluate_policy((1, 1, 0, 1), self.cases[0], self.config, include_graph=True)
+        states, _, _, rewards, _ = result["_graph"]
+        self.assertEqual(rewards.shape, (len(states), 16))
+        self.assertGreater(rewards.sum(), 0.0)
+
     def test_near_nonabsorbing_gets_high_precision_recheck(self):
         case = {**self.cases[0], "case": 97, "p1": 0.0, "p2": 0.0, "pf": 1 - 1e-12}
         result = evaluate_policy((0, 0, 0, 0), case, self.config)
         self.assertEqual(result["status"], "NEAR_NONABSORBING")
         self.assertIn("spectral_radius_high_precision", result)
         self.assertLess(result["spectral_radius_high_precision"], 1.0)
+        self.assertTrue(result["high_precision_reward_solve"])
+        self.assertLessEqual(result["linear_residual"], self.config["probability_tolerance"])
 
     def test_random_parameters_remain_well_formed(self):
         rng = random.Random(20240829)

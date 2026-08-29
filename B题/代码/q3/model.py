@@ -78,6 +78,8 @@ class Kernel:
     equations: int = 0
     status: str = "SUCCESS_EXACT"
     high_precision_radius: float | None = None
+    high_precision_reward_solve: bool = False
+    guaranteed_good: bool = False
 
 
 class KernelFailure(Exception):
@@ -108,9 +110,23 @@ def decode(strategy_id):
 
 
 def _radius_mp(p):
-    mp.mp.dps = CONFIG["high_precision_digits"]
-    values = mp.eig(mp.matrix(p.tolist()), left=False, right=False)
-    return float(max(abs(value) for value in values))
+    with mp.workdps(CONFIG["high_precision_digits"]):
+        values = mp.eig(mp.matrix(p.tolist()), left=False, right=False)
+        return float(max(abs(value) for value in values))
+
+
+def _solve_mp(a, rhs):
+    with mp.workdps(CONFIG["high_precision_digits"]):
+        matrix = mp.matrix([[mp.mpf(value) for value in row] for row in a])
+        columns, worst = [], mp.mpf("0")
+        for j in range(rhs.shape[1]):
+            target = mp.matrix([mp.mpf(value) for value in rhs[:, j]])
+            solution = mp.lu_solve(matrix, target)
+            error = matrix * solution - target
+            scale = max(mp.mpf("1"), max(abs(value) for value in target))
+            worst = max(worst, max(abs(value) for value in error) / scale)
+            columns.append([float(value) for value in solution])
+    return np.asarray(columns, dtype=float).T, float(worst)
 
 
 def _solve_matrix(p, rhs, terminal):
@@ -124,17 +140,21 @@ def _solve_matrix(p, rhs, terminal):
     a = np.eye(len(p)) - p
     condition = float(np.linalg.cond(a))
     try:
-        lu = splu(csc_matrix(a))
-        values = lu.solve(rhs)
-        for _ in range(2):
-            values += lu.solve(rhs - a @ values)
+        if status == "NEAR_NONABSORBING":
+            values, residual = _solve_mp(a, rhs)
+        else:
+            lu = splu(csc_matrix(a))
+            values = lu.solve(rhs)
+            for _ in range(2):
+                values += lu.solve(rhs - a @ values)
+            denominator = np.linalg.norm(a, np.inf) * np.linalg.norm(values, np.inf) + np.linalg.norm(rhs, np.inf)
+            residual = float(np.linalg.norm(a @ values - rhs, np.inf) / max(denominator, np.finfo(float).tiny))
     except (RuntimeError, ValueError) as exc:
         raise KernelFailure("ILL_CONDITIONED", spectral_radius=rho, absorption_margin=margin) from exc
-    denominator = np.linalg.norm(a, np.inf) * np.linalg.norm(values, np.inf) + np.linalg.norm(rhs, np.inf)
-    residual = float(np.linalg.norm(a @ values - rhs, np.inf) / max(denominator, np.finfo(float).tiny))
     if residual > CONFIG["probability_tolerance"]:
         raise KernelFailure("ILL_CONDITIONED", spectral_radius=rho, absorption_margin=margin, residual=residual)
-    return values, Kernel(0.0, zero(), rho, condition, residual, 1, status, hp)
+    return values, Kernel(0.0, zero(), rho, condition, residual, 1, status, hp,
+                          status == "NEAR_NONABSORBING")
 
 
 def solve_loop(reward, repeat):
@@ -142,11 +162,19 @@ def solve_loop(reward, repeat):
         raise KernelFailure("NON_ABSORBING", spectral_radius=1.0, absorption_margin=0.0)
     margin = 1 - repeat
     status = "NEAR_NONABSORBING" if margin <= CONFIG["near_absorption_margin"] else "SUCCESS_EXACT"
-    value = reward / margin
-    residual = float(np.linalg.norm(margin * value - reward, np.inf) / (np.linalg.norm(reward, np.inf) + 1))
+    if status == "NEAR_NONABSORBING":
+        with mp.workdps(CONFIG["high_precision_digits"]):
+            margin_mp = 1 - mp.mpf(repeat)
+            value = np.array([float(mp.mpf(item) / margin_mp) for item in reward])
+            residual = 0.0
+    else:
+        value = reward / margin
+        residual = float(np.linalg.norm(margin * value - reward, np.inf) / (np.linalg.norm(reward, np.inf) + 1))
     if residual > CONFIG["probability_tolerance"]:
         raise KernelFailure("ILL_CONDITIONED", spectral_radius=repeat, absorption_margin=margin, residual=residual)
-    return value, Kernel(0.0, zero(), repeat, 1 / margin, residual, 1, status, repeat if status != "SUCCESS_EXACT" else None)
+    return value, Kernel(0.0, zero(), repeat, 1 / margin, residual, 1, status,
+                         repeat if status != "SUCCESS_EXACT" else None,
+                         status == "NEAR_NONABSORBING")
 
 
 def _combine(kernels):
@@ -160,6 +188,7 @@ def _combine(kernels):
         result.equations += item.equations
         if item.high_precision_radius is not None:
             result.high_precision_radius = max(result.high_precision_radius or 0.0, item.high_precision_radius)
+        result.high_precision_reward_solve |= item.high_precision_reward_solve
     return result
 
 
@@ -227,14 +256,18 @@ def input_batch(ids, inspections, leaves=LEAVES, cache=None):
     values, diagnostics = _solve_matrix(p, np.column_stack([rewards, quality, terminal]), terminal)
     if abs(values[0, -1] - 1) > CONFIG["probability_tolerance"]:
         raise KernelFailure("ILL_CONDITIONED", residual=abs(values[0, -1] - 1))
+    guaranteed_good = all(bool(flag) or leaves[leaf_id][0] == 0.0 for leaf_id, flag in zip(ids, inspections))
     result = Kernel(float(values[0, -2]), values[0, :-2], diagnostics.spectral_radius,
                     diagnostics.condition_number, diagnostics.residual, diagnostics.equations,
-                    diagnostics.status, diagnostics.high_precision_radius)
+                    diagnostics.status, diagnostics.high_precision_radius,
+                    diagnostics.high_precision_reward_solve, guaranteed_good)
     cache[key] = result
     BATCH_AUDIT[str(key)] = {
         "ids": list(ids), "inspections": list(inspections), "n_states": size,
         "spectral_radius": result.spectral_radius, "condition_number": result.condition_number,
         "residual": result.residual, "status": result.status,
+        "guaranteed_good": result.guaranteed_good,
+        "high_precision_reward_solve": result.high_precision_reward_solve,
     }
     return result
 
@@ -309,12 +342,13 @@ def node(name, policy, leaves=LEAVES, nodes=NODES, replacement=REPLACEMENT,
     _record_assembly(first, name, children, assembly)
     tested = yf if root else semis[int(name[1]) - 1]
     dismantle = zf if root else dis_semis[int(name[1]) - 1]
-    all_good = all(abs(item.good - 1) <= CONFIG["probability_tolerance"] for item in child_kernels)
+    all_good = all(item.guaranteed_good for item in child_kernels)
 
     if not tested and not (root and dismantle):
         result = Kernel(q, first, diagnostics.spectral_radius, diagnostics.condition_number,
                         diagnostics.residual, diagnostics.equations, diagnostics.status,
-                        diagnostics.high_precision_radius)
+                        diagnostics.high_precision_radius, diagnostics.high_precision_reward_solve,
+                        all_good and defect == 0.0)
     elif tested and not dismantle:
         first[ci("final_inspection" if root else "semi_inspection")] += inspection
         first[ei("expected_final_inspections" if root else "expected_semi_inspections")] += 1
@@ -326,7 +360,7 @@ def node(name, policy, leaves=LEAVES, nodes=NODES, replacement=REPLACEMENT,
         diagnostics = _combine([diagnostics, loop])
         result = Kernel(1.0, value, diagnostics.spectral_radius, diagnostics.condition_number,
                         diagnostics.residual, diagnostics.equations, diagnostics.status,
-                        diagnostics.high_precision_radius)
+                        diagnostics.high_precision_radius, diagnostics.high_precision_reward_solve, True)
     elif recovery_mode == "physical_retention":
         if not all_good:
             raise KernelFailure("NON_ABSORBING", spectral_radius=1.0, absorption_margin=0.0)
@@ -345,7 +379,8 @@ def node(name, policy, leaves=LEAVES, nodes=NODES, replacement=REPLACEMENT,
         diagnostics = _combine([diagnostics, loop])
         result = Kernel(1.0, sum((item.reward for item in child_kernels), zero()) + value,
                         diagnostics.spectral_radius, diagnostics.condition_number, diagnostics.residual,
-                        diagnostics.equations, diagnostics.status, diagnostics.high_precision_radius)
+                        diagnostics.equations, diagnostics.status, diagnostics.high_precision_radius,
+                        diagnostics.high_precision_reward_solve, True)
     elif recovery_mode == "quality_reset_rebuild":
         attempt = first.copy()
         if tested:
@@ -361,7 +396,7 @@ def node(name, policy, leaves=LEAVES, nodes=NODES, replacement=REPLACEMENT,
         diagnostics = _combine([diagnostics, loop])
         result = Kernel(1.0, value, diagnostics.spectral_radius, diagnostics.condition_number,
                         diagnostics.residual, diagnostics.equations, diagnostics.status,
-                        diagnostics.high_precision_radius)
+                        diagnostics.high_precision_radius, diagnostics.high_precision_reward_solve, True)
     else:
         raise ValueError(f"未知回收模式: {recovery_mode}")
     if name != "root":
@@ -369,7 +404,8 @@ def node(name, policy, leaves=LEAVES, nodes=NODES, replacement=REPLACEMENT,
         KERNEL_AUDIT[str(key)] = {
             "node": name, "good_probability": result.good, "spectral_radius": result.spectral_radius,
             "condition_number": result.condition_number, "residual": result.residual,
-            "status": result.status,
+            "status": result.status, "guaranteed_good": result.guaranteed_good,
+            "high_precision_reward_solve": result.high_precision_reward_solve,
         }
     return result
 
@@ -422,13 +458,14 @@ def evaluate(strategy_id, parameters=None, _context=None, recovery_mode="physica
             diagnostics = _combine([result, loop])
             result = Kernel(1.0, value, diagnostics.spectral_radius, diagnostics.condition_number,
                             diagnostics.residual, diagnostics.equations, diagnostics.status,
-                            diagnostics.high_precision_radius)
+                            diagnostics.high_precision_radius, diagnostics.high_precision_reward_solve, True)
         row.update({
             "status": result.status, "local_loop_equations": result.equations,
             "spectral_radius": result.spectral_radius, "absorption_margin": 1 - result.spectral_radius,
             "max_condition_number": result.condition_number,
             "condition_warning": result.condition_number > CONFIG["condition_warning"],
             "max_local_equation_residual": result.residual,
+            "high_precision_reward_solve": result.high_precision_reward_solve,
         })
         if result.high_precision_radius is not None:
             row["spectral_radius_high_precision"] = result.high_precision_radius

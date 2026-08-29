@@ -181,6 +181,21 @@ def _solve(a, rhs, config):
     return values, residual
 
 
+def _solve_high_precision(a, rhs, digits):
+    """Solve every reward column with mpmath near non-absorption."""
+    with mp.workdps(digits):
+        matrix = mp.matrix([[mp.mpf(value) for value in row] for row in a])
+        columns, worst = [], mp.mpf("0")
+        for j in range(rhs.shape[1]):
+            target = mp.matrix([mp.mpf(value) for value in rhs[:, j]])
+            solution = mp.lu_solve(matrix, target)
+            error = matrix * solution - target
+            scale = max(mp.mpf("1"), max(abs(value) for value in target))
+            worst = max(worst, max(abs(value) for value in error) / scale)
+            columns.append([float(value) for value in solution])
+    return np.asarray(columns, dtype=float).T, float(worst)
+
+
 def evaluate_policy(policy, case, config, recovery_mode="physical_retention", include_graph=False):
     states, p, success, rewards, edges = build_chain(policy, case, recovery_mode)
     row_error = float(np.max(np.abs(p.sum(axis=1) + success - 1)))
@@ -190,7 +205,7 @@ def evaluate_policy(policy, case, config, recovery_mode="physical_retention", in
         "case": case["case"], "x1": policy[0], "x2": policy[1], "y": policy[2], "z": policy[3],
         "n_states": len(states), "n_edges": len(edges), "row_sum_error": row_error,
         "spectral_radius": rho, "absorption_margin": margin, "status": "SUCCESS_EXACT",
-        "closed_class_count": 0,
+        "closed_class_count": 0, "high_precision_reward_solve": False,
     }
     tol = config["probability_tolerance"]
     if np.any(p < 0.0) or np.any(success < 0.0) or row_error > tol:
@@ -206,7 +221,7 @@ def evaluate_policy(policy, case, config, recovery_mode="physical_retention", in
 
     if base["status"] not in {"SUCCESS_EXACT", "NEAR_NONABSORBING"}:
         if include_graph:
-            base["_graph"] = (states, p, success, edges)
+            base["_graph"] = (states, p, success, rewards, edges)
         return base
 
     a = np.eye(len(states)) - p
@@ -214,7 +229,11 @@ def evaluate_policy(policy, case, config, recovery_mode="physical_retention", in
     base["condition_number"] = float(np.linalg.cond(a))
     base["condition_warning"] = base["condition_number"] > config["condition_warning"]
     try:
-        values, residual = _solve(a, rhs, config)
+        if base["status"] == "NEAR_NONABSORBING":
+            values, residual = _solve_high_precision(a, rhs, config["high_precision_digits"])
+            base["high_precision_reward_solve"] = True
+        else:
+            values, residual = _solve(a, rhs, config)
     except (RuntimeError, ValueError):
         base["status"] = "ILL_CONDITIONED"
         return base
@@ -232,5 +251,5 @@ def evaluate_policy(policy, case, config, recovery_mode="physical_retention", in
     base["factory_defect_rate"] = 0.0 if policy[2] else base["expected_replacements"] / (1 + base["expected_replacements"])
     base["exchange_rate"] = base["expected_replacements"]
     if include_graph:
-        base["_graph"] = (states, p, success, edges)
+        base["_graph"] = (states, p, success, rewards, edges)
     return base

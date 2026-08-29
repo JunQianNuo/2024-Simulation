@@ -8,10 +8,11 @@ import unittest
 import pandas as pd
 
 from component_state import inspect_component as shared_inspect
+from q2.model import evaluate_policy as evaluate_q2_policy
 from q2.model import inspect_component as q2_inspect
 from q3.model import (
-    BATCH_CACHE, CONFIG, LEAVES, evaluate, input_batch, make_q3_evaluator,
-    q3_nominal_parameters,
+    BATCH_CACHE, CONFIG, COSTS, LEAVES, NODES, evaluate,
+    input_batch, make_q3_evaluator, node, q3_nominal_parameters, solve_loop,
 )
 from q3.run_q3 import audit, select_best
 
@@ -93,6 +94,35 @@ class Q3AcceptanceTests(unittest.TestCase):
         parameters["final"] = 1 - 1e-12
         row = make_q3_evaluator(parameters)(63487)
         self.assertEqual(row["status"], "NEAR_NONABSORBING")
+        self.assertTrue(row["high_precision_reward_solve"])
+
+    def test_tiny_positive_defect_remains_structurally_nonabsorbing(self):
+        parameters = {name: 0.0 for name in q3_nominal_parameters()}
+        parameters["part_1"] = 1e-12
+        parameters["final"] = 0.1
+        row = make_q3_evaluator(parameters)(32768)
+        self.assertEqual(row["status"], "NON_ABSORBING")
+        self.assertEqual(row["spectral_radius"], 1.0)
+
+    def test_complete_q2_two_component_degeneration(self):
+        children, pf, assembly, product_test, disassembly = NODES["s3"]
+        case = {
+            "case": 301,
+            "p1": LEAVES[7][0], "buy1": LEAVES[7][1], "test1": LEAVES[7][2],
+            "p2": LEAVES[8][0], "buy2": LEAVES[8][1], "test2": LEAVES[8][2],
+            "pf": pf, "assembly": assembly, "test_product": product_test,
+            "price": 0.0, "replacement": 0.0, "disassembly": disassembly,
+        }
+        for x1, x2, y, z in ((0, 0, 0, 0), (1, 1, 0, 0), (1, 1, 1, 0), (1, 1, 1, 1)):
+            q2 = evaluate_q2_policy((x1, x2, y, z), case, CONFIG)
+            parts = (0, 0, 0, 0, 0, 0, x1, x2)
+            semis, dismantle = (0, 0, y), (0, 0, z)
+            kernel = node("s3", ((0,) * 16, parts, semis, 0, dismantle, 0),
+                          kernel_cache={}, batch_cache={})
+            reward = kernel.reward
+            if not y:
+                reward, _ = solve_loop(reward, 1 - kernel.good)
+            self.assertAlmostEqual(q2["expected_total_cost"], float(reward[:len(COSTS)].sum()), places=9)
 
     def test_parameterized_interface_random_slice(self):
         parameters = q3_nominal_parameters()
