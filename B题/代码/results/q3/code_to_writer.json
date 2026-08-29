@@ -1,0 +1,29 @@
+{
+  "claims": [
+    {
+      "claim": "nominal optimum",
+      "strategy_id": 63487,
+      "strategy_bits": "1111111111101111",
+      "expected_profit_yuan": 57.66666666666663,
+      "expected_cost_yuan": 142.33333333333337,
+      "conditions": "Table 2 nominal parameters; physical quality retention",
+      "table": "best_policies.csv",
+      "figure": "top_policy_profit.svg",
+      "validation": "test_q3.py full enumeration, closed-form batch crosscheck and material_balance.csv"
+    },
+    {
+      "claim": "sensitivity switches",
+      "switch_scenarios": [
+        {
+          "parameter": "final",
+          "value_or_multiplier": 0.2,
+          "best_strategy_ids": "65535"
+        }
+      ],
+      "table": "sensitivity.csv",
+      "figure": "sensitivity_profit_gap.svg",
+      "conditions": "Defect bounds use Tables 1-2 observed range; cost scenarios are hypothetical +/-25%."
+    }
+  ],
+  "caution": "quality_reset_rebuild is a structural stress scenario, not the main physical model."
+}

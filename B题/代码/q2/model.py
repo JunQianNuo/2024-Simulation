@@ -10,10 +10,21 @@ import numpy as np
 from scipy.sparse import csc_matrix
 from scipy.sparse.linalg import splu
 
-
-MISSING, BAD, GOOD = -1, 0, 1
-INFO_MISSING, UNKNOWN, KNOWN_GOOD = "M", "U", "G"
-SRC_MISSING, NEW, RECOVERED = "M", "N", "R"
+try:
+    from component_state import (
+        BAD, GOOD, INFO_MISSING, KNOWN_GOOD, MISSING, NEW, RECOVERED,
+        SRC_MISSING, UNKNOWN, closed_transient_classes, inspect_component,
+        positive_transitions, purchase_options,
+    )
+except ModuleNotFoundError:  # 兼容直接执行 q2/run_q2.py
+    import sys
+    from pathlib import Path
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+    from component_state import (
+        BAD, GOOD, INFO_MISSING, KNOWN_GOOD, MISSING, NEW, RECOVERED,
+        SRC_MISSING, UNKNOWN, closed_transient_classes, inspect_component,
+        positive_transitions, purchase_options,
+    )
 
 COMPONENTS = [
     "purchase_1", "purchase_2", "inspection_1", "inspection_2", "assembly",
@@ -43,10 +54,6 @@ def _blank_rewards():
     return dict.fromkeys(COMPONENTS, 0.0), dict.fromkeys(EVENTS, 0.0)
 
 
-def _positive(items):
-    return [(state, probability) for state, probability in items if probability > 0.0]
-
-
 def state_transitions(state, policy, case, recovery_mode="physical_retention"):
     """返回次态概率、成功吸收概率和本状态的成本/事件。"""
     x1, x2, y, z = policy
@@ -58,37 +65,39 @@ def state_transitions(state, policy, case, recovery_mode="physical_retention"):
         if state.z1 == MISSING:
             costs["purchase_1"] = case["buy1"]
             events["expected_purchases_1"] = 1.0
-            outcomes1 = [(GOOD, UNKNOWN, NEW, 1 - case["p1"]), (BAD, UNKNOWN, NEW, case["p1"])]
+            outcomes1 = [(*item, probability) for item, probability in purchase_options(MISSING, INFO_MISSING, SRC_MISSING, case["p1"])]
         if state.z2 == MISSING:
             costs["purchase_2"] = case["buy2"]
             events["expected_purchases_2"] = 1.0
-            outcomes2 = [(GOOD, UNKNOWN, NEW, 1 - case["p2"]), (BAD, UNKNOWN, NEW, case["p2"])]
+            outcomes2 = [(*item, probability) for item, probability in purchase_options(MISSING, INFO_MISSING, SRC_MISSING, case["p2"])]
         transitions = [
             (State("inspect1", a, b, ka, kb, oa, ob), pa * pb)
             for a, ka, oa, pa in outcomes1 for b, kb, ob, pb in outcomes2
         ]
-        return _positive(transitions), 0.0, costs, events
+        return positive_transitions(transitions), 0.0, costs, events
 
     if state.phase == "inspect1":
-        if not x1 or state.k1 == KNOWN_GOOD:
+        charged, rejected, info = inspect_component(state.z1, state.k1, x1)
+        if not charged:
             return [(state._replace(phase="inspect2"), 1.0)], 0.0, costs, events
         costs["inspection_1"] = case["test1"]
         events["expected_inspections_1"] = 1.0
-        if state.z1 == BAD:
+        if rejected:
             nxt = State("prepare", MISSING, state.z2, INFO_MISSING, state.k2, SRC_MISSING, state.o2)
         else:
-            nxt = state._replace(phase="inspect2", k1=KNOWN_GOOD)
+            nxt = state._replace(phase="inspect2", k1=info)
         return [(nxt, 1.0)], 0.0, costs, events
 
     if state.phase == "inspect2":
-        if not x2 or state.k2 == KNOWN_GOOD:
+        charged, rejected, info = inspect_component(state.z2, state.k2, x2)
+        if not charged:
             return [(state._replace(phase="assemble"), 1.0)], 0.0, costs, events
         costs["inspection_2"] = case["test2"]
         events["expected_inspections_2"] = 1.0
-        if state.z2 == BAD:
+        if rejected:
             nxt = State("prepare", state.z1, MISSING, state.k1, INFO_MISSING, state.o1, SRC_MISSING)
         else:
-            nxt = state._replace(phase="assemble", k2=KNOWN_GOOD)
+            nxt = state._replace(phase="assemble", k2=info)
         return [(nxt, 1.0)], 0.0, costs, events
 
     if state.phase == "assemble":
@@ -102,7 +111,7 @@ def state_transitions(state, policy, case, recovery_mode="physical_retention"):
         else:
             costs["replacement_loss"] = (1 - good_probability) * case["replacement"]
             events["expected_replacements"] = 1 - good_probability
-        return _positive([(bad_state, 1 - good_probability)]), good_probability, costs, events
+        return positive_transitions([(bad_state, 1 - good_probability)]), good_probability, costs, events
 
     if state.phase == "known_bad":
         if not z:
@@ -118,7 +127,7 @@ def state_transitions(state, policy, case, recovery_mode="physical_retention"):
                 for a, pa in ((GOOD, 1 - case["p1"]), (BAD, case["p1"]))
                 for b, pb in ((GOOD, 1 - case["p2"]), (BAD, case["p2"]))
             ]
-            return _positive(transitions), 0.0, costs, events
+            return positive_transitions(transitions), 0.0, costs, events
         raise ValueError(f"未知拆解回用模式: {recovery_mode}")
 
     raise ValueError(f"未知状态: {state}")
@@ -151,43 +160,6 @@ def build_chain(policy, case, recovery_mode="physical_retention"):
             p[i, j] += probability
             edges.append((i, j, probability))
     return states, p, success, rewards, edges
-
-
-def closed_transient_classes(p, success):
-    """用正概率边构图，不用数值容差改写图结构。"""
-    n = len(p)
-    graph = [[j for j in range(n) if p[i, j] > 0.0] for i in range(n)]
-    reverse = [[i for i in range(n) if p[i, j] > 0.0] for j in range(n)]
-    seen, order = set(), []
-
-    def visit(i):
-        seen.add(i)
-        for j in graph[i]:
-            if j not in seen:
-                visit(j)
-        order.append(i)
-
-    for i in range(n):
-        if i not in seen:
-            visit(i)
-    seen, groups = set(), []
-
-    def collect(i, group):
-        seen.add(i)
-        group.append(i)
-        for j in reverse[i]:
-            if j not in seen:
-                collect(j, group)
-
-    for root in reversed(order):
-        if root in seen:
-            continue
-        group = []
-        collect(root, group)
-        inside = set(group)
-        if all(success[i] == 0.0 and all(j in inside for j in graph[i]) for i in group):
-            groups.append(group)
-    return groups
 
 
 def _spectral_radius_mp(p, digits):

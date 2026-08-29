@@ -1,0 +1,37 @@
+﻿parameter,value_or_multiplier,range_basis,best_strategy_ids,best_profit,profit_gap_to_second,nominal_strategy_changed
+part_1,0.05,official Table 1-2 observed defect-rate range,63487,57.84210526315786,1.8395061728394921,False
+part_1,0.2,official Table 1-2 observed defect-rate range,63487,57.24999999999997,1.8395061728394921,False
+part_2,0.05,official Table 1-2 observed defect-rate range,63487,58.19298245614033,1.8395061728394921,False
+part_2,0.2,official Table 1-2 observed defect-rate range,63487,56.41666666666663,1.8395061728394921,False
+part_3,0.05,official Table 1-2 observed defect-rate range,63487,58.48538011695902,1.1500974658869154,False
+part_3,0.2,official Table 1-2 observed defect-rate range,63487,55.7222222222222,1.8395061728395206,False
+part_4,0.05,official Table 1-2 observed defect-rate range,63487,57.84210526315786,1.8395061728394921,False
+part_4,0.2,official Table 1-2 observed defect-rate range,63487,57.24999999999997,1.8395061728394921,False
+part_5,0.05,official Table 1-2 observed defect-rate range,63487,58.19298245614033,1.8395061728394921,False
+part_5,0.2,official Table 1-2 observed defect-rate range,63487,56.41666666666663,1.8395061728394921,False
+part_6,0.05,official Table 1-2 observed defect-rate range,63487,58.48538011695902,1.1500974658869154,False
+part_6,0.2,official Table 1-2 observed defect-rate range,63487,55.7222222222222,1.8395061728395206,False
+part_7,0.05,official Table 1-2 observed defect-rate range,63487,58.19298245614033,1.7810266406757478,False
+part_7,0.2,official Table 1-2 observed defect-rate range,63487,56.41666666666663,1.9783950617283494,False
+part_8,0.05,official Table 1-2 observed defect-rate range,63487,58.48538011695902,0.695906432748501,False
+part_8,0.2,official Table 1-2 observed defect-rate range,63487,55.72222222222217,2.055555555555543,False
+semi_1,0.05,official Table 1-2 observed defect-rate range,63487,58.953216374268976,0.9941520467836256,False
+semi_1,0.2,official Table 1-2 observed defect-rate range,63487,54.611111111111086,1.8395061728395206,False
+semi_2,0.05,official Table 1-2 observed defect-rate range,63487,58.953216374268976,0.9941520467836256,False
+semi_2,0.2,official Table 1-2 observed defect-rate range,63487,54.611111111111086,1.8395061728395206,False
+semi_3,0.05,official Table 1-2 observed defect-rate range,63487,58.89473684210523,0.8713450292397624,False
+semi_3,0.2,official Table 1-2 observed defect-rate range,63487,54.74999999999997,2.0987654320987588,False
+final,0.05,official Table 1-2 observed defect-rate range,63487,61.76023391812865,1.8395061728395206,False
+final,0.2,official Table 1-2 observed defect-rate range,65535,50.44444444444446,1.8395061728395206,True
+part_inspection,0.75,hypothetical +/-25% cost stress scenario,63487,61.02777777777774,1.8302469135802255,False
+part_inspection,1.25,hypothetical +/-25% cost stress scenario,63487,54.30555555555554,1.5126886145404796,False
+semi_inspection,0.75,hypothetical +/-25% cost stress scenario,63487,61.333333333333314,1.8395061728394921,False
+semi_inspection,1.25,hypothetical +/-25% cost stress scenario,63487,54.0,1.8395061728395206,False
+final_inspection,0.75,hypothetical +/-25% cost stress scenario,63487,57.66666666666663,0.5555555555555429,False
+final_inspection,1.25,hypothetical +/-25% cost stress scenario,63487,57.66666666666663,1.8395061728394921,False
+replacement,0.75,hypothetical +/-25% cost stress scenario,63487,58.77777777777774,1.8395061728394921,False
+replacement,1.25,hypothetical +/-25% cost stress scenario,63487,56.55555555555554,1.1111111111110858,False
+semi_disassembly,0.75,hypothetical +/-25% cost stress scenario,63487,58.16666666666663,2.0061728395061778,False
+semi_disassembly,1.25,hypothetical +/-25% cost stress scenario,63487,57.16666666666663,1.672839506172835,False
+final_disassembly,0.75,hypothetical +/-25% cost stress scenario,63487,57.94444444444443,1.8395061728395206,False
+final_disassembly,1.25,hypothetical +/-25% cost stress scenario,63487,57.38888888888886,1.8395061728394921,False

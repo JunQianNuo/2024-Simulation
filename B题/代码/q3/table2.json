@@ -1,0 +1,21 @@
+{
+  "leaves": {
+    "1": {"defect": 0.10, "purchase": 2, "inspection": 1},
+    "2": {"defect": 0.10, "purchase": 8, "inspection": 1},
+    "3": {"defect": 0.10, "purchase": 12, "inspection": 2},
+    "4": {"defect": 0.10, "purchase": 2, "inspection": 1},
+    "5": {"defect": 0.10, "purchase": 8, "inspection": 1},
+    "6": {"defect": 0.10, "purchase": 12, "inspection": 2},
+    "7": {"defect": 0.10, "purchase": 8, "inspection": 1},
+    "8": {"defect": 0.10, "purchase": 12, "inspection": 2}
+  },
+  "nodes": {
+    "s1": {"children": [1, 2, 3], "defect": 0.10, "assembly": 8, "inspection": 4, "disassembly": 6},
+    "s2": {"children": [4, 5, 6], "defect": 0.10, "assembly": 8, "inspection": 4, "disassembly": 6},
+    "s3": {"children": [7, 8], "defect": 0.10, "assembly": 8, "inspection": 4, "disassembly": 6},
+    "root": {"children": ["s1", "s2", "s3"], "defect": 0.10, "assembly": 8, "inspection": 6, "disassembly": 10}
+  },
+  "price": 200,
+  "replacement": 40,
+  "source": "B题.pdf 表2与图1"
+}

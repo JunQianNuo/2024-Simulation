@@ -1,0 +1,11 @@
+{
+  "top_policy_profit.svg": {
+    "source": "top10_policies.csv",
+    "supports": "nominal optimum and runner-up gap"
+  },
+  "sensitivity_profit_gap.svg": {
+    "source": "sensitivity.csv",
+    "supports": "decision stability and switch scenario"
+  },
+  "command": "cd B题/代码 && python -m q3.run_q3"
+}

@@ -1,0 +1,883 @@
+{
+  "schema_version": "component-info-state-v2",
+  "tree_and_parameter_sha256": "3b5aa1937b0b056eccf01185214c9382500329f5743e3bf22fd9ed349922505f",
+  "bit_order": [
+    "x1",
+    "x2",
+    "x3",
+    "x4",
+    "x5",
+    "x6",
+    "x7",
+    "x8",
+    "y1",
+    "y2",
+    "y3",
+    "yf",
+    "z1",
+    "z2",
+    "z3",
+    "zf"
+  ],
+  "state_fields": [
+    "phase",
+    "quality",
+    "information",
+    "source"
+  ],
+  "quality_values": [
+    "missing",
+    "bad",
+    "good"
+  ],
+  "information_values": [
+    "missing",
+    "unknown",
+    "known_good"
+  ],
+  "source_values": [
+    "missing",
+    "new",
+    "recovered"
+  ],
+  "batch_kernels": {
+    "((1, 2, 3), (0, 0, 0))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        0,
+        0,
+        0
+      ],
+      "n_states": 25,
+      "spectral_radius": 0.0,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (0, 0, 0))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        0,
+        0,
+        0
+      ],
+      "n_states": 25,
+      "spectral_radius": 0.0,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "((7, 8), (0, 0))": {
+      "ids": [
+        7,
+        8
+      ],
+      "inspections": [
+        0,
+        0
+      ],
+      "n_states": 9,
+      "spectral_radius": 0.0,
+      "condition_number": 3.6006653960518604,
+      "residual": 1.0093603933216016e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((1, 2, 3), (1, 0, 0))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        1,
+        0,
+        0
+      ],
+      "n_states": 21,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((1, 2, 3), (0, 1, 0))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        0,
+        1,
+        0
+      ],
+      "n_states": 25,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((1, 2, 3), (1, 1, 0))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        1,
+        1,
+        0
+      ],
+      "n_states": 25,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.735801863306963e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((1, 2, 3), (0, 0, 1))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        0,
+        0,
+        1
+      ],
+      "n_states": 29,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 5.116075170547382e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((1, 2, 3), (1, 0, 1))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        1,
+        0,
+        1
+      ],
+      "n_states": 27,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((1, 2, 3), (0, 1, 1))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        0,
+        1,
+        1
+      ],
+      "n_states": 35,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((1, 2, 3), (1, 1, 1))": {
+      "ids": [
+        1,
+        2,
+        3
+      ],
+      "inspections": [
+        1,
+        1,
+        1
+      ],
+      "n_states": 30,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (1, 0, 0))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        1,
+        0,
+        0
+      ],
+      "n_states": 21,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (0, 1, 0))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        0,
+        1,
+        0
+      ],
+      "n_states": 25,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (1, 1, 0))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        1,
+        1,
+        0
+      ],
+      "n_states": 25,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.7358018633069625e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (0, 0, 1))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        0,
+        0,
+        1
+      ],
+      "n_states": 29,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 5.116075170547382e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (1, 0, 1))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        1,
+        0,
+        1
+      ],
+      "n_states": 27,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (0, 1, 1))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        0,
+        1,
+        1
+      ],
+      "n_states": 35,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((4, 5, 6), (1, 1, 1))": {
+      "ids": [
+        4,
+        5,
+        6
+      ],
+      "inspections": [
+        1,
+        1,
+        1
+      ],
+      "n_states": 30,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((7, 8), (1, 0))": {
+      "ids": [
+        7,
+        8
+      ],
+      "inspections": [
+        1,
+        0
+      ],
+      "n_states": 9,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 6.3535902784981815,
+      "residual": 3.5255610115272166e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((7, 8), (0, 1))": {
+      "ids": [
+        7,
+        8
+      ],
+      "inspections": [
+        0,
+        1
+      ],
+      "n_states": 11,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 7.600050529083686,
+      "residual": 3.603635104702743e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "((7, 8), (1, 1))": {
+      "ids": [
+        7,
+        8
+      ],
+      "inspections": [
+        1,
+        1
+      ],
+      "n_states": 12,
+      "spectral_radius": 0.464158883361278,
+      "condition_number": 11.656359817292074,
+      "residual": 4.842920113318526e-18,
+      "status": "SUCCESS_EXACT"
+    }
+  },
+  "subtree_kernels": {
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 0, 0), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.6561000000000001,
+      "spectral_radius": 0.0,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 0, 0), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.6561000000000001,
+      "spectral_radius": 0.0,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (0, 0), 0, 0)": {
+      "node": "s3",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.0,
+      "condition_number": 3.6006653960518604,
+      "residual": 1.0093603933216016e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 0, 0), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 1, 0), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 1, 0), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.735801863306963e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 0, 1), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 5.116075170547382e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 0, 1), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 1, 1), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 1, 1), 0, 0)": {
+      "node": "s1",
+      "good_probability": 0.9000000000000002,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 0, 0), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 1, 0), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 1, 0), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.7358018633069625e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 0, 1), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 5.116075170547382e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 0, 1), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 1, 1), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 1, 1), 0, 0)": {
+      "node": "s2",
+      "good_probability": 0.9000000000000002,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (1, 0), 0, 0)": {
+      "node": "s3",
+      "good_probability": 0.81,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 6.3535902784981815,
+      "residual": 3.5255610115272166e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (0, 1), 0, 0)": {
+      "node": "s3",
+      "good_probability": 0.81,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 7.600050529083686,
+      "residual": 3.603635104702743e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (1, 1), 0, 0)": {
+      "node": "s3",
+      "good_probability": 0.9,
+      "spectral_radius": 0.464158883361278,
+      "condition_number": 11.656359817292074,
+      "residual": 4.842920113318526e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 0, 0), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.3438999999999999,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 0, 0), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 1, 0), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 1, 0), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.735801863306963e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 0, 1), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 1.4600193200550003e-16,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 0, 1), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 1, 1), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 1, 1), 1, 0)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 3.490657544672981e-17,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 0, 0), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.3438999999999999,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 0, 0), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 1, 0), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 1, 0), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.7358018633069625e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 0, 1), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 1.4600193200550003e-16,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 0, 1), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 1, 1), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 1, 1), 1, 0)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 3.490657544672981e-17,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (0, 0), 1, 0)": {
+      "node": "s3",
+      "good_probability": 1.0,
+      "spectral_radius": 0.2709999999999999,
+      "condition_number": 3.6006653960518604,
+      "residual": 1.0093603933216016e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (1, 0), 1, 0)": {
+      "node": "s3",
+      "good_probability": 1.0,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 6.3535902784981815,
+      "residual": 3.5255610115272166e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (0, 1), 1, 0)": {
+      "node": "s3",
+      "good_probability": 1.0,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 7.600050529083686,
+      "residual": 3.603635104702743e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (1, 1), 1, 0)": {
+      "node": "s3",
+      "good_probability": 1.0,
+      "spectral_radius": 0.464158883361278,
+      "condition_number": 11.656359817292074,
+      "residual": 4.842920113318526e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 0, 0), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.6561000000000001,
+      "spectral_radius": 0.0,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 0, 0), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 1, 0), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 1, 0), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.735801863306963e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 0, 1), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 5.116075170547382e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 0, 1), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (0, 1, 1), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 1, 1), 0, 1)": {
+      "node": "s1",
+      "good_probability": 0.9000000000000002,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's1', (1, 1, 1), 1, 1)": {
+      "node": "s1",
+      "good_probability": 1.0,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 0, 0), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.6561000000000001,
+      "spectral_radius": 0.0,
+      "condition_number": 4.807094601558495,
+      "residual": 7.810004444028766e-19,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 0, 0), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 7.5967757185076525,
+      "residual": 4.0961985958521834e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 1, 0), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 8.848809986738134,
+      "residual": 4.254938461522504e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 1, 0), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.4641588833612779,
+      "condition_number": 13.647239130862658,
+      "residual": 5.7358018633069625e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 0, 1), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.5623413251903493,
+      "condition_number": 10.284501447453588,
+      "residual": 5.116075170547382e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 0, 1), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903501,
+      "condition_number": 15.117748145304427,
+      "residual": 5.516561906084705e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (0, 1, 1), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.8100000000000002,
+      "spectral_radius": 0.5623413251903492,
+      "condition_number": 16.419029455084374,
+      "residual": 4.576366895099838e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 1, 1), 0, 1)": {
+      "node": "s2",
+      "good_probability": 0.9000000000000002,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's2', (1, 1, 1), 1, 1)": {
+      "node": "s2",
+      "good_probability": 1.0,
+      "spectral_radius": 0.56234132519035,
+      "condition_number": 22.723539981967907,
+      "residual": 9.919170384995329e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (0, 0), 0, 1)": {
+      "node": "s3",
+      "good_probability": 0.7290000000000001,
+      "spectral_radius": 0.0,
+      "condition_number": 3.6006653960518604,
+      "residual": 1.0093603933216016e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (1, 0), 0, 1)": {
+      "node": "s3",
+      "good_probability": 0.81,
+      "spectral_radius": 0.31622776601683794,
+      "condition_number": 6.3535902784981815,
+      "residual": 3.5255610115272166e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (0, 1), 0, 1)": {
+      "node": "s3",
+      "good_probability": 0.81,
+      "spectral_radius": 0.46415888336127803,
+      "condition_number": 7.600050529083686,
+      "residual": 3.603635104702743e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (1, 1), 0, 1)": {
+      "node": "s3",
+      "good_probability": 0.9,
+      "spectral_radius": 0.464158883361278,
+      "condition_number": 11.656359817292074,
+      "residual": 4.842920113318526e-18,
+      "status": "SUCCESS_EXACT"
+    },
+    "('component-info-state-v2', 'physical_retention', 's3', (1, 1), 1, 1)": {
+      "node": "s3",
+      "good_probability": 1.0,
+      "spectral_radius": 0.464158883361278,
+      "condition_number": 11.656359817292074,
+      "residual": 4.842920113318526e-18,
+      "status": "SUCCESS_EXACT"
+    }
+  }
+}

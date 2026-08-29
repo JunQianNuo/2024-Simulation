@@ -1,0 +1,3 @@
+﻿recovery_mode,best_strategy_ids,best_profit,status_counts,note
+physical_retention,63487,57.66666666666663,"{""NON_ABSORBING"": 48476, ""SUCCESS_EXACT"": 17060}",main model; recovered items retain physical quality
+quality_reset_rebuild,2047,39.34156378600824,"{""SUCCESS_EXACT"": 65536}",structural stress only; dismantled children are statistically reset and rebuilt
