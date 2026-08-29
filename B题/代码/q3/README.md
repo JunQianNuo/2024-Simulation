@@ -8,9 +8,9 @@ Q2/Q3 共用 `component_state.py` 中的质量—信息状态语义。零件批�
 
 ```bash
 cd B题/代码
-python -m pip install -r q3/requirements.txt
-python -m q3.run_q3
-python -m unittest q3.test_q3 -v
+uv pip install --python ../../.venv/bin/python -r q3/requirements.txt
+../../.venv/bin/python -m q3.run_q3
+../../.venv/bin/python -m unittest q3.test_q3 -v
 ```
 
 快速调试可使用 `python -m q3.run_q3 --skip-sensitivity`，但该命令不生成完整交付。唯一完整复现命令是 `python -m q3.run_q3`。

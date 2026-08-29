@@ -444,14 +444,19 @@ def main():
     marker = "DEMO_ONLY_NOT_OFFICIAL_DATA" if evidence.get("mode") == "DEMO_ONLY_NOT_OFFICIAL_DATA" else "USER_SUPPLIED_EVIDENCE"
     used = {**evidence, "source_path": str(Path(args.evidence).resolve()), "evidence_marker": marker}
     (OUTDIR / "evidence_used.json").write_text(json.dumps(used, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    bayesian_converged = bool(q2b.mc_status.eq("SUCCESS_MC_TOL").all() and q3b.mc_status.eq("SUCCESS_MC_TOL").all())
+    claim_scope = ("题面无真实 N,K；默认输出使用明确标记的模拟证据，只能说明算法流程和该模拟情景。"
+                   if marker == "DEMO_ONLY_NOT_OFFICIAL_DATA" else
+                   "结论仅适用于 evidence_used.json 所保存的用户抽样证据、固定策略域和锁定模型假设。")
     summary = {"schema_version": config["schema_version"], "models": ["Q4-M2", "Q4-M3"], "algorithms": ["Q4-A1", "Q4-A2"],
-               "evidence_marker": marker, "claim_scope": "题面无真实 N,K；默认输出仅为演示，不是企业观测结论。",
+               "evidence_marker": marker, "claim_scope": claim_scope,
                "policy_domains": {"q2_per_case": 16, "q3": 65536}, "quick": args.quick, "q2_bayesian": q2sum, "q3_bayesian": q3sum,
                "q2_robust": q2rsum, "q3_robust": q3rsum,
                "robust_claim": "对当前固定策略闭式评价式已完成结构单调性、数值反例搜索和递归区间导数证书；矩形集最坏点为全部上端点。认证范围不扩展到历史自适应策略或其他不确定集。",
                "checks": {"q2_full_policy_coverage": len(q2b) == 192, "q3_full_policy_coverage": len(q3b) == 131072,
                           "q2_robust_full_policy_coverage": len(q2r) == 192,
                           "q3_robust_full_policy_coverage": len(q3r) == 131072,
+                          "bayesian_all_runs_converged": bayesian_converged,
                           "optimal_probabilities_sum_to_one": bool(np.allclose(q2b.groupby(["case", "prior"]).posterior_optimal_probability.sum(), 1) and np.allclose(q3b.groupby("prior").posterior_optimal_probability.sum(), 1)),
                           "regret_nonnegative": bool(q2b.posterior_mean_regret.dropna().min() >= -TOL and q3b.posterior_mean_regret.dropna().min() >= -TOL),
                           "certified_rows_have_zero_inner_gap": bool((q2r.loc[q2r.robust_status.eq("ROBUST_CERTIFIED"), "inner_gap"] == 0).all()
@@ -461,7 +466,8 @@ def main():
     writer = {
         "evidence_marker": marker,
         "accounting_unit": "最终交付一件合格品的期望净利润",
-        "bayesian_claim": "快速验收批未达 MC 容差，只可报告近优集；正式运行达 SUCCESS_MC_TOL 后才可报领先策略。",
+        "bayesian_claim": ("正式探索与独立确认批均达到 MC 容差，可在当前证据范围内报告领先固定策略。"
+                            if bayesian_converged else "MC 容差未全部满足，只可报告近优策略集合和现有误差。"),
         "robust_claim": "当前闭式固定策略域通过递归单调性证书，矩形集最坏利润在全部缺陷率上端点取得；ROBUST_CERTIFIED 不代表历史自适应策略域全局最优。",
         "q2_bayesian_near_optimal_file": "q2_bayesian_near_optimal.csv",
         "q3_bayesian_near_optimal_file": "q3_bayesian_near_optimal.csv",
@@ -470,7 +476,7 @@ def main():
         "limitations": ["题面未给真实 N,K，默认数值是演示", "矩形联合集忽略参数相关性", "完美检测、条件独立与回收件真实质量保留沿用 Q2/Q3 锁定假设"]
     }
     (OUTDIR / "code_to_writer.json").write_text(json.dumps(writer, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-    source_files = [HERE / name for name in ("run_q4.py", "batch_evaluators.py", "test_q4.py", "config.json", "q4_demo_evidence.json", "README.md")]
+    source_files = [HERE / name for name in ("run_q4.py", "batch_evaluators.py", "test_q4.py", "config.json", "q4_demo_evidence.json", "requirements.txt", "README.md")]
     repro = {"generated_at_utc": datetime.now(timezone.utc).isoformat(), "command": f"cd B题/代码 && python -m q4.run_q4{' --quick' if args.quick else ''}",
              "python": sys.version, "platform": platform.platform(), "versions": {"numpy": np.__version__, "pandas": pd.__version__, "scipy": scipy.__version__},
              "git_commit": subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=HERE, text=True).strip(),

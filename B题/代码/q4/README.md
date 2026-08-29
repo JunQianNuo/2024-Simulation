@@ -4,6 +4,7 @@ Q4 不另造生产模型，而是把抽样得到的次品率不确定性传入�
 
 ```bash
 cd B题/代码
+uv pip install --python ../../.venv/bin/python -r q4/requirements.txt
 ../../.venv/bin/python -m q4.run_q4 --quick
 ../../.venv/bin/python -m unittest q4.test_q4 -v
 ```
