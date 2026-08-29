@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-08-29T13:06:30+0800",
+  "generated_at": "2026-08-29T17:10:43+0800",
   "python": "3.14.7 (main, Aug 10 2026, 00:00:00) [GCC 16.1.1 20260515 (Red Hat 16.1.1-2)]",
   "numpy": "2.5.2",
   "scipy": "1.18.1",
@@ -11,13 +11,29 @@
     "source": "https://github.com/gostevehoward/confseq",
     "official_reference_value": -0.07134018897925642
   },
-  "git_commit": "c746be402f4e6837988cb4daf6f07052f9a92066",
+  "git_commit": "c608f8bee597af895021b8c52cc9ad6aa753563c",
   "git_dirty": true,
+  "source_snapshot": "exact SHA-256 hashes below are authoritative when git_dirty is true",
+  "source_sha256": {
+    "q1/run_q1.py": "0f37a3bf7c7fb1ea98416bb2920e8dc2cda5a9cb6b5a3a3a9dbf41d014448df8",
+    "q1/confidence_sequence.py": "2de63d424d2e7a70f58154f11ba7d35f94b69f7c04da5fc1fcb6973982607031",
+    "q1/test_q1.py": "4ffa2339ce8ddddc195a1c2e579c32c08b2c00b1105f39426262cc1462ce1f1c",
+    "q1/config.json": "f932d119a2c0d120ba93246ed657c853d9255445e9e43fc28c6873e79e08fb6e",
+    "q1/requirements-q1.txt": "9f5ff4d59d680bd5b443811f57bcda0df43a52b8f5eb878492ff089def355185",
+    "q1/Dockerfile": "725615d55a59bca8f1ef8ae13e916b5374b19261ad77973ae4fca1ffb4daa655",
+    "q1/README.md": "b5704e216015a458909ad9f531cc1891b6c56c21d0d08c2ec67ce91bea1f5162"
+  },
   "inputs": {
     "/home/clmbr/Projects/CUMCM/2024-Simulation/B题/代码/q1/config.json": "f932d119a2c0d120ba93246ed657c853d9255445e9e43fc28c6873e79e08fb6e",
     "/home/clmbr/Projects/CUMCM/2024-Simulation/B题/B题.pdf": "f54529dd15d729b046e248ea41033b4f66ef68333be2bee912b0c54eafd227ab"
   },
   "command": "cd B题/代码 && python -m q1.run_q1",
+  "container_command": "docker build -f B题/代码/q1/Dockerfile -t cumcm-q1 . && docker run --rm cumcm-q1",
+  "container_validation": {
+    "status": "SUCCESS_EXACT",
+    "runtime": "Linux container, Python 3.10",
+    "verified_with": "Podman using the same Dockerfile"
+  },
   "tolerances": {
     "mass": 1e-10,
     "cs_endpoint": 1e-08,

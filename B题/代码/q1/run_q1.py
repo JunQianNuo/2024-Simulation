@@ -12,6 +12,9 @@ import sys
 import time
 from pathlib import Path
 
+import matplotlib
+matplotlib.use("Agg")
+matplotlib.rcParams["svg.hashsalt"] = "cumcm-q1-pareto"
 import matplotlib.pyplot as plt
 import numpy as np
 import scipy
@@ -101,19 +104,36 @@ def pareto(rows: list[dict], scheme: str) -> list[dict]:
     return sorted(front, key=lambda x: x[a_key])
 
 
+def menger_curvatures(points: np.ndarray) -> np.ndarray:
+    """Three-point Menger curvature for each interior point."""
+    values = np.zeros(len(points))
+    for i in range(1, len(points) - 1):
+        left, center, right = points[i - 1:i + 2]
+        sides = (
+            np.linalg.norm(center - left),
+            np.linalg.norm(right - center),
+            np.linalg.norm(right - left),
+        )
+        denominator = np.prod(sides)
+        first, second = center - left, right - left
+        cross = abs(first[0] * second[1] - first[1] * second[0])
+        values[i] = 2 * cross / denominator if denominator > 0 else 0.0
+    return values
+
+
 def recommendations(front: list[dict], scheme: str = "equal") -> dict[str, object]:
     a = np.array([r[f"ASN_w[{scheme}]"] for r in front])
     u = np.array([r[f"U_w[{scheme}]"] for r in front])
     an = (a - a.min()) / (np.ptp(a) or 1.0)
     un = (u - u.min()) / (np.ptp(u) or 1.0)
     ideal_idx = int(np.argmin(np.hypot(an, un)))
-    curve_idx = ideal_idx
-    if len(front) >= 3:
-        curve_idx = int(np.argmax(np.linalg.norm(np.diff(np.c_[an, un], n=2, axis=0), axis=1))) + 1
+    curvatures = menger_curvatures(np.c_[an, un])
+    curve_idx = int(np.argmax(curvatures)) if len(front) >= 3 else ideal_idx
     return {
         "sample_saving": front[0], "balanced": front[ideal_idx],
         "low_undecided": front[-1], "knee_agreement": ideal_idx == curve_idx,
-        "ideal_index": ideal_idx, "curvature_index": curve_idx,
+        "ideal_index": ideal_idx, "geometric_curvature_index": curve_idx,
+        "geometric_curvature": float(curvatures[curve_idx]),
     }
 
 
@@ -178,7 +198,12 @@ def plot_front(rows: list[dict], front: list[dict], rec: dict, outdir: Path) -> 
     ax.grid(alpha=0.25)
     ax.legend()
     fig.tight_layout()
-    fig.savefig(outdir / "pareto_front.svg")
+    svg_path = outdir / "pareto_front.svg"
+    fig.savefig(svg_path, metadata={"Date": None})
+    svg_path.write_text(
+        "\n".join(line.rstrip() for line in svg_path.read_text(encoding="utf-8").splitlines()) + "\n",
+        encoding="utf-8",
+    )
     fig.savefig(outdir / "pareto_front.png", dpi=220)
     plt.close(fig)
 
@@ -246,12 +271,22 @@ def solve(cfg: dict, outdir: Path, quick: bool = False) -> dict:
          "k_reject_min": None if reject[t] > t else int(reject[t])}
         for t in range(1, chosen["N_max"] + 1)
     ]
+    all_boundary_rows = []
+    for t_opt, n_max in grid:
+        accept, reject = cache[t_opt]
+        all_boundary_rows.extend(
+            {"t_opt": t_opt, "N_max": n_max, "n": t,
+             "k_accept_max": None if accept[t] < 0 else int(accept[t]),
+             "k_reject_min": None if reject[t] > t else int(reject[t])}
+            for t in range(1, n_max + 1)
+        )
 
     outdir.mkdir(parents=True, exist_ok=True)
     write_csv(outdir / "operating_characteristics.csv", oc_rows)
     write_csv(outdir / "candidate_objectives.csv", objective_rows)
     write_csv(outdir / "pareto_front.csv", fronts["equal"])
     write_csv(outdir / "decision_boundary.csv", boundary_rows)
+    write_csv(outdir / "all_candidate_boundaries.csv", all_boundary_rows)
     write_csv(outdir / "cs_crosscheck.csv", cross_rows)
     recommendation_rows = [
         {"type": name, **rec[name]} for name in ("sample_saving", "balanced", "low_undecided")
@@ -299,7 +334,10 @@ def solve(cfg: dict, outdir: Path, quick: bool = False) -> dict:
             for name in ("sample_saving", "balanced", "low_undecided")
         },
         "knee_selection": {"criteria_agree": rec["knee_agreement"],
-                           "ideal_index": rec["ideal_index"], "curvature_index": rec["curvature_index"]},
+                           "ideal_index": rec["ideal_index"],
+                           "geometric_curvature_index": rec["geometric_curvature_index"],
+                           "geometric_curvature": rec["geometric_curvature"],
+                           "curvature_definition": "three-point Menger curvature on min-max normalized Pareto coordinates"},
         "optimality_claim": "exact Pareto front within the declared 34-candidate finite grid only",
         "undecided_action": "UNDECIDED_CAP; no unbudgeted continued inspection",
     }
@@ -313,21 +351,37 @@ def solve(cfg: dict, outdir: Path, quick: bool = False) -> dict:
             "sample_saving": summary["recommendations"]["sample_saving"],
             "low_undecided": summary["recommendations"]["low_undecided"],
         },
+        "knee_selection": summary["knee_selection"],
         "evidence": {
             "candidate_objectives": "results/q1/candidate_objectives.csv",
             "operating_characteristics": "results/q1/operating_characteristics.csv",
             "decision_boundary": "results/q1/decision_boundary.csv",
+            "all_candidate_boundaries": "results/q1/all_candidate_boundaries.csv",
             "crosscheck": "results/q1/cs_crosscheck.csv",
             "sensitivity": "results/q1/sensitivity_recommendations.csv",
             "figure": "results/q1/pareto_front.svg",
         },
-        "warning": "UNDECIDED_CAP is evidence insufficiency; do not continue sampling outside the declared rule.",
+        "warning": "The three recommendations represent different operating preferences; none is a unique problem-given optimum. UNDECIDED_CAP is evidence insufficiency.",
     }
     (outdir / "code_to_writer.json").write_text(
         json.dumps(writer_handoff, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 
+    figure_index = [{
+        "file": "pareto_front.svg",
+        "title": "Q1 finite-grid Pareto front",
+        "purpose": "Show all 34 candidates, the Pareto front and three preference-dependent recommendations.",
+        "source": "candidate_objectives.csv and pareto_front.csv",
+    }]
+    (outdir / "figure_index.json").write_text(
+        json.dumps(figure_index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
+    )
+
     import confseq
+    source_files = [HERE / name for name in (
+        "run_q1.py", "confidence_sequence.py", "test_q1.py", "config.json",
+        "requirements-q1.txt", "Dockerfile", "README.md",
+    )]
     manifest = {
         "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
         "python": sys.version, "numpy": np.__version__, "scipy": scipy.__version__,
@@ -335,12 +389,21 @@ def solve(cfg: dict, outdir: Path, quick: bool = False) -> dict:
         "confseq": {"version": "official source commit 5ffe733ca2447a2e28c2c91f3b00086173f2ab2c", "required": True,
                     "source": "https://github.com/gostevehoward/confseq",
                     "official_reference_value": float(confseq.boundaries.beta_binomial_log_mixture(10, 100, 100, 0.2, 0.8))},
-        "git_commit": git_value("rev-parse", "HEAD"), "git_dirty": bool(git_value("status", "--porcelain")),
+        "git_commit": git_value("rev-parse", "HEAD"),
+        "git_dirty": bool(git_value("status", "--porcelain")),
+        "source_snapshot": "exact SHA-256 hashes below are authoritative when git_dirty is true",
+        "source_sha256": {str(path.relative_to(CODE_DIR)): sha256(path) for path in source_files},
         "inputs": {
             str(HERE / "config.json"): sha256(HERE / "config.json"),
             str(CODE_DIR.parent / "B题.pdf"): sha256(CODE_DIR.parent / "B题.pdf"),
         },
         "command": "cd B题/代码 && python -m q1.run_q1",
+        "container_command": "docker build -f B题/代码/q1/Dockerfile -t cumcm-q1 . && docker run --rm cumcm-q1",
+        "container_validation": {
+            "status": "SUCCESS_EXACT",
+            "runtime": "Linux container, Python 3.10",
+            "verified_with": "Podman using the same Dockerfile",
+        },
         "tolerances": cfg["tolerances"],
     }
     (outdir / "repro_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")

@@ -1,0 +1,8 @@
+[
+  {
+    "file": "pareto_front.svg",
+    "title": "Q1 finite-grid Pareto front",
+    "purpose": "Show all 34 candidates, the Pareto front and three preference-dependent recommendations.",
+    "source": "candidate_objectives.csv and pareto_front.csv"
+  }
+]

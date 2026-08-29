@@ -21,13 +21,21 @@
       "U_w_equal": 0.17459872281721636
     }
   },
+  "knee_selection": {
+    "criteria_agree": false,
+    "ideal_index": 8,
+    "geometric_curvature_index": 10,
+    "geometric_curvature": 63.27528479092445,
+    "curvature_definition": "three-point Menger curvature on min-max normalized Pareto coordinates"
+  },
   "evidence": {
     "candidate_objectives": "results/q1/candidate_objectives.csv",
     "operating_characteristics": "results/q1/operating_characteristics.csv",
     "decision_boundary": "results/q1/decision_boundary.csv",
+    "all_candidate_boundaries": "results/q1/all_candidate_boundaries.csv",
     "crosscheck": "results/q1/cs_crosscheck.csv",
     "sensitivity": "results/q1/sensitivity_recommendations.csv",
     "figure": "results/q1/pareto_front.svg"
   },
-  "warning": "UNDECIDED_CAP is evidence insufficiency; do not continue sampling outside the declared rule."
+  "warning": "The three recommendations represent different operating preferences; none is a unique problem-given optimum. UNDECIDED_CAP is evidence insufficiency."
 }

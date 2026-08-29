@@ -57,7 +57,9 @@
   "knee_selection": {
     "criteria_agree": false,
     "ideal_index": 8,
-    "curvature_index": 13
+    "geometric_curvature_index": 10,
+    "geometric_curvature": 63.27528479092445,
+    "curvature_definition": "three-point Menger curvature on min-max normalized Pareto coordinates"
   },
   "optimality_claim": "exact Pareto front within the declared 34-candidate finite grid only",
   "undecided_action": "UNDECIDED_CAP; no unbudgeted continued inspection"

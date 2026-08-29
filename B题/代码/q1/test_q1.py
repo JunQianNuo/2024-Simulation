@@ -7,7 +7,7 @@ from pathlib import Path
 import numpy as np
 
 from .confidence_sequence import crosscheck_endpoints, fixed_sample_baselines, official_boundaries
-from .run_q1 import candidates, evaluate_cutoffs, load_config
+from .run_q1 import candidates, evaluate_cutoffs, load_config, menger_curvatures, recommendations
 
 
 class Q1Tests(unittest.TestCase):
@@ -22,6 +22,23 @@ class Q1Tests(unittest.TestCase):
 
     def test_declared_grid_has_34_candidates(self):
         self.assertEqual(len(candidates(self.cfg)), 34)
+
+    def test_menger_curvature_definition(self):
+        quarter_circle = np.array([[1.0, 0.0], [2 ** -0.5, 2 ** -0.5], [0.0, 1.0]])
+        self.assertAlmostEqual(menger_curvatures(quarter_circle)[1], 1.0, places=12)
+        line = np.array([[0.0, 0.0], [0.5, 0.5], [1.0, 1.0]])
+        self.assertEqual(menger_curvatures(line)[1], 0.0)
+
+    def test_v2_knee_regression(self):
+        path = Path(__file__).parents[1] / "results" / "q1" / "pareto_front.csv"
+        import csv
+        with path.open(encoding="utf-8-sig", newline="") as f:
+            front = [{k: float(v) if k.startswith(("ASN_w", "U_w")) else v
+                      for k, v in row.items()} for row in csv.DictReader(f)]
+        result = recommendations(front)
+        self.assertEqual(result["ideal_index"], 8)
+        self.assertEqual(result["geometric_curvature_index"], 10)
+        self.assertFalse(result["knee_agreement"])
 
     def test_official_reference_value(self):
         from confseq import boundaries
