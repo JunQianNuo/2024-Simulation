@@ -21,7 +21,7 @@
     "q1/config.json": "f932d119a2c0d120ba93246ed657c853d9255445e9e43fc28c6873e79e08fb6e",
     "q1/requirements-q1.txt": "9f5ff4d59d680bd5b443811f57bcda0df43a52b8f5eb878492ff089def355185",
     "q1/Dockerfile": "725615d55a59bca8f1ef8ae13e916b5374b19261ad77973ae4fca1ffb4daa655",
-    "q1/README.md": "b5704e216015a458909ad9f531cc1891b6c56c21d0d08c2ec67ce91bea1f5162"
+    "q1/README.md": "220665616d5bf91f78f34abfbd227be4b8c4fc4d1bee04f9f00c9fb373955071"
   },
   "inputs": {
     "/home/clmbr/Projects/CUMCM/2024-Simulation/B题/代码/q1/config.json": "f932d119a2c0d120ba93246ed657c853d9255445e9e43fc28c6873e79e08fb6e",
@@ -38,5 +38,11 @@
     "mass": 1e-10,
     "cs_endpoint": 1e-08,
     "root": 1e-12
+  },
+  "plotting": {
+    "command": "cd B题/代码 && python -m q1.plot_q1",
+    "source": "q1/plot_q1.py",
+    "source_sha256": "658ba5766d7bf640c648757f77743deec422889e0a547fd5a10b2f77fcd0c393",
+    "figure_manifest": "results/q1/figures/figure_repro_manifest.json"
   }
 }

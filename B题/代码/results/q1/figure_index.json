@@ -1,8 +1,80 @@
 [
   {
+    "file": "figures/q1_decision_regions_balanced.svg",
+    "raster_file": "figures/q1_decision_regions_balanced.png",
+    "title": "平衡参考方案的序贯决策区域",
+    "type": "Type 3",
+    "purpose": "展示接收、继续抽检和拒收三个动作区域及其边界。",
+    "source": [
+      "decision_boundary.csv",
+      "recommendations.csv",
+      "summary.json"
+    ],
+    "claim_scope": "仅适用于当前 balanced reference；UNDECIDED_CAP 是证据不足，不是第四种质量判定。",
+    "paper_candidate": "正文（方法/策略说明）",
+    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "caption_zh": "图示平衡参考方案在累计抽检数与累计次品数平面上的序贯决策区域。接收上界与拒收下界之间需继续抽检；到达 N_max 仍未越界时记为 UNDECIDED_CAP，表示证据不足而非合格或不合格。"
+  },
+  {
+    "file": "figures/q1_operating_characteristics_balanced.svg",
+    "raster_file": "figures/q1_operating_characteristics_balanced.png",
+    "title": "平衡参考方案的操作特性",
+    "type": "Type 3",
+    "purpose": "展示真实次品率改变时接收、拒收和未决概率的变化。",
+    "source": [
+      "operating_characteristics.csv",
+      "recommendations.csv",
+      "config.json"
+    ],
+    "claim_scope": "仅连接 13 个已计算网格点以引导视线，不表示额外插值计算；接收错误约束指 p0 右极限。",
+    "paper_candidate": "正文（操作特性/风险说明）",
+    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "caption_zh": "图示平衡参考方案在 13 个已计算真实次品率上的接收、拒收和截尾未决概率。标称阈值附近的未决概率较高，反映了双单侧置信序列在边界附近需要更多证据；图中同时区分了 p=p0 的拒收风险与 p0 右极限的接收风险。"
+  },
+  {
+    "file": "figures/q1_recommendation_tradeoffs.svg",
+    "raster_file": "figures/q1_recommendation_tradeoffs.png",
+    "title": "三种偏好方案的效率—未决权衡",
+    "type": "Type 3",
+    "purpose": "比较省样本、平衡参考和低未决方案在不同真实次品率下的 ASN 与未决概率。",
+    "source": [
+      "operating_characteristics.csv",
+      "recommendations.csv",
+      "config.json"
+    ],
+    "claim_scope": "三方案代表不同运营偏好；不支持题目存在唯一给定最优方案或连续参数域全局最优。",
+    "paper_candidate": "正文（方案权衡）",
+    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "caption_zh": "图在相同的 13 个真实次品率上比较三种 Pareto 代表方案的平均抽检数和截尾未决概率。省样本方案强调检测效率，低未决方案强调降低证据不足的频率，平衡参考仅是两目标间的工程折中。"
+  },
+  {
     "file": "pareto_front.svg",
-    "title": "Q1 finite-grid Pareto front",
-    "purpose": "Show all 34 candidates, the Pareto front and three preference-dependent recommendations.",
-    "source": "candidate_objectives.csv and pareto_front.csv"
+    "raster_file": "pareto_front.png",
+    "title": "34 个有限候选的 ASN—未决率 Pareto 前沿",
+    "type": "Type 3",
+    "purpose": "展示所有候选、等权 Pareto 前沿、三类推荐与外部五阶段基线。",
+    "source": [
+      "candidate_objectives.csv",
+      "pareto_front.csv",
+      "recommendations.csv",
+      "baseline_comparison.csv"
+    ],
+    "claim_scope": "精确 Pareto 仅指声明的 34 个有限候选内无 Monte Carlo 误差；外部基线不属于该网格且不连入前沿。",
+    "paper_candidate": "正文（多目标结果）",
+    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "caption_zh": "图示 34 个预先声明候选在等权平均抽检数与等权未决概率之间的权衡，并标出 Pareto 前沿及三种偏好方案。外部五阶段基线仅作相同等权口径下的工程参照，不属于这 34 个候选的 Pareto 网格；本图不证明连续参数域或所有停止规则中的全局最优。"
+  },
+  {
+    "file": "sensitivity_recommendations.csv",
+    "title": "Q1 权重敏感性推荐表",
+    "type": "Type 4",
+    "purpose": "用紧凑精确表格展示 equal、near-threshold 和 far-threshold 权重下的推荐变化。",
+    "source": [
+      "sensitivity_recommendations.csv"
+    ],
+    "claim_scope": "权重是公开的分析情景，不是题面事实；表格优于强行绘图。",
+    "paper_candidate": "附录表",
+    "render_check": "PASS: 9-row table loaded and cross-checked; no chart generated",
+    "caption_zh": "表比较三种代表性次品率权重口径下的省样本、平衡与低未决推荐，用于说明工程参考依赖公开的评价权重。"
   }
 ]
