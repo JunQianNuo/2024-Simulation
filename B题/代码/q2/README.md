@@ -30,3 +30,21 @@ python -m unittest q2.test_q2 -v
 - `best_profit_by_case.png/.svg`：各情形最优期望利润图。
 
 `SUCCESS_EXACT` 表示闭环最终吸收；`NON_ABSORBING` 表示存在无成功泄漏的可达闭合类。`factory_defect_rate` 是进入市场的成品中次品的期望比例；`exchange_rate` 是每订单期望调换次数，不是“至少调换一次”的概率。
+
+## 论文候选图
+
+绘图入口只读取现有 Q2 CSV/JSON，不重新枚举策略或求解 Markov 奖励方程：
+
+```bash
+cd B题/代码
+python -m q2.plot_q2
+```
+
+新增图保存在 `results/q2/figures/`，改进后的最优利润图仍保存为
+`results/q2/best_profit_by_case.svg/.png`。数据源、结论边界、中文图注和渲染检查状态见
+`results/q2/figure_index.json`。默认使用 `Noto Serif CJK SC`，英文数字回退为
+`Liberation Serif`，数学符号使用 STIX。
+
+图中的“最优”只指表 1 名义参数下预先声明的 16 个固定二元策略；非吸收策略不参与利润比较，
+不代表历史自适应策略空间中的全局最优。质量重置模式仅用于结构敏感性对照，主结论仍以拆解后
+保持零件真实质量的模型为准。

@@ -27,7 +27,8 @@
       "q2/config.json": "87867483b29cfc4b8d6a14ce566c7c01a8f57ce79d5cf81bf518461624f0355a",
       "q2/table1.json": "ac7710a169089f0d67440ed2663f5eb9ec0ad43b4b4278055537bc469c09f045",
       "q2/requirements.txt": "2ac7ae174b474c2762b629b640846d8c6d308edfc38045562e47c3a4ac07c20b",
-      "q2/README.md": "785f26607443098f29d0e6943eeee3632cb0caae693605e7cfe9ef371ff0b15d"
+      "q2/README.md": "9df3de8a25bf61c715f5523047c506c203f1ccd57ce91f32ca184441f5b115f1",
+      "q2/plot_q2.py": "1b28bcca53138f00f4f231826c152f8e46e88e59fbb20abcd13dd864d3d80011"
     },
     "normalized_source_sha256": {
       "component_state.py": "223fe11a0a734a98ce87baeb94a3b13053e26871357a14089dedb3aa7246ee88",
@@ -37,7 +38,15 @@
       "q2/config.json": "87867483b29cfc4b8d6a14ce566c7c01a8f57ce79d5cf81bf518461624f0355a",
       "q2/table1.json": "ac7710a169089f0d67440ed2663f5eb9ec0ad43b4b4278055537bc469c09f045",
       "q2/requirements.txt": "2ac7ae174b474c2762b629b640846d8c6d308edfc38045562e47c3a4ac07c20b",
-      "q2/README.md": "785f26607443098f29d0e6943eeee3632cb0caae693605e7cfe9ef371ff0b15d"
+      "q2/README.md": "9df3de8a25bf61c715f5523047c506c203f1ccd57ce91f32ca184441f5b115f1",
+      "q2/plot_q2.py": "1b28bcca53138f00f4f231826c152f8e46e88e59fbb20abcd13dd864d3d80011"
+    },
+    "plotting": {
+      "generated_at_utc": "2026-08-29T14:04:49.808921+00:00",
+      "command": "cd B题/代码 && python -m q2.plot_q2",
+      "source": "q2/plot_q2.py",
+      "source_sha256": "1b28bcca53138f00f4f231826c152f8e46e88e59fbb20abcd13dd864d3d80011",
+      "figure_manifest": "results/q2/figures/figure_repro_manifest.json"
     }
   },
   "accounting_unit": "one finally delivered qualified product",
