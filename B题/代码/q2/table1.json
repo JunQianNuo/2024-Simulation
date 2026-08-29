@@ -1,0 +1,8 @@
+[
+  {"case": 1, "p1": 0.10, "buy1": 4, "test1": 2, "p2": 0.10, "buy2": 18, "test2": 3, "pf": 0.10, "assembly": 6, "test_product": 3, "price": 56, "replacement": 6, "disassembly": 5},
+  {"case": 2, "p1": 0.20, "buy1": 4, "test1": 2, "p2": 0.20, "buy2": 18, "test2": 3, "pf": 0.20, "assembly": 6, "test_product": 3, "price": 56, "replacement": 6, "disassembly": 5},
+  {"case": 3, "p1": 0.10, "buy1": 4, "test1": 2, "p2": 0.10, "buy2": 18, "test2": 3, "pf": 0.10, "assembly": 6, "test_product": 3, "price": 56, "replacement": 30, "disassembly": 5},
+  {"case": 4, "p1": 0.20, "buy1": 4, "test1": 1, "p2": 0.20, "buy2": 18, "test2": 1, "pf": 0.20, "assembly": 6, "test_product": 2, "price": 56, "replacement": 30, "disassembly": 5},
+  {"case": 5, "p1": 0.10, "buy1": 4, "test1": 8, "p2": 0.20, "buy2": 18, "test2": 1, "pf": 0.10, "assembly": 6, "test_product": 2, "price": 56, "replacement": 10, "disassembly": 5},
+  {"case": 6, "p1": 0.05, "buy1": 4, "test1": 2, "p2": 0.05, "buy2": 18, "test2": 3, "pf": 0.05, "assembly": 6, "test_product": 3, "price": 56, "replacement": 10, "disassembly": 40}
+]

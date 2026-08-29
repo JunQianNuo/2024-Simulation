@@ -1,24 +1,32 @@
-# 2024 CUMCM B题问题二
+# 2024 CUMCM B 题问题二
 
-本程序实现 Q2-M2 吸收 Markov 奖励闭环利润模型，以 Q2-A1 穷举每个表 1 情形的 16 个固定策略 `(x1, x2, y, z)`：`x1/x2` 为是否检测两类零件，`y` 为是否检测成品，`z` 为是否拆解已知不合格成品。
+程序实现 Q2-M2 吸收 Markov 奖励模型，枚举表 1 每个情形的 16 个固定策略 `(x1, x2, y, z)`：两个 `x` 表示零件检测，`y` 表示成品检测，`z` 表示拆解已知不合格品。
 
-核算单位为“每最终交付一件合格品”：售价只计一次，调换损失不含替换产品本身的生产成本。
+状态为 `(phase,z1,z2,k1,k2,o1,o2)`，同时记录零件的真实质量、已知信息和新购/拆回来源。已检合格且保留的零件不重复检测；拆回件保留真实质量，并按固定策略重新检测。
+
+核算单位为“每最终交付一件合格品”：售价只计一次，调换损失不含替换品本身的生产成本。
+
+## 运行
 
 ```bash
 cd B题/代码
+python -m pip install -r q2/requirements.txt
 python -m q2.run_q2
+python -m unittest q2.test_q2 -v
 ```
 
-若使用 uv：
+主程序使用正概率边的 SCC 判定闭合暂态类，再计算谱半径与吸收裕度。裕度不大于 `1e-10` 时标记 `NEAR_NONABSORBING` 并用 80 位精度复核；数值阈值不参与图结构分类。可吸收策略使用稀疏 LU 一次求解多个成本/事件右端，并进行残差检查。
 
-```bash
-uv run python -m q2.run_q2
-```
+## 输出
 
-运行会核对题目 PDF 表 1 的全部字段、概率矩阵、可达闭类、线性方程残差与“事件次数 × 单价 = 成本分项”，并生成 `results/q2/all_policies.csv`、`best_policies.csv` 和 `summary.json`。
+结果位于 `B题/代码/results/q2/`：
 
-`SUCCESS_EXACT` 表示策略的闭环成本方程可解且最终吸收；它不表示一次装配合格率为 100%。`one_assembly_success` 仅是忽略拆解、返工和调换时的一次装配直接合格概率。`factory_defect_rate` 是所有进入用户环节的成品中次品的长期比例；成检时为零。`exchange_rate` 与 `expected_replacements` 都表示每个最终交付订单的期望调换次数，而不是“至少发生一次调换”的概率，因为一个订单可能经历多次调换。
+- `all_policies.csv`：96 个策略的状态、谱信息、成本分项和事件次数。
+- `best_policies.csv`：各情形最优策略，并列解全部保留。
+- `state_table.csv` 和 `transition_edges.csv`：可追溯的状态/边表。
+- `sensitivity.csv`：检测、调换和拆解费用的单因素分析，范围依据为表 1 已观测值。
+- `structural_comparison.csv`：物理质量保持与传统质量重置近似的结构对照。
+- `summary.json` 和 `run_metadata.json`：汇总、版本、配置与 SHA-256 哈希。
+- `best_profit_by_case.png/.svg`：各情形最优期望利润图。
 
-当前状态规模仅十几维，故使用稠密 `np.linalg.solve` 精确求解，并先进行 SCC/可达闭类吸收性检查；没有采用确认单 C3 建议的稀疏 LU 多右端工程实现，这不影响本题小规模的精确计算。`z=1` 且任一零件不检测时，可达坏零件会重复回流，策略标为 `NON_ABSORBING`。
-
-这些只是题设给定参数下的固定策略精确最优，不是对所有参数扰动的普遍结论。尤其情形 5、6 的第一、第二名利润差距较小，需谨慎解释。
+`SUCCESS_EXACT` 表示闭环最终吸收；`NON_ABSORBING` 表示存在无成功泄漏的可达闭合类。`factory_defect_rate` 是进入市场的成品中次品的期望比例；`exchange_rate` 是每订单期望调换次数，不是“至少调换一次”的概率。

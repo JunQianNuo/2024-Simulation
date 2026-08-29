@@ -1,0 +1,13 @@
+﻿case,recovery_mode,best_policies,best_profit,note
+1,physical_retention,1101,17.555555555555557,main model
+1,quality_reset,0001,21.680384087791495,structural sensitivity only
+2,physical_retention,1101,10.75,main model
+2,quality_reset,1001,12.96875,structural sensitivity only
+3,physical_retention,1101;1111,14.888888888888893,main model
+3,quality_reset,0011,19.795610425240056,structural sensitivity only
+4,physical_retention,1111,14.25,main model
+4,quality_reset,1011,15.171875,structural sensitivity only
+5,physical_retention,0100,11.987654320987652,main model
+5,quality_reset,0011,18.938271604938265,structural sensitivity only
+6,physical_retention,0000,21.6786703601108,main model
+6,quality_reset,0000,21.6786703601108,structural sensitivity only
