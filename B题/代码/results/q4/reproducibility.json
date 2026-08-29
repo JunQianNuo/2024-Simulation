@@ -1,14 +1,69 @@
 {
-  "generated_at_utc": "2026-08-29T18:00:33.580746+00:00",
-  "command": "python -m q4.run_q4 --quick",
-  "python": "3.13.15 (main, Aug  7 2026, 02:25:50) [Clang 22.1.3 ]",
+  "generated_at_utc": "2026-08-29T19:04:39.496692+00:00",
+  "command": "cd B题/代码 && python -m q4.run_q4",
+  "python": "3.10.20 (main, Aug  7 2026, 02:25:15) [Clang 22.1.3 ]",
   "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43",
   "versions": {
-    "numpy": "2.5.2",
-    "pandas": "3.0.5",
-    "scipy": "1.18.1"
+    "numpy": "2.2.6",
+    "pandas": "2.3.3",
+    "scipy": "1.15.3"
   },
-  "git_commit": "1435cf0b4d7ec4a9ea04c40b36e2687bd56d40b0",
-  "config_sha256": "99d0ac19b8694dbc66cbd14f3578f49af44a591879456ac4fa5a5a9afb210f7c",
-  "evidence_sha256": "257dca12ad7dddea76630c1df090e1934f9cea79d0a977ac31e5ef1afb06dffd"
+  "git_commit": "dd44f72879faded1bf61508bac444d6d3e388f30",
+  "git_dirty": true,
+  "config_sha256": "8f6e1b45b98e9390e4e2e4464df457115297541d4e9a79371e93fd25b41dd73d",
+  "evidence_sha256": "257dca12ad7dddea76630c1df090e1934f9cea79d0a977ac31e5ef1afb06dffd",
+  "source_sha256": {
+    "run_q4.py": "d208267c1e82166256e2216a52ceadf6496d8783484df74a3c74d9c2cda92621",
+    "batch_evaluators.py": "55dedba164078a7bbb5c02ec3a8a083992a5a841c8eb7a1b7085f98a2f8bcec8",
+    "test_q4.py": "b7a0133df8747bcd2e28069cbbe76597d213616c511862e50f1e66f0cc10ea2d",
+    "config.json": "8f6e1b45b98e9390e4e2e4464df457115297541d4e9a79371e93fd25b41dd73d",
+    "q4_demo_evidence.json": "257dca12ad7dddea76630c1df090e1934f9cea79d0a977ac31e5ef1afb06dffd",
+    "README.md": "0a8a0d418a8f3f72791d3d7634463d07e5f998336daf6d2fd1f615b68b03a6ff"
+  },
+  "plans": {
+    "q2": {
+      "explore_seed": 2024,
+      "confirm_seed": 12024,
+      "initial_draws": 2048,
+      "batch_size": 2048,
+      "draw_chunk": 512,
+      "max_draws": 262144,
+      "confirm_draws": 32768,
+      "min_batches": 8,
+      "stable_checkpoints": 3,
+      "epsilon_profit": 0.056,
+      "epsilon_prob": 0.005,
+      "quantile_reservoir_draws": 2048,
+      "crn_diagnostic_draws": 2048
+    },
+    "q3": {
+      "explore_seed": 2024,
+      "confirm_seed": 12024,
+      "initial_draws": 2048,
+      "batch_size": 2048,
+      "draw_chunk": 8,
+      "max_draws": 65536,
+      "confirm_draws": 16384,
+      "min_batches": 8,
+      "stable_checkpoints": 3,
+      "epsilon_profit": 0.2,
+      "epsilon_prob": 0.005,
+      "quantile_reservoir_draws": 256,
+      "crn_diagnostic_draws": 1024
+    }
+  },
+  "priors": {
+    "uniform": [
+      1.0,
+      1.0
+    ],
+    "jeffreys": [
+      0.5,
+      0.5
+    ]
+  },
+  "robust_coverages": [
+    90,
+    95
+  ]
 }

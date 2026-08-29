@@ -12,7 +12,7 @@
     ],
     "claim_scope": "仅适用于当前 balanced reference；UNDECIDED_CAP 是证据不足，不是第四种质量判定。",
     "paper_candidate": "正文（方法/策略说明）",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "caption_zh": "图示平衡参考方案在累计抽检数与累计次品数平面上的序贯决策区域。接收上界与拒收下界之间需继续抽检；到达 N_max 仍未越界时记为 UNDECIDED_CAP，表示证据不足而非合格或不合格。"
   },
   {
@@ -28,7 +28,7 @@
     ],
     "claim_scope": "仅连接 13 个已计算网格点以引导视线，不表示额外插值计算；接收错误约束指 p0 右极限。",
     "paper_candidate": "正文（操作特性/风险说明）",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "caption_zh": "图示平衡参考方案在 13 个已计算真实次品率上的接收、拒收和截尾未决概率。标称阈值附近的未决概率较高，反映了双单侧置信序列在边界附近需要更多证据；图中同时区分了 p=p0 的拒收风险与 p0 右极限的接收风险。"
   },
   {
@@ -44,7 +44,7 @@
     ],
     "claim_scope": "三方案代表不同运营偏好；不支持题目存在唯一给定最优方案或连续参数域全局最优。",
     "paper_candidate": "正文（方案权衡）",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "caption_zh": "图在相同的 13 个真实次品率上比较三种 Pareto 代表方案的平均抽检数和截尾未决概率。省样本方案强调检测效率，低未决方案强调降低证据不足的频率，平衡参考仅是两目标间的工程折中。"
   },
   {
@@ -61,7 +61,7 @@
     ],
     "claim_scope": "精确 Pareto 仅指声明的 34 个有限候选内无 Monte Carlo 误差；外部基线不属于该网格且不连入前沿。",
     "paper_candidate": "正文（多目标结果）",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "caption_zh": "图示 34 个预先声明候选在等权平均抽检数与等权未决概率之间的权衡，并标出 Pareto 前沿及三种偏好方案。外部五阶段基线仅作相同等权口径下的工程参照，不属于这 34 个候选的 Pareto 网格；本图不证明连续参数域或所有停止规则中的全局最优。"
   },
   {

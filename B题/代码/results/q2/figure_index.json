@@ -2,7 +2,7 @@
   {
     "type": "Type 3",
     "paper_candidate": "正文",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "file": "figures/q2_optimal_policy_matrix.svg",
     "raster_file": "figures/q2_optimal_policy_matrix.png",
     "title": "六种情形的最优固定策略矩阵",
@@ -17,7 +17,7 @@
   {
     "type": "Type 3",
     "paper_candidate": "正文",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "file": "best_profit_by_case.svg",
     "raster_file": "best_profit_by_case.png",
     "title": "六种名义情形的最优期望利润",
@@ -32,7 +32,7 @@
   {
     "type": "Type 3",
     "paper_candidate": "正文",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "file": "figures/q2_policy_profit_landscape.svg",
     "raster_file": "figures/q2_policy_profit_landscape.png",
     "title": "六种情形下16个固定策略的期望利润全景",
@@ -48,7 +48,7 @@
   {
     "type": "Type 3",
     "paper_candidate": "正文",
-    "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale",
+    "render_check": "PASS: PNG visually inspected; Chinese glyphs, cropping, panels, legends, axes and scaling are correct",
     "file": "figures/q2_optimal_cost_composition.svg",
     "raster_file": "figures/q2_optimal_cost_composition.png",
     "title": "最优固定策略的期望成本构成",

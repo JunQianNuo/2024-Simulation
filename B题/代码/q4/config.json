@@ -2,11 +2,11 @@
   "schema_version": "q4-results-v2",
   "robust_coverages": [90, 95],
   "default_plan": {
-    "q2": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 2048, "batch_size": 2048, "max_draws": 262144, "confirm_draws": 32768, "min_batches": 8, "stable_checkpoints": 3, "epsilon_profit": 0.056, "epsilon_prob": 0.005},
-    "q3": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 2048, "batch_size": 2048, "max_draws": 65536, "confirm_draws": 16384, "min_batches": 8, "stable_checkpoints": 3, "epsilon_profit": 0.2, "epsilon_prob": 0.005}
+    "q2": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 2048, "batch_size": 2048, "draw_chunk": 512, "max_draws": 262144, "confirm_draws": 32768, "min_batches": 8, "stable_checkpoints": 3, "epsilon_profit": 0.056, "epsilon_prob": 0.005, "quantile_reservoir_draws": 2048, "crn_diagnostic_draws": 2048},
+    "q3": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 2048, "batch_size": 2048, "draw_chunk": 8, "max_draws": 65536, "confirm_draws": 16384, "min_batches": 8, "stable_checkpoints": 3, "epsilon_profit": 0.2, "epsilon_prob": 0.005, "quantile_reservoir_draws": 256, "crn_diagnostic_draws": 1024}
   },
   "quick_plan": {
-    "q2": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 24, "batch_size": 8, "max_draws": 24, "confirm_draws": 24, "min_batches": 3, "stable_checkpoints": 3, "epsilon_profit": 0.056, "epsilon_prob": 0.005},
-    "q3": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 8, "batch_size": 4, "max_draws": 8, "confirm_draws": 8, "min_batches": 2, "stable_checkpoints": 3, "epsilon_profit": 0.2, "epsilon_prob": 0.005}
+    "q2": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 24, "batch_size": 8, "draw_chunk": 8, "max_draws": 24, "confirm_draws": 24, "min_batches": 3, "stable_checkpoints": 3, "epsilon_profit": 0.056, "epsilon_prob": 0.005, "quantile_reservoir_draws": 24, "crn_diagnostic_draws": 24},
+    "q3": {"explore_seed": 2024, "confirm_seed": 12024, "initial_draws": 8, "batch_size": 4, "draw_chunk": 4, "max_draws": 8, "confirm_draws": 8, "min_batches": 2, "stable_checkpoints": 3, "epsilon_profit": 0.2, "epsilon_prob": 0.005, "quantile_reservoir_draws": 8, "crn_diagnostic_draws": 8}
   }
 }

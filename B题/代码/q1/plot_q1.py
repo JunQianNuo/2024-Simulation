@@ -47,6 +47,20 @@ RECOMMENDATION_STYLES = {
 }
 
 
+def _register_cjk_fonts() -> None:
+    # Matplotlib may omit system OTF/TTC fonts from a fresh virtual environment.
+    for path in (
+        "/usr/share/fonts/google-noto-serif-cjk-vf-fonts/NotoSerifCJK-VF.ttc",
+        "/usr/share/fonts/fandol/FandolSong-Regular.otf",
+        "/usr/share/fonts/google-droid-sans-fonts/DroidSansFallbackFull.ttf",
+    ):
+        if Path(path).exists():
+            try:
+                fontManager.addfont(path)
+            except RuntimeError:
+                pass
+
+
 def _available_font(preferred: list[str]) -> str:
     available = {font.name for font in fontManager.ttflist}
     for name in preferred:
@@ -55,7 +69,8 @@ def _available_font(preferred: list[str]) -> str:
     raise RuntimeError(f"No usable font found in {preferred}")
 
 
-CHINESE_FONT = _available_font(["Noto Serif CJK SC", "Noto Serif CJK JP", "DejaVu Serif"])
+_register_cjk_fonts()
+CHINESE_FONT = _available_font(["Noto Serif CJK SC", "FandolSong", "Droid Sans Fallback"])
 LATIN_FONT = _available_font(["Times New Roman", "Liberation Serif", "DejaVu Serif"])
 
 plt.rcParams.update({

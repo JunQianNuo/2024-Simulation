@@ -59,9 +59,8 @@ def enumerate_policies(context=None, recovery_mode="physical_retention"):
 
 
 def feasible(frame):
-    hp = frame.get("high_precision_reward_solve", False)
-    if hasattr(hp, "fillna"):
-        hp = hp.fillna(False).astype(bool)
+    hp = (frame["high_precision_reward_solve"].astype("boolean").fillna(False).to_numpy(dtype=bool)
+          if "high_precision_reward_solve" in frame else np.zeros(len(frame), dtype=bool))
     return frame[(frame.status == "SUCCESS_EXACT") | ((frame.status == "NEAR_NONABSORBING") & hp)].copy()
 
 

@@ -42,8 +42,8 @@ python -m q2.plot_q2
 
 新增图保存在 `results/q2/figures/`，改进后的最优利润图仍保存为
 `results/q2/best_profit_by_case.svg/.png`。数据源、结论边界、中文图注和渲染检查状态见
-`results/q2/figure_index.json`。默认使用 `Noto Serif CJK SC`，英文数字回退为
-`Liberation Serif`，数学符号使用 STIX。
+`results/q2/figure_index.json`。中文字体优先使用 `Noto Serif CJK SC`，不可加载时回退为
+`FandolSong`；英文数字回退为 `Liberation Serif`，数学符号使用 STIX。
 
 图中的“最优”只指表 1 名义参数下预先声明的 16 个固定二元策略；非吸收策略不参与利润比较，
 不代表历史自适应策略空间中的全局最优。质量重置模式仅用于结构敏感性对照，主结论仍以拆解后

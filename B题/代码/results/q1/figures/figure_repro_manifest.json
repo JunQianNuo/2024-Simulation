@@ -1,20 +1,20 @@
 {
-  "generated_at_utc": "2026-08-29T13:18:01.561554+00:00",
+  "generated_at_utc": "2026-08-29T18:38:01.969911+00:00",
   "command": "cd B题/代码 && python -m q1.plot_q1",
-  "python": "3.13.15 (main, Aug  7 2026, 02:25:50) [Clang 22.1.3 ]",
+  "python": "3.10.20 (main, Aug  7 2026, 02:25:15) [Clang 22.1.3 ]",
   "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43",
-  "matplotlib": "3.11.1",
-  "numpy": "2.5.2",
+  "matplotlib": "3.10.9",
+  "numpy": "2.2.6",
   "dpi": 360,
   "fonts": {
-    "chinese": "Noto Serif CJK SC",
+    "chinese": "FandolSong",
     "latin_fallback": "Liberation Serif",
     "math": "STIX"
   },
-  "plot_source_sha256": "658ba5766d7bf640c648757f77743deec422889e0a547fd5a10b2f77fcd0c393",
+  "plot_source_sha256": "926db50a80f4ad15e0c3c3653349f17c02f1490fe30387574287ca7782d4e486",
   "input_sha256": {
     "q1/config.json": "f932d119a2c0d120ba93246ed657c853d9255445e9e43fc28c6873e79e08fb6e",
-    "results/q1/summary.json": "5c136d9be3d1a7f4a52026ecfdc78142ba181c4be502fecdcadd398cfd91dca1",
+    "results/q1/summary.json": "e03327c1dd5095a223be2176612679781f0f28899123e1828594962ff9222cf2",
     "results/q1/code_to_writer.json": "b82321ab7e74abc088583e850d781cd4e2f5da900996e762d1be2a65811fc3c0",
     "results/q1/candidate_objectives.csv": "c7bf01966814d5f150319f5074bc8734ce8f3248e53642cd6d779ad2d8e74b98",
     "results/q1/pareto_front.csv": "ab868b3f4bda65f2172f85e03bef8f9ab5b855c91df4bdd09ee54ff70ec17b57",
@@ -22,17 +22,17 @@
     "results/q1/operating_characteristics.csv": "8c9e13e656c22574964134a1c2193fcd770a7ce6be1f09f0e6d4e1f61d4e5a97",
     "results/q1/recommendations.csv": "73facf5220badd4d60e82f2236d8ff0be6ec7c67a5a19416253695f286217534",
     "results/q1/sensitivity_recommendations.csv": "99782953916b6653081383208fe6c0be7c1fe26a8a03cfd929a2e2967b01fdd9",
-    "results/q1/baseline_comparison.csv": "cab3733cb2bc9cf4f9507c7baffa170b260111edc0061a48b1016455abdbd11f"
+    "results/q1/baseline_comparison.csv": "cff01dcbf4e4706faf206b87a6e112fc765f36546afd0b9ab043de72cf717bc1"
   },
   "output_sha256": {
-    "figures/q1_decision_regions_balanced.svg": "8dc9db5b0e7c7d56625e972cf39a7d4b4fede658ed8158178a640685ba5285fb",
-    "figures/q1_decision_regions_balanced.png": "a1763ae7aa7d880d71ab4b2e88f93da1a1552386ff831d4ba96f157efcc87eed",
-    "figures/q1_operating_characteristics_balanced.svg": "c19988978707cf997b59af5f40c89e308a37c2e53b121b348d465c4a608ef65f",
-    "figures/q1_operating_characteristics_balanced.png": "1af5692d53bd66e9f459fcdbf8effa9062839ac61aa7044f20d3791b9c477290",
-    "figures/q1_recommendation_tradeoffs.svg": "6a87212e63e6d3896e50b6a19c20cc46b3ef3b085a801701641eadf0d3d0e28e",
-    "figures/q1_recommendation_tradeoffs.png": "dfb166f738d265ee599646fd676b308a98d45ce4c32bc6438b1a3debfb77ba74",
-    "pareto_front.svg": "d3564316aad6cf62dd1e7809545ce93da7b715fcea5b5550ed7caf7d786f560a",
-    "pareto_front.png": "f7b108551108d9ad931042a67c692972cf3821b4e081962e83735910007fa10a"
+    "figures/q1_decision_regions_balanced.svg": "08c8a0aa60d9c88af376736ade858726108b76813c58967d519880d1de64be01",
+    "figures/q1_decision_regions_balanced.png": "b8c8f2cc7cf3bffe391de46c29189c28eb10632dbd7eebeddb0432d0d5ed1cfa",
+    "figures/q1_operating_characteristics_balanced.svg": "be4537fbf195ced46a5799fa6e2ea0519a07aa02e04f3876f18daf0a1e77c7fa",
+    "figures/q1_operating_characteristics_balanced.png": "9422c707fa31343479b67eb3913cb273be3cb0a002731fa4cefb5ae1397b9ced",
+    "figures/q1_recommendation_tradeoffs.svg": "81ff48a6b1e72023d9873dfb97a4100f205a815a8674b7dd924c1e1d89e0e25d",
+    "figures/q1_recommendation_tradeoffs.png": "9873a9c7e386f280063bb3e21ec7e537fd07abf9ac892b1049276abd1e4ad098",
+    "pareto_front.svg": "f254322c7de8926a9883fa7fb51f8cb46bbe47d1bff01a66a28e6d3a9c88492d",
+    "pareto_front.png": "f10c9fec7ea0838204fb89057b1674292ebeb39df0ea266ed057a83b5499564a"
   },
-  "render_check": "PASS: final PNG inspected for glyphs, clipping, overlap, legends, empty panels and scale"
+  "render_check": "PENDING: generated successfully; final PNG visual inspection required"
 }

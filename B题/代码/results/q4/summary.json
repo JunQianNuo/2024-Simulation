@@ -14,31 +14,49 @@
     "q2_per_case": 16,
     "q3": 65536
   },
-  "quick": true,
+  "quick": false,
   "q2_bayesian": {
     "case_1": {
       "uniform": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1101",
         "confirm_best": "1101",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 1.1753001373845446,
-        "explore_paired_halfwidth_95": 0.8483980048234138,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 1.2735112584922277,
+        "explore_paired_halfwidth_95": 0.025757806118258352,
+        "confirm_paired_halfwidth_95": 0.01231068569014499,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 1.1394372272476112,
+          "independent_difference_variance": 7.263253425469536,
+          "variance_ratio_paired_over_independent": 0.15687697516543034
+        },
         "near_optimal": [
           "1101"
         ]
       },
       "jeffreys": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1101",
         "confirm_best": "1101",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 0.9781910628390023,
-        "explore_paired_halfwidth_95": 0.8208298237719494,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 1.081776374354181,
+        "explore_paired_halfwidth_95": 0.026462189511168684,
+        "confirm_paired_halfwidth_95": 0.01213844693107249,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 1.1582944357124245,
+          "independent_difference_variance": 6.54483744986475,
+          "variance_ratio_paired_over_independent": 0.17697833515122072
+        },
         "near_optimal": [
           "1101"
         ]
@@ -46,27 +64,45 @@
     },
     "case_2": {
       "uniform": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1101",
         "confirm_best": "1101",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 2.2385665223882505,
-        "explore_paired_halfwidth_95": 0.1830383025699663,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 2.20962100951256,
+        "explore_paired_halfwidth_95": 0.0030037313145578576,
+        "confirm_paired_halfwidth_95": 0.002117704541319533,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 0.03744883042582291,
+          "independent_difference_variance": 7.500776867627255,
+          "variance_ratio_paired_over_independent": 0.004992660238627951
+        },
         "near_optimal": [
           "1101"
         ]
       },
       "jeffreys": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1101",
         "confirm_best": "1101",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 2.252316497566495,
-        "explore_paired_halfwidth_95": 0.18170386920700998,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 2.2239423274044476,
+        "explore_paired_halfwidth_95": 0.002932657726582617,
+        "confirm_paired_halfwidth_95": 0.002358785120440914,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 0.03688186880914821,
+          "independent_difference_variance": 7.389455861303475,
+          "variance_ratio_paired_over_independent": 0.004991148130715321
+        },
         "near_optimal": [
           "1101"
         ]
@@ -74,59 +110,91 @@
     },
     "case_3": {
       "uniform": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1111",
         "confirm_best": "1111",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 0.15327729057019113,
-        "explore_paired_halfwidth_95": 1.0077461502338636,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 0.3067600403249209,
+        "explore_paired_halfwidth_95": 0.0248735603992983,
+        "confirm_paired_halfwidth_95": 0.013299721302511735,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 1.1591895069188876,
+          "independent_difference_variance": 5.590398902766271,
+          "variance_ratio_paired_over_independent": 0.2073536302293726
+        },
         "near_optimal": [
-          "1010",
-          "1101",
           "1111"
         ]
       },
       "jeffreys": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1111",
-        "confirm_best": "1101",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 0.024038767344947587,
-        "explore_paired_halfwidth_95": 0.9871250178295096,
+        "confirm_best": "1111",
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 0.1724327833274728,
+        "explore_paired_halfwidth_95": 0.022495618102907768,
+        "confirm_paired_halfwidth_95": 0.01053141246993795,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 1.110522289259356,
+          "independent_difference_variance": 5.126890752686167,
+          "variance_ratio_paired_over_independent": 0.21660736357167595
+        },
         "near_optimal": [
-          "1010",
-          "1101",
           "1111"
         ]
       }
     },
     "case_4": {
       "uniform": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1111",
         "confirm_best": "1111",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 5.106712457709678,
-        "explore_paired_halfwidth_95": 1.7083574906530206,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 5.376870577882771,
+        "explore_paired_halfwidth_95": 0.028034825602543792,
+        "confirm_paired_halfwidth_95": 0.019765242385648734,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 3.262209228205019,
+          "independent_difference_variance": 11.868607927843675,
+          "variance_ratio_paired_over_independent": 0.2748603078000325
+        },
         "near_optimal": [
           "1111"
         ]
       },
       "jeffreys": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1111",
         "confirm_best": "1111",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 4.978379356046039,
-        "explore_paired_halfwidth_95": 1.6959027792654322,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 5.243204944225155,
+        "explore_paired_halfwidth_95": 0.027371472114772446,
+        "confirm_paired_halfwidth_95": 0.022015327790781268,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 3.212820571819138,
+          "independent_difference_variance": 11.694522714589791,
+          "variance_ratio_paired_over_independent": 0.27472866146225056
+        },
         "near_optimal": [
           "1111"
         ]
@@ -134,28 +202,45 @@
     },
     "case_5": {
       "uniform": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "0110",
         "confirm_best": "0110",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 0.0693423540134468,
-        "explore_paired_halfwidth_95": 0.5201533942049306,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 0.08196895275656502,
+        "explore_paired_halfwidth_95": 0.010951397987675547,
+        "confirm_paired_halfwidth_95": 0.006790975799791674,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 0.23462566469382298,
+          "independent_difference_variance": 18.437373717697476,
+          "variance_ratio_paired_over_independent": 0.012725546939942586
+        },
         "near_optimal": [
-          "0100",
           "0110"
         ]
       },
       "jeffreys": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "0100",
         "confirm_best": "0100",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 0.01816896558188219,
-        "explore_paired_halfwidth_95": 0.5080928271427713,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 0.009192925970715748,
+        "explore_paired_halfwidth_95": 0.008245061508603208,
+        "confirm_paired_halfwidth_95": 0.006509286775138904,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 0.2203591715936739,
+          "independent_difference_variance": 17.385856921453048,
+          "variance_ratio_paired_over_independent": 0.012674622400795478
+        },
         "near_optimal": [
           "0100",
           "0110"
@@ -164,111 +249,94 @@
     },
     "case_6": {
       "uniform": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "1000",
         "confirm_best": "1000",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 0.15182509890662388,
-        "explore_paired_halfwidth_95": 1.002740839728903,
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 0.02546062994627718,
+        "explore_paired_halfwidth_95": 0.010500211660023852,
+        "confirm_paired_halfwidth_95": 0.01140763275417761,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 0.8928901350532878,
+          "independent_difference_variance": 6.5554320258328,
+          "variance_ratio_paired_over_independent": 0.13620614652622462
+        },
         "near_optimal": [
           "0000",
           "1000"
         ]
       },
       "jeffreys": {
-        "status": "MC_NOT_CONVERGED",
+        "status": "SUCCESS_MC_TOL",
         "explore_best": "0000",
-        "confirm_best": "1000",
-        "explore_draws": 24,
-        "confirm_draws": 24,
-        "stable_checkpoints": 1,
-        "explore_gap": 0.031336819862819,
-        "explore_paired_halfwidth_95": 0.9533324184945581,
+        "confirm_best": "0000",
+        "explore_draws": 16384,
+        "confirm_draws": 32768,
+        "stable_checkpoints": 8,
+        "explore_stop_reason": "precision_and_stability_reached",
+        "explore_gap": 0.1601986022683981,
+        "explore_paired_halfwidth_95": 0.011934803030998963,
+        "confirm_paired_halfwidth_95": 0.012425525028409028,
+        "quantile_method": "common-draw reservoir n=2048",
+        "crn_diagnostic": {
+          "draws": 2048,
+          "paired_difference_variance": 0.7997663222389915,
+          "independent_difference_variance": 5.600816728683664,
+          "variance_ratio_paired_over_independent": 0.14279458889328042
+        },
         "near_optimal": [
-          "0000",
-          "1000"
+          "0000"
         ]
       }
     }
   },
   "q3_bayesian": {
     "uniform": {
-      "status": "MC_NOT_CONVERGED",
+      "status": "SUCCESS_MC_TOL",
       "explore_best": 63487,
       "confirm_best": 63487,
-      "explore_draws": 8,
-      "confirm_draws": 8,
-      "stable_checkpoints": 1,
-      "explore_gap": 1.862061931903483,
-      "explore_paired_halfwidth_95": 7.107815241113514,
+      "explore_draws": 16384,
+      "confirm_draws": 16384,
+      "stable_checkpoints": 8,
+      "explore_stop_reason": "precision_and_stability_reached",
+      "explore_gap": 1.8333352644954601,
+      "explore_paired_halfwidth_95": 0.017178362108132093,
+      "confirm_paired_halfwidth_95": 0.010654116245056975,
+      "quantile_method": "common-draw reservoir n=256",
+      "crn_diagnostic": {
+        "draws": 1024,
+        "paired_difference_variance": 1.8415259401086566,
+        "independent_difference_variance": 17.804463518390385,
+        "variance_ratio_paired_over_independent": 0.10343057729352689
+      },
       "near_optimal": [
-        34815,
-        38751,
-        38783,
-        38847,
-        38879,
-        38895,
-        38911,
-        40831,
-        40927,
-        40959,
-        42875,
-        42879,
-        42943,
-        43003,
-        43007,
-        44927,
-        45055,
-        46911,
-        46975,
-        47039,
-        47103,
-        48959,
-        49023,
-        49087,
-        49151,
-        51151,
-        51163,
-        51167,
-        51183,
-        51195,
-        51199,
-        53215,
-        53247,
-        55247,
-        55255,
-        55263,
-        55279,
-        55287,
-        55295,
-        57295,
-        57311,
-        57327,
-        57343,
-        59385,
-        59387,
-        59389,
-        59391,
-        61435,
-        61437,
-        61439,
-        63487,
-        65535
+        63487
       ]
     },
     "jeffreys": {
-      "status": "MC_NOT_CONVERGED",
+      "status": "SUCCESS_MC_TOL",
       "explore_best": 63487,
       "confirm_best": 63487,
-      "explore_draws": 8,
-      "confirm_draws": 8,
-      "stable_checkpoints": 1,
-      "explore_gap": 1.9743305882281774,
-      "explore_paired_halfwidth_95": 1.6176263000306,
+      "explore_draws": 16384,
+      "confirm_draws": 16384,
+      "stable_checkpoints": 8,
+      "explore_stop_reason": "precision_and_stability_reached",
+      "explore_gap": 1.9548495297404287,
+      "explore_paired_halfwidth_95": 0.016870244487372392,
+      "confirm_paired_halfwidth_95": 0.01755910850215184,
+      "quantile_method": "common-draw reservoir n=256",
+      "crn_diagnostic": {
+        "draws": 1024,
+        "paired_difference_variance": 0.4023965363633073,
+        "independent_difference_variance": 25.2625786198547,
+        "variance_ratio_paired_over_independent": 0.015928561467080424
+      },
       "near_optimal": [
-        47103,
         63487
       ]
     }
@@ -295,9 +363,18 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.033333333333333326,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_1_95": {
       "bounds": {
@@ -320,22 +397,31 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.01666666666666668,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_2_90": {
       "bounds": {
         "p1": [
-          0.12150361354262595,
+          0.12150361354262602,
           0.2997658618400198
         ],
         "p2": [
-          0.12150361354262595,
+          0.12150361354262602,
           0.2997658618400198
         ],
         "pf": [
-          0.12150361354262595,
+          0.12150361354262602,
           0.2997658618400198
         ]
       },
@@ -345,22 +431,31 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.033333333333333326,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_2_95": {
       "bounds": {
         "p1": [
-          0.11361675058609902,
+          0.113616750586099,
           0.31245182531573273
         ],
         "p2": [
-          0.11361675058609902,
+          0.113616750586099,
           0.31245182531573273
         ],
         "pf": [
-          0.11361675058609902,
+          0.113616750586099,
           0.31245182531573273
         ]
       },
@@ -370,9 +465,18 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.01666666666666668,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_3_90": {
       "bounds": {
@@ -395,9 +499,18 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.033333333333333326,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_3_95": {
       "bounds": {
@@ -420,22 +533,31 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.01666666666666668,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_4_90": {
       "bounds": {
         "p1": [
-          0.12150361354262595,
+          0.12150361354262602,
           0.2997658618400198
         ],
         "p2": [
-          0.12150361354262595,
+          0.12150361354262602,
           0.2997658618400198
         ],
         "pf": [
-          0.12150361354262595,
+          0.12150361354262602,
           0.2997658618400198
         ]
       },
@@ -445,22 +567,31 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.033333333333333326,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_4_95": {
       "bounds": {
         "p1": [
-          0.11361675058609902,
+          0.113616750586099,
           0.31245182531573273
         ],
         "p2": [
-          0.11361675058609902,
+          0.113616750586099,
           0.31245182531573273
         ],
         "pf": [
-          0.11361675058609902,
+          0.113616750586099,
           0.31245182531573273
         ]
       },
@@ -470,9 +601,18 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.01666666666666668,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_5_90": {
       "bounds": {
@@ -481,7 +621,7 @@
           0.18307901081197567
         ],
         "p2": [
-          0.12150361354262595,
+          0.12150361354262602,
           0.2997658618400198
         ],
         "pf": [
@@ -495,9 +635,18 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.033333333333333326,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_5_95": {
       "bounds": {
@@ -506,7 +655,7 @@
           0.19418377920641908
         ],
         "p2": [
-          0.11361675058609902,
+          0.113616750586099,
           0.31245182531573273
         ],
         "pf": [
@@ -520,22 +669,31 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.01666666666666668,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_6_90": {
       "bounds": {
         "p1": [
-          0.014769078866146415,
+          0.014769078866146411,
           0.11871223214172384
         ],
         "p2": [
-          0.014769078866146415,
+          0.014769078866146411,
           0.11871223214172384
         ],
         "pf": [
-          0.014769078866146415,
+          0.014769078866146411,
           0.11871223214172384
         ]
       },
@@ -545,22 +703,31 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.033333333333333326,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "case_6_95": {
       "bounds": {
         "p1": [
-          0.012393591163241431,
+          0.012393591163241435,
           0.12833698620661416
         ],
         "p2": [
-          0.012393591163241431,
+          0.012393591163241435,
           0.12833698620661416
         ],
         "pf": [
-          0.012393591163241431,
+          0.012393591163241435,
           0.12833698620661416
         ]
       },
@@ -570,9 +737,18 @@
         "pf": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.01666666666666668,
-      "evaluated_box_points": 8,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 270,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     }
   },
   "q3_robust": {
@@ -642,9 +818,18 @@
         "final": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.008333333333333331,
-      "evaluated_box_points": 7,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 1842480,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     },
     "95": {
       "bounds": {
@@ -712,18 +897,29 @@
         "final": "clopper_pearson_fixed_n"
       },
       "alpha_per_parameter": 0.00416666666666667,
-      "evaluated_box_points": 7,
-      "interval_certificate": false,
-      "claim_limit": "无区间分支定界证书，仅能称数值稳健方案"
+      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
+      "automatic_derivative_counterexample_search": {
+        "points": 9,
+        "comparisons": 1842480,
+        "violations": 0,
+        "maximum_profit_increase": 0.0
+      },
+      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
+      "interval_certificate": true,
+      "inner_gap": 0.0,
+      "worst_point": "all simultaneous upper endpoints",
+      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
     }
   },
-  "robust_claim": "快速验收仅 ROBUST_UNCERTIFIED；正式 Q2 互证最高为 ROBUST_NUMERICAL；无区间证书不得称严格全局稳健最优。",
+  "robust_claim": "对当前固定策略闭式评价式已完成结构单调性、数值反例搜索和递归区间导数证书；矩形集最坏点为全部上端点。认证范围不扩展到历史自适应策略或其他不确定集。",
   "checks": {
     "q2_full_policy_coverage": true,
     "q3_full_policy_coverage": true,
+    "q2_robust_full_policy_coverage": true,
+    "q3_robust_full_policy_coverage": true,
     "optimal_probabilities_sum_to_one": true,
     "regret_nonnegative": true,
-    "no_false_robust_certification": true
+    "certified_rows_have_zero_inner_gap": true
   },
-  "runtime_seconds": 109.11145309300264
+  "runtime_seconds": 423.52598887299973
 }

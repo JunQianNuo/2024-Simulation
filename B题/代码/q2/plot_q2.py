@@ -31,6 +31,19 @@ COLORS = {
 }
 
 
+def register_cjk_fonts():
+    for path in (
+        "/usr/share/fonts/google-noto-serif-cjk-vf-fonts/NotoSerifCJK-VF.ttc",
+        "/usr/share/fonts/fandol/FandolSong-Regular.otf",
+        "/usr/share/fonts/google-droid-sans-fonts/DroidSansFallbackFull.ttf",
+    ):
+        if Path(path).exists():
+            try:
+                fontManager.addfont(path)
+            except RuntimeError:
+                pass
+
+
 def choose_font(names):
     installed = {font.name for font in fontManager.ttflist}
     for name in names:
@@ -39,7 +52,8 @@ def choose_font(names):
     raise RuntimeError(f"No usable font found in {names}")
 
 
-CHINESE_FONT = choose_font(["Noto Serif CJK SC", "Noto Serif CJK JP", "DejaVu Serif"])
+register_cjk_fonts()
+CHINESE_FONT = choose_font(["Noto Serif CJK SC", "FandolSong", "Droid Sans Fallback"])
 LATIN_FONT = choose_font(["Times New Roman", "Liberation Serif", "DejaVu Serif"])
 plt.rcParams.update({
     "font.family": CHINESE_FONT, "mathtext.fontset": "stix", "axes.unicode_minus": False,

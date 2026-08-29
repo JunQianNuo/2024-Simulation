@@ -30,6 +30,6 @@ cd B题/代码
 python -m q1.plot_q1
 ```
 
-新增图保存在 `results/q1/figures/`，改进后的 Pareto 图仍保存为 `results/q1/pareto_front.svg/.png`。图表数据源、结论边界、中文图注与渲染检查状态见 `results/q1/figure_index.json`。默认使用 `Noto Serif CJK SC`，英文衬线回退为 `Liberation Serif`，数学符号使用 STIX。
+新增图保存在 `results/q1/figures/`，改进后的 Pareto 图仍保存为 `results/q1/pareto_front.svg/.png`。图表数据源、结论边界、中文图注与渲染检查状态见 `results/q1/figure_index.json`。中文字体优先使用 `Noto Serif CJK SC`，不可加载时回退为 `FandolSong`；英文衬线回退为 `Liberation Serif`，数学符号使用 STIX。
 
 结果的“精确 Pareto”仅指预先声明的 34 个有限候选内无 Monte Carlo 误差，不代表连续参数域或所有停止规则中的全局最优。批次有限且抽样比不可忽略时，应改用不放回抽样的置信序列。
