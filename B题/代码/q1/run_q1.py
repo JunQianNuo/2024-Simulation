@@ -1,4 +1,4 @@
-"""Solve Q1-M5 with official Bernoulli CS, exact path DP and Pareto search."""
+"""Q1-M6/A2：AQL-LTPD 双风险截尾序贯验收设计。"""
 
 from __future__ import annotations
 
@@ -6,418 +6,302 @@ import argparse
 import csv
 import hashlib
 import json
+import math
 import platform
 import subprocess
 import sys
 import time
+from dataclasses import asdict
+from datetime import datetime, timezone
 from pathlib import Path
 
-import matplotlib
-matplotlib.use("Agg")
-matplotlib.rcParams["svg.hashsalt"] = "cumcm-q1-pareto"
-import matplotlib.pyplot as plt
 import numpy as np
 import scipy
-from scipy.stats import beta, binom
 
-from .confidence_sequence import crosscheck_endpoints, fixed_sample_baselines, official_boundaries
+from .exact_path_dp import (
+    BoundaryPlan, evaluate, feasible_terminal_cutoffs, fixed_plan_as_boundary,
+    llr_boundaries, preterminal,
+)
+from .fixed_binomial_plan import minimum_plan
 
 HERE = Path(__file__).resolve().parent
 CODE_DIR = HERE.parent
 DEFAULT_OUT = CODE_DIR / "results" / "q1"
 
 
-def load_config(path: Path) -> dict:
-    cfg = json.loads(path.read_text(encoding="utf-8"))
-    p = cfg["problem"]
-    if not all(0 < p[key] < 1 for key in ("p0", "alpha_reject", "alpha_accept")):
-        raise ValueError("INVALID_DATA: probabilities must be in (0,1)")
-    if len(cfg["p_grid"]) != 13 or sorted(cfg["p_grid"]) != cfg["p_grid"]:
-        raise ValueError("INVALID_DATA: the declared 13-point p grid is required")
-    return cfg
+def read_json(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
 
 
-def candidates(cfg: dict) -> list[tuple[int, int]]:
-    result = [(t, n) for t in cfg["t_opt"] for n in cfg["n_max"] if n >= t]
-    if len(result) != 34:
-        raise ValueError(f"INVALID_DATA: expected 34 candidates, got {len(result)}")
-    return result
-
-
-def evaluate_cutoffs(p: float, accept_max: np.ndarray, reject_min: np.ndarray,
-                     cutoffs: list[int]) -> dict[int, dict[str, float | int]]:
-    top = max(cutoffs)
-    q = np.zeros(top + 1)
-    q[0] = 1.0
-    accepted = rejected = asn = 0.0
-    stop_pmf = np.zeros(top + 1)
-    output = {}
-
-    for t in range(1, top + 1):
-        asn += float(q[:t].sum())
-        nxt = np.zeros(t + 1)
-        nxt[:t] += (1.0 - p) * q[:t]
-        nxt[1:] += p * q[:t]
-        k = np.arange(t + 1)
-        acc, rej = k <= accept_max[t], k >= reject_min[t]
-        a_mass, r_mass = float(nxt[acc].sum()), float(nxt[rej].sum())
-        accepted += a_mass
-        rejected += r_mass
-        stop_pmf[t] = a_mass + r_mass
-        nxt[acc | rej] = 0.0
-        q[:t + 1] = nxt
-
-        if t in cutoffs:
-            undecided = float(nxt.sum())
-            total = accepted + rejected + undecided
-            pmf = stop_pmf[:t + 1].copy()
-            pmf[t] += undecided
-            cdf = np.cumsum(pmf)
-            output[t] = {
-                "p": p, "ASN": asn,
-                "P50": int(np.searchsorted(cdf, 0.5 * total)),
-                "P90": int(np.searchsorted(cdf, 0.9 * total)),
-                "P_accept": accepted, "P_reject": rejected,
-                "P_undecided": undecided, "mass_residual": abs(total - 1.0),
-            }
-    return output
-
-
-def normalize_weights(raw: list[float] | None, size: int) -> np.ndarray:
-    w = np.ones(size) if raw is None else np.asarray(raw, dtype=float)
-    if w.size != size or np.any(w < 0) or w.sum() <= 0:
-        raise ValueError("INVALID_DATA: invalid weight scheme")
-    return w / w.sum()
-
-
-def pareto(rows: list[dict], scheme: str) -> list[dict]:
-    a_key, u_key = f"ASN_w[{scheme}]", f"U_w[{scheme}]"
-    front = []
-    for row in rows:
-        dominated = any(
-            (other[a_key] <= row[a_key] and other[u_key] <= row[u_key])
-            and (other[a_key] < row[a_key] or other[u_key] < row[u_key])
-            for other in rows if other is not row
-        )
-        if not dominated:
-            front.append(row)
-    return sorted(front, key=lambda x: x[a_key])
-
-
-def menger_curvatures(points: np.ndarray) -> np.ndarray:
-    """Three-point Menger curvature for each interior point."""
-    values = np.zeros(len(points))
-    for i in range(1, len(points) - 1):
-        left, center, right = points[i - 1:i + 2]
-        sides = (
-            np.linalg.norm(center - left),
-            np.linalg.norm(right - center),
-            np.linalg.norm(right - left),
-        )
-        denominator = np.prod(sides)
-        first, second = center - left, right - left
-        cross = abs(first[0] * second[1] - first[1] * second[0])
-        values[i] = 2 * cross / denominator if denominator > 0 else 0.0
-    return values
-
-
-def recommendations(front: list[dict], scheme: str = "equal") -> dict[str, object]:
-    a = np.array([r[f"ASN_w[{scheme}]"] for r in front])
-    u = np.array([r[f"U_w[{scheme}]"] for r in front])
-    an = (a - a.min()) / (np.ptp(a) or 1.0)
-    un = (u - u.min()) / (np.ptp(u) or 1.0)
-    ideal_idx = int(np.argmin(np.hypot(an, un)))
-    curvatures = menger_curvatures(np.c_[an, un])
-    curve_idx = int(np.argmax(curvatures)) if len(front) >= 3 else ideal_idx
-    return {
-        "sample_saving": front[0], "balanced": front[ideal_idx],
-        "low_undecided": front[-1], "knee_agreement": ideal_idx == curve_idx,
-        "ideal_index": ideal_idx, "geometric_curvature_index": curve_idx,
-        "geometric_curvature": float(curvatures[curve_idx]),
-    }
-
-
-def group_sequential_baseline(p_grid: list[float]) -> list[dict]:
-    stages = [40, 80, 160, 320, 800]
-    alpha_r = [0.01] * 5
-    alpha_a = [0.04, 0.025, 0.015, 0.012, 0.008]
-    plan = []
-    for n, ar, aa in zip(stages, alpha_r, alpha_a):
-        acc = [k for k in range(n + 1) if (1.0 if k == n else beta.ppf(1 - aa, k + 1, n - k)) <= 0.1]
-        rej = [k for k in range(n + 1) if (0.0 if k == 0 else beta.ppf(ar, k, n - k + 1)) > 0.1]
-        plan.append((n, max(acc, default=-1), min(rej, default=n + 1)))
-
-    rows = []
-    for p in p_grid:
-        alive, prev, asn = np.array([1.0]), 0, 0.0
-        accepted = rejected = 0.0
-        for n, acc, rej in plan:
-            asn += (n - prev) * float(alive.sum())
-            alive = np.convolve(alive, binom.pmf(np.arange(n - prev + 1), n - prev, p))
-            k = np.arange(n + 1)
-            accepted += float(alive[k <= acc].sum())
-            rejected += float(alive[k >= rej].sum())
-            alive[(k <= acc) | (k >= rej)] = 0.0
-            prev = n
-        rows.append({"p": p, "ASN": asn, "P_undecided": float(alive.sum())})
-    return rows
+def validate_config(cfg: dict) -> None:
+    if cfg.get("model_id") != "Q1-M6" or cfg.get("algorithm_id") != "Q1-A2":
+        raise ValueError("STALE_MODEL_RESULT: Q1 config must be Q1-M6/Q1-A2")
+    if not 0 < cfg["p0"] < min(cfg["p1_values"]) < 1:
+        raise ValueError("INVALID_DATA: require p0 < every p1")
+    if cfg["main_p1"] not in cfg["p1_values"] or cfg["main_kappa"] not in cfg["kappa_values"]:
+        raise ValueError("INVALID_DATA: main scenario missing from sensitivity grid")
+    if min(cfg["kappa_values"]) < 1:
+        raise ValueError("INVALID_DATA: kappa must be at least one")
 
 
 def write_csv(path: Path, rows: list[dict]) -> None:
     if not rows:
         raise RuntimeError(f"empty output: {path}")
-    with path.open("w", newline="", encoding="utf-8-sig") as f:
-        writer = csv.DictWriter(f, fieldnames=list(rows[0]), lineterminator="\n")
+    with path.open("w", newline="", encoding="utf-8-sig") as stream:
+        writer = csv.DictWriter(stream, fieldnames=list(rows[0]), lineterminator="\n")
         writer.writeheader()
         writer.writerows(rows)
 
 
-def git_value(*args: str) -> str:
+def plan_hash(plan: BoundaryPlan) -> str:
+    payload = json.dumps(asdict(plan), sort_keys=True, separators=(",", ":"))
+    return hashlib.sha256(payload.encode()).hexdigest()[:16]
+
+
+def _candidate_n(n_fixed: int, kappa: float, fractions: list[float]) -> list[int]:
+    cap = int(math.floor(kappa * n_fixed + 1e-12))
+    values = {max(1, int(round(cap * fraction))) for fraction in fractions}
+    values.update({n_fixed, cap})
+    return sorted(n for n in values if n <= cap)
+
+
+def _terminal_choice(rows: list[tuple[int, float, float]], alpha: float, beta: float):
+    return min(rows, key=lambda row: (max(row[1] / alpha, row[2] / beta),
+                                      abs(row[1] / alpha - row[2] / beta), row[0]))
+
+
+def _objective(plan: BoundaryPlan, p_grid: np.ndarray) -> tuple[float, float, list[dict]]:
+    rows = [evaluate(plan, float(p)) for p in p_grid]
+    index = int(np.argmax([row["ASN"] for row in rows]))
+    return float(rows[index]["ASN"]), float(p_grid[index]), rows
+
+
+def search_plan(cfg: dict, p1: float, kappa: float, quick: bool = False) -> tuple[dict, list[dict]]:
+    p0, alpha, beta = cfg["p0"], cfg["alpha"], cfg["beta"]
+    baseline = minimum_plan(p0, p1, alpha, beta)
+    n_fixed, c_fixed = int(baseline["n_fixed"]), int(baseline["c_fixed"])
+    fixed = fixed_plan_as_boundary(p0, p1, n_fixed, c_fixed)
+    fixed_eval = evaluate(fixed, p0), evaluate(fixed, p1)
+    candidates = [{
+        "plan": fixed, "producer_risk": fixed_eval[0]["P_reject"],
+        "consumer_risk": fixed_eval[1]["P_accept"], "proxy_asn": float(n_fixed),
+    }]
+
+    alpha0, beta0 = cfg["alpha"], cfg["beta"]
+    h_a0 = math.log(beta0 / (1 - alpha0))
+    h_r0 = math.log((1 - beta0) / alpha0)
+    search = cfg["search"]
+    accept_offsets = search["accept_offsets"][::2] if quick else search["accept_offsets"]
+    reject_offsets = search["reject_offsets"][::2] if quick else search["reject_offsets"]
+    n_values = _candidate_n(n_fixed, kappa, search["n_fractions"])
+    if quick:
+        n_values = sorted(set([n_fixed, n_values[max(0, len(n_values) // 2)]]))
+    p_dagger = -math.log((1 - p1) / (1 - p0)) / math.log(p1 * (1 - p0) / (p0 * (1 - p1)))
+    seen = set()
+    audit_rows = []
+    for a_offset in accept_offsets:
+        for r_offset in reject_offsets:
+            h_accept, h_reject = h_a0 + a_offset, h_r0 + r_offset
+            if h_accept >= h_reject:
+                continue
+            for n_max in n_values:
+                accept, reject = llr_boundaries(n_max, p0, p1, h_accept, h_reject)
+                signature = (n_max, accept, reject)
+                if signature in seen:
+                    continue
+                seen.add(signature)
+                shell = BoundaryPlan(p0, p1, n_max, 0, accept, reject,
+                                     h_accept, h_reject, "calibrated-truncated-sprt")
+                at_p0, at_p1 = preterminal(shell, p0), preterminal(shell, p1)
+                cutoffs = feasible_terminal_cutoffs(at_p0, at_p1, n_max, alpha, beta)
+                audit_rows.append({
+                    "p1": p1, "kappa": kappa, "N_max": n_max,
+                    "h_accept": h_accept, "h_reject": h_reject,
+                    "feasible_terminal_count": len(cutoffs),
+                })
+                if not cutoffs:
+                    continue
+                cutoff, producer, consumer = _terminal_choice(cutoffs, alpha, beta)
+                plan = BoundaryPlan(p0, p1, n_max, cutoff, accept, reject,
+                                    h_accept, h_reject, "calibrated-truncated-sprt")
+                candidates.append({
+                    "plan": plan, "producer_risk": producer, "consumer_risk": consumer,
+                    "proxy_asn": float(evaluate(plan, p_dagger)["ASN"]),
+                })
+
+    shortlist = sorted(candidates, key=lambda row: (row["proxy_asn"], row["plan"].n_max,
+                                                      plan_hash(row["plan"])))[:search["shortlist"]]
+    if candidates[0] not in shortlist:
+        shortlist.append(candidates[0])
+    points = 25 if quick else int(search["asn_grid_points"])
+    p_grid = np.unique(np.r_[np.linspace(p0, p1, points), p_dagger])
+    for row in shortlist:
+        row["J_grid"], row["p_worst_grid"], _ = _objective(row["plan"], p_grid)
+        endpoint_asn = [evaluate(row["plan"], p)["ASN"] for p in (p0, p1)]
+        row["endpoint_max_asn"] = max(endpoint_asn)
+        row["endpoint_mean_asn"] = sum(endpoint_asn) / 2
+    chosen = min(shortlist, key=lambda row: (
+        row["J_grid"], row["plan"].n_max, row["endpoint_max_asn"],
+        row["endpoint_mean_asn"], plan_hash(row["plan"]),
+    ))
+    chosen.update({
+        "n_fixed": n_fixed, "c_fixed": c_fixed,
+        "fixed_producer_risk": baseline["producer_risk"],
+        "fixed_consumer_risk": baseline["consumer_risk"],
+        "asn_saving_vs_fixed": 1 - chosen["J_grid"] / n_fixed,
+        "p_dagger": p_dagger,
+        "status": "SUCCESS_LOCAL_CALIBRATION",
+        "optimality_scope": "predeclared truncated-SPRT calibration grid; gray-zone ASN supremum evaluated on an adaptive grid",
+        "candidate_count": len(candidates), "shortlist_count": len(shortlist),
+    })
+    return chosen, audit_rows
+
+
+def _plan_row(result: dict) -> dict:
+    plan = result["plan"]
+    return {
+        "p0": plan.p0, "p1": plan.p1, "kappa": result["kappa"],
+        "status": result["status"], "family": plan.family,
+        "plan_hash": plan_hash(plan), "n_fixed": result["n_fixed"],
+        "c_fixed": result["c_fixed"], "N_max": plan.n_max,
+        "c_N": plan.terminal_cutoff, "h_accept": plan.h_accept,
+        "h_reject": plan.h_reject, "producer_risk": result["producer_risk"],
+        "consumer_risk": result["consumer_risk"], "J_ASN_grid": result["J_grid"],
+        "p_worst_grid": result["p_worst_grid"],
+        "endpoint_max_ASN": result["endpoint_max_asn"],
+        "endpoint_mean_ASN": result["endpoint_mean_asn"],
+        "ASN_saving_vs_fixed": result["asn_saving_vs_fixed"],
+        "candidate_count": result["candidate_count"],
+    }
+
+
+def _git_value(*args: str) -> str:
     try:
         return subprocess.check_output(["git", *args], cwd=HERE, text=True).strip()
     except (OSError, subprocess.SubprocessError):
         return "unavailable"
 
 
-def sha256(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def plot_front(rows: list[dict], front: list[dict], rec: dict, outdir: Path) -> None:
-    fig, ax = plt.subplots(figsize=(7.2, 4.8))
-    ax.scatter([r["ASN_w[equal]"] for r in rows], [r["U_w[equal]"] for r in rows],
-               s=28, color="#9aa0a6", label="34 candidates")
-    ax.plot([r["ASN_w[equal]"] for r in front], [r["U_w[equal]"] for r in front],
-            "o-", color="#1f77b4", label="Pareto front")
-    colors = {"sample_saving": "#2ca02c", "balanced": "#d62728", "low_undecided": "#9467bd"}
-    for name, color in colors.items():
-        row = rec[name]
-        ax.scatter(row["ASN_w[equal]"], row["U_w[equal]"], s=85, color=color, label=name)
-    ax.set(xlabel="Weighted average sample number (ASN)", ylabel="Weighted undecided probability",
-           title="Q1 finite-grid Pareto front")
-    ax.grid(alpha=0.25)
-    ax.legend()
-    fig.tight_layout()
-    svg_path = outdir / "pareto_front.svg"
-    fig.savefig(svg_path, metadata={"Date": None})
-    svg_path.write_text(
-        "\n".join(line.rstrip() for line in svg_path.read_text(encoding="utf-8").splitlines()) + "\n",
-        encoding="utf-8",
-    )
-    fig.savefig(outdir / "pareto_front.png", dpi=220)
-    plt.close(fig)
-
-
 def solve(cfg: dict, outdir: Path, quick: bool = False) -> dict:
-    problem = cfg["problem"]
-    grid = candidates(cfg)
-    if quick:
-        grid = [(50, 200), (200, 400)]
-    by_t: dict[int, list[int]] = {}
-    for t_opt, n_max in grid:
-        by_t.setdefault(t_opt, []).append(n_max)
+    validate_config(cfg)
+    started = time.perf_counter()
+    results, search_audit = [], []
+    for p1 in cfg["p1_values"]:
+        for kappa in cfg["kappa_values"]:
+            result, audit = search_plan(cfg, p1, kappa, quick)
+            result["kappa"] = kappa
+            results.append(result)
+            search_audit.extend(audit)
 
-    oc_rows, objective_rows, cross_rows = [], [], []
-    cache = {}
-    for t_opt, cutoffs in by_t.items():
-        accept, reject = official_boundaries(
-            max(cutoffs), problem["p0"], problem["alpha_reject"], problem["alpha_accept"], t_opt
-        )
-        cache[t_opt] = (accept, reject)
-        probe_t = sorted(set(min(max(cutoffs), x) for x in (25, 50, 100, 200, 400, 800, 1600, 3200)))
-        states = [(t, min(t, max(0, int(round(problem["p0"] * t)) + d)))
-                  for t in probe_t for d in (-2, 0, 2)]
-        cross_rows.extend(crosscheck_endpoints(
-            t_opt, states, problem["alpha_reject"], problem["alpha_accept"]
-        ))
-        evaluated = {n: [] for n in cutoffs}
-        for true_p in cfg["p_grid"]:
-            points = evaluate_cutoffs(true_p, accept, reject, cutoffs)
-            for n in cutoffs:
-                row = {"t_opt": t_opt, "N_max": n, **points[n], "status": "SUCCESS_EXACT"}
-                oc_rows.append(row)
-                evaluated[n].append(row)
-        for n in cutoffs:
-            hit = np.flatnonzero(accept[:n + 1] >= 0)
-            row = {"t_opt": t_opt, "N_max": n,
-                   "first_accept_all_good": int(hit[0]) if hit.size else None,
-                   "status": "SUCCESS_EXACT"}
-            for name, raw in cfg["weights"].items():
-                w = normalize_weights(raw, len(cfg["p_grid"]))
-                row[f"ASN_w[{name}]"] = float(np.dot(w, [x["ASN"] for x in evaluated[n]]))
-                row[f"U_w[{name}]"] = float(np.dot(w, [x["P_undecided"] for x in evaluated[n]]))
-            objective_rows.append(row)
+    plan_rows = [_plan_row(result) for result in results]
+    boundary_rows, oc_rows = [], []
+    oc_points = 31 if quick else int(cfg["search"]["oc_grid_points"])
+    for result in results:
+        plan = result["plan"]
+        key = {"p1": plan.p1, "kappa": result["kappa"], "plan_hash": plan_hash(plan)}
+        for t in range(1, plan.n_max + 1):
+            boundary_rows.append({
+                **key, "n": t,
+                "k_accept_max": plan.terminal_cutoff if t == plan.n_max else
+                                ("" if plan.accept_max[t] < 0 else plan.accept_max[t]),
+                "k_reject_min": plan.terminal_cutoff + 1 if t == plan.n_max else
+                                ("" if plan.reject_min[t] > t else plan.reject_min[t]),
+                "terminal": t == plan.n_max,
+            })
+        p_grid = np.unique(np.r_[np.linspace(0, 1, oc_points), cfg["p0"], plan.p1,
+                                 result["p_worst_grid"]])
+        previous_accept = math.inf
+        for p in p_grid:
+            row = evaluate(plan, float(p))
+            if row["mass_residual"] > cfg["tolerances"]["mass"]:
+                raise RuntimeError("PROBABILITY_CONSERVATION_FAILED")
+            if row["P_accept"] > previous_accept + cfg["tolerances"]["monotonicity"]:
+                raise RuntimeError("OC_MONOTONICITY_FAILED")
+            previous_accept = row["P_accept"]
+            oc_rows.append({**key, **row})
 
-    worst_mass = max(r["mass_residual"] for r in oc_rows)
-    worst_cs = max(r["max_abs_error"] for r in cross_rows)
-    at_threshold = [r for r in oc_rows if r["p"] == problem["p0"]]
-    worst_false_reject = max(r["P_reject"] for r in at_threshold)
-    worst_false_accept_limit = max(r["P_accept"] for r in at_threshold)
-    if worst_mass > cfg["tolerances"]["mass"]:
-        raise RuntimeError(f"PROB_CONSERVATION_FAILED: {worst_mass:.3e}")
-    if worst_cs > cfg["tolerances"]["cs_endpoint"]:
-        raise RuntimeError(f"CS_CROSSCHECK_FAILED: {worst_cs:.3e}")
-    if worst_false_reject > problem["alpha_reject"] + 1e-10:
-        raise RuntimeError("ERROR_CONSTRAINT_FAILED: false rejection")
-    if worst_false_accept_limit > problem["alpha_accept"] + 1e-10:
-        raise RuntimeError("ERROR_CONSTRAINT_FAILED: false acceptance")
-
-    fronts = {name: pareto(objective_rows, name) for name in cfg["weights"]}
-    rec = recommendations(fronts["equal"])
-    chosen = rec["balanced"]
-    accept, reject = cache[chosen["t_opt"]]
-    boundary_rows = [
-        {"n": t, "k_accept_max": None if accept[t] < 0 else int(accept[t]),
-         "k_reject_min": None if reject[t] > t else int(reject[t])}
-        for t in range(1, chosen["N_max"] + 1)
-    ]
-    all_boundary_rows = []
-    for t_opt, n_max in grid:
-        accept, reject = cache[t_opt]
-        all_boundary_rows.extend(
-            {"t_opt": t_opt, "N_max": n_max, "n": t,
-             "k_accept_max": None if accept[t] < 0 else int(accept[t]),
-             "k_reject_min": None if reject[t] > t else int(reject[t])}
-            for t in range(1, n_max + 1)
-        )
+    main = next(result for result in results if result["plan"].p1 == cfg["main_p1"]
+                and result["kappa"] == cfg["main_kappa"])
+    main_p0 = evaluate(main["plan"], cfg["p0"])
+    main_p1 = evaluate(main["plan"], cfg["main_p1"])
+    if main_p0["P_reject"] > cfg["alpha"] + cfg["tolerances"]["risk"] or \
+            main_p1["P_accept"] > cfg["beta"] + cfg["tolerances"]["risk"]:
+        raise RuntimeError("INFEASIBLE_RISK_PLAN")
 
     outdir.mkdir(parents=True, exist_ok=True)
+    write_csv(outdir / "fixed_binomial_baselines.csv", [{
+        "p0": cfg["p0"], "p1": result["plan"].p1,
+        "n_fixed": result["n_fixed"], "c_fixed": result["c_fixed"],
+        "producer_risk": result["fixed_producer_risk"],
+        "consumer_risk": result["fixed_consumer_risk"],
+    } for result in results[::len(cfg["kappa_values"])]])
+    write_csv(outdir / "sequential_plans.csv", plan_rows)
+    write_csv(outdir / "decision_boundaries.csv", boundary_rows)
     write_csv(outdir / "operating_characteristics.csv", oc_rows)
-    write_csv(outdir / "candidate_objectives.csv", objective_rows)
-    write_csv(outdir / "pareto_front.csv", fronts["equal"])
-    write_csv(outdir / "decision_boundary.csv", boundary_rows)
-    write_csv(outdir / "all_candidate_boundaries.csv", all_boundary_rows)
-    write_csv(outdir / "cs_crosscheck.csv", cross_rows)
-    recommendation_rows = [
-        {"type": name, **rec[name]} for name in ("sample_saving", "balanced", "low_undecided")
-    ]
-    write_csv(outdir / "recommendations.csv", recommendation_rows)
-    sensitivity_rows = []
-    for scheme, front in fronts.items():
-        scheme_rec = recommendations(front, scheme)
-        for kind in ("sample_saving", "balanced", "low_undecided"):
-            row = scheme_rec[kind]
-            sensitivity_rows.append({
-                "weight_scheme": scheme, "recommendation_type": kind,
-                "t_opt": row["t_opt"], "N_max": row["N_max"],
-                "ASN_w": row[f"ASN_w[{scheme}]"], "U_w": row[f"U_w[{scheme}]"],
-            })
-    write_csv(outdir / "sensitivity_recommendations.csv", sensitivity_rows)
+    write_csv(outdir / "calibration_search_audit.csv", search_audit)
 
-    base = group_sequential_baseline(cfg["p_grid"])
-    w = normalize_weights(None, len(base))
-    baseline_row = [{
-        "method": "Q1-BL-GSCP-5",
-        "ASN_w[equal]": float(np.dot(w, [x["ASN"] for x in base])),
-        "U_w[equal]": float(np.dot(w, [x["P_undecided"] for x in base])),
-        "role": "external_baseline_not_in_pareto_grid",
-    }]
-    write_csv(outdir / "baseline_comparison.csv", baseline_row)
-    plot_front(objective_rows, fronts["equal"], rec, outdir)
-
-    baseline = fixed_sample_baselines()
-    if abs(baseline["U_0.90(22,0)"] - 0.0994) > 5e-4 or abs(baseline["L_0.95(2,2)"] - 0.2236) > 5e-4:
-        raise RuntimeError("fixed-sample baseline check failed")
     summary = {
-        "problem": "2024-CUMCM-B-Q1", "model": "Q1-M5", "algorithm": "Q1-A1",
-        "status": "SUCCESS_EXACT", "candidate_count": len(grid),
-        "representative_p": cfg["p_grid"], "baseline": baseline,
-        "worst_mass_residual": worst_mass, "worst_cs_endpoint_error": worst_cs,
-        "error_constraint_check": {
-            "max_reject_at_p0": worst_false_reject,
-            "max_accept_at_p0_right_limit": worst_false_accept_limit,
+        "problem": "2024-CUMCM-B-Q1", "model": "Q1-M6", "algorithm": "Q1-A2",
+        "status": main["status"], "quick": quick,
+        "main_scenario": _plan_row(main),
+        "main_endpoint_checks": {"at_p0": main_p0, "at_p1": main_p1},
+        "sensitivity_scenarios": plan_rows,
+        "termination": "binary accept/reject by N_max; no undecided action",
+        "checks": {
+            "all_16_scenarios_present": len(plan_rows) == len(cfg["p1_values"]) * len(cfg["kappa_values"]),
+            "all_producer_risks_feasible": all(row["producer_risk"] <= cfg["alpha"] + cfg["tolerances"]["risk"] for row in plan_rows),
+            "all_consumer_risks_feasible": all(row["consumer_risk"] <= cfg["beta"] + cfg["tolerances"]["risk"] for row in plan_rows),
+            "binary_terminal_rule": True,
+            "maximum_probability_residual": max(row["mass_residual"] for row in oc_rows),
         },
-        "pareto_sizes": {k: len(v) for k, v in fronts.items()},
-        "recommendations": {
-            name: {"t_opt": rec[name]["t_opt"], "N_max": rec[name]["N_max"],
-                   "ASN_w_equal": rec[name]["ASN_w[equal]"], "U_w_equal": rec[name]["U_w[equal]"]}
-            for name in ("sample_saving", "balanced", "low_undecided")
-        },
-        "knee_selection": {"criteria_agree": rec["knee_agreement"],
-                           "ideal_index": rec["ideal_index"],
-                           "geometric_curvature_index": rec["geometric_curvature_index"],
-                           "geometric_curvature": rec["geometric_curvature"],
-                           "curvature_definition": "three-point Menger curvature on min-max normalized Pareto coordinates"},
-        "optimality_claim": "exact Pareto front within the declared 34-candidate finite grid only",
-        "undecided_action": "UNDECIDED_CAP; no unbudgeted continued inspection",
+        "optimality_claim": main["optimality_scope"],
+        "limitations": [
+            "p1 is an engineering scenario rather than problem-given data",
+            "threshold search is a declared local calibration grid",
+            "gray-zone ASN objective is grid evaluated, not interval-certified",
+        ],
+        "runtime_seconds": time.perf_counter() - started,
     }
     (outdir / "summary.json").write_text(json.dumps(summary, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
-
-    writer_handoff = {
-        "status": "SUCCESS_EXACT",
-        "claim": summary["optimality_claim"],
-        "balanced_reference": summary["recommendations"]["balanced"],
-        "alternative_recommendations": {
-            "sample_saving": summary["recommendations"]["sample_saving"],
-            "low_undecided": summary["recommendations"]["low_undecided"],
-        },
-        "knee_selection": summary["knee_selection"],
+    writer = {
+        "status": main["status"], "model": "Q1-M6", "algorithm": "Q1-A2",
+        "claim_scope": main["optimality_scope"],
+        "main_scenario": _plan_row(main),
         "evidence": {
-            "candidate_objectives": "results/q1/candidate_objectives.csv",
-            "operating_characteristics": "results/q1/operating_characteristics.csv",
-            "decision_boundary": "results/q1/decision_boundary.csv",
-            "all_candidate_boundaries": "results/q1/all_candidate_boundaries.csv",
-            "crosscheck": "results/q1/cs_crosscheck.csv",
-            "sensitivity": "results/q1/sensitivity_recommendations.csv",
-            "figure": "results/q1/pareto_front.svg",
+            "fixed_baselines": "results/q1/fixed_binomial_baselines.csv",
+            "plans": "results/q1/sequential_plans.csv",
+            "boundaries": "results/q1/decision_boundaries.csv",
+            "oc_asn": "results/q1/operating_characteristics.csv",
         },
-        "warning": "The three recommendations represent different operating preferences; none is a unique problem-given optimum. UNDECIDED_CAP is evidence insufficiency.",
+        "warning": "p1=0.13 and kappa=1 are declared scenarios. The rule always ends in accept or reject; old undecided/Pareto conclusions are stale.",
     }
-    (outdir / "code_to_writer.json").write_text(
-        json.dumps(writer_handoff, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-
-    figure_index = [{
-        "file": "pareto_front.svg",
-        "title": "Q1 finite-grid Pareto front",
-        "purpose": "Show all 34 candidates, the Pareto front and three preference-dependent recommendations.",
-        "source": "candidate_objectives.csv and pareto_front.csv",
-    }]
-    (outdir / "figure_index.json").write_text(
-        json.dumps(figure_index, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-
-    import confseq
+    (outdir / "code_to_writer.json").write_text(json.dumps(writer, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     source_files = [HERE / name for name in (
-        "run_q1.py", "confidence_sequence.py", "test_q1.py", "config.json",
-        "requirements-q1.txt", "Dockerfile", "README.md",
+        "run_q1.py", "fixed_binomial_plan.py", "exact_path_dp.py", "test_q1.py",
+        "config.json", "requirements-q1.txt", "README.md",
     )]
     manifest = {
-        "generated_at": time.strftime("%Y-%m-%dT%H:%M:%S%z"),
-        "python": sys.version, "numpy": np.__version__, "scipy": scipy.__version__,
-        "platform": platform.platform(), "random_seed": None,
-        "confseq": {"version": "official source commit 5ffe733ca2447a2e28c2c91f3b00086173f2ab2c", "required": True,
-                    "source": "https://github.com/gostevehoward/confseq",
-                    "official_reference_value": float(confseq.boundaries.beta_binomial_log_mixture(10, 100, 100, 0.2, 0.8))},
-        "git_commit": git_value("rev-parse", "HEAD"),
-        "git_dirty": bool(git_value("status", "--porcelain")),
-        "source_snapshot": "exact SHA-256 hashes below are authoritative when git_dirty is true",
-        "source_sha256": {str(path.relative_to(CODE_DIR)): sha256(path) for path in source_files},
-        "inputs": {
-            str(HERE / "config.json"): sha256(HERE / "config.json"),
-            str(CODE_DIR.parent / "B题.pdf"): sha256(CODE_DIR.parent / "B题.pdf"),
-        },
-        "command": "cd B题/代码 && python -m q1.run_q1",
-        "container_command": "docker build -f B题/代码/q1/Dockerfile -t cumcm-q1 . && docker run --rm cumcm-q1",
-        "container_validation": {
-            "status": "SUCCESS_EXACT",
-            "runtime": "Linux container, Python 3.10",
-            "verified_with": "Podman using the same Dockerfile",
-        },
-        "tolerances": cfg["tolerances"],
+        "generated_at_utc": datetime.now(timezone.utc).isoformat(),
+        "command": f"cd B题/代码 && python -m q1.run_q1{' --quick' if quick else ''}",
+        "python": sys.version, "platform": platform.platform(),
+        "versions": {"numpy": np.__version__, "scipy": scipy.__version__},
+        "random_seed": None, "git_commit": _git_value("rev-parse", "HEAD"),
+        "git_dirty": bool(_git_value("status", "--porcelain")),
+        "config_sha256": hashlib.sha256((HERE / "config.json").read_bytes()).hexdigest(),
+        "source_sha256": {path.name: hashlib.sha256(path.read_bytes()).hexdigest() for path in source_files},
     }
     (outdir / "repro_manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
     return summary
 
 
 def main() -> None:
-    parser = argparse.ArgumentParser(description="CUMCM 2024 B Q1 exact finite-grid search")
+    parser = argparse.ArgumentParser()
     parser.add_argument("--config", type=Path, default=HERE / "config.json")
     parser.add_argument("--outdir", type=Path, default=DEFAULT_OUT)
     parser.add_argument("--quick", action="store_true")
     args = parser.parse_args()
-    summary = solve(load_config(args.config), args.outdir, args.quick)
-    print(json.dumps(summary, ensure_ascii=False, indent=2))
+    summary = solve(read_json(args.config), args.outdir, args.quick)
+    print(json.dumps(summary["main_scenario"], ensure_ascii=False, indent=2))
 
 
 if __name__ == "__main__":

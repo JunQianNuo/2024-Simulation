@@ -1,15 +1,19 @@
 {
   "evidence_marker": "DEMO_ONLY_NOT_OFFICIAL_DATA",
-  "accounting_unit": "最终交付一件合格品的期望净利润",
-  "bayesian_claim": "正式探索与独立确认批均达到 MC 容差，可在当前证据范围内报告领先固定策略。",
-  "robust_claim": "当前闭式固定策略域通过递归单调性证书，矩形集最坏利润在全部缺陷率上端点取得；ROBUST_CERTIFIED 不代表历史自适应策略域全局最优。",
-  "q2_bayesian_near_optimal_file": "q2_bayesian_near_optimal.csv",
-  "q3_bayesian_near_optimal_file": "q3_bayesian_near_optimal.csv",
-  "q2_robust_certified_file": "q2_robust_certified_best.csv",
-  "q3_robust_certified_file": "q3_robust_certified_best.csv",
+  "main_model": "Q4-M4 with Q4-M2 terminal value and Q4-M3 audit",
+  "q2_claim": "Finite-horizon sampling/stop/production policy solved by memoized DP to the saved quadrature tolerance.",
+  "q3_claim": "Saved action uses cost-sensitive one-step KG with independent scrambled-Sobol confirmation; it is not a globally optimal sampling policy.",
+  "robust_claim": "Endpoint audit is ROBUST_NUMERICAL; no interval branch-and-bound certificate is claimed.",
+  "files": {
+    "q2_policy": "results/q4/q2_voi_policy_summary.csv",
+    "q2_dag": "results/q4/q2_voi_policy_dag.csv",
+    "q3_actions": "results/q4/q3_kg_action_values.csv",
+    "robust": "results/q4/robust_audit.csv",
+    "intervals": "results/q4/simultaneous_intervals.csv"
+  },
   "limitations": [
-    "题面未给真实 N,K，默认数值是演示",
-    "矩形联合集忽略参数相关性",
-    "完美检测、条件独立与回收件真实质量保留沿用 Q2/Q3 锁定假设"
+    "default evidence is a declared demo scenario",
+    "Q3 is myopic KG",
+    "robust inner search is not interval-certified"
   ]
 }

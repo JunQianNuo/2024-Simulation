@@ -1,70 +1,33 @@
 {
-  "generated_at_utc": "2026-08-29T19:50:48.411775+00:00",
+  "generated_at_utc": "2026-08-30T06:30:14.658408+00:00",
   "command": "cd B题/代码 && python -m q4.run_q4",
-  "python": "3.10.20 (main, Aug  7 2026, 02:25:15) [Clang 22.1.3 ]",
+  "python": "3.14.7 (main, Aug 10 2026, 00:00:00) [GCC 16.1.1 20260515 (Red Hat 16.1.1-2)]",
   "platform": "Linux-7.1.8-200.fc44.x86_64-x86_64-with-glibc2.43",
   "versions": {
-    "numpy": "2.2.6",
-    "pandas": "2.3.3",
-    "scipy": "1.15.3"
+    "numpy": "2.5.2",
+    "pandas": "3.0.5",
+    "scipy": "1.18.1"
   },
-  "git_commit": "dc13721ba7e62e30d172cc49112628f8a8ed816b",
-  "git_dirty": true,
-  "config_sha256": "8f6e1b45b98e9390e4e2e4464df457115297541d4e9a79371e93fd25b41dd73d",
-  "evidence_sha256": "257dca12ad7dddea76630c1df090e1934f9cea79d0a977ac31e5ef1afb06dffd",
+  "seeds": {
+    "q3_sobol_exploration": 2024,
+    "q3_sobol_confirmation": 12024
+  },
+  "config_sha256": "e0ccfdfea298b21c7844049bdbd0820a9c5887d55cf53b96cd41b3d70887fb37",
+  "evidence_sha256": "9209d7980f4c7c44c6e55db9bae9d77231fab5e7b9b671c2d90ba3013f36c53e",
   "source_sha256": {
-    "run_q4.py": "3203de927e76e116a755fc9449c88a86ffade4d5efd349a08e76650db370752c",
+    "run_q4.py": "15fb2b93236193c31690ad3854eca5ed784b78cf72bf97492171cd2f44cbedca",
+    "belief_state.py": "4c8a983f920757c929867d6893f330a3127d4de16b4acb3e843ba8f69b635cd4",
+    "terminal_value.py": "d9fef834aa526e4786adc65edebeb094f6d46f492614c6990dbd0862933dbc55",
+    "exact_voi_dp.py": "7800eccacbcdef7f0a8653ef546dbfe34aec8e6f96a00c07dcd007b8838c5789",
+    "kg_rollout.py": "196b92abed31fcd7b12873522d67ea9c97ffc6bf78ec44e466c42d132458731f",
+    "simultaneous_cs.py": "d92cc809a2d2c5c7edbb79d8b38c90e96da8f4b6cdcff2dfc60cc928ea300f8c",
     "batch_evaluators.py": "55dedba164078a7bbb5c02ec3a8a083992a5a841c8eb7a1b7085f98a2f8bcec8",
-    "test_q4.py": "b7a0133df8747bcd2e28069cbbe76597d213616c511862e50f1e66f0cc10ea2d",
-    "config.json": "8f6e1b45b98e9390e4e2e4464df457115297541d4e9a79371e93fd25b41dd73d",
-    "q4_demo_evidence.json": "257dca12ad7dddea76630c1df090e1934f9cea79d0a977ac31e5ef1afb06dffd",
-    "requirements.txt": "46eaa1a8df35af8e5f0f51d53deccd8ba97d36277552d8ea8e367fa5c95f273d",
-    "README.md": "fb051d85a2e2b5ef7259b5c8d5732182c72b53bbb275147a007657ec500aeb10"
+    "test_q4.py": "c5d86d18da09156679bf2954abb577395fd25d41f3e036e38cbb2d3b41796c8a",
+    "config.json": "e0ccfdfea298b21c7844049bdbd0820a9c5887d55cf53b96cd41b3d70887fb37",
+    "q4_demo_evidence.json": "9209d7980f4c7c44c6e55db9bae9d77231fab5e7b9b671c2d90ba3013f36c53e",
+    "requirements.txt": "59ba6d816cd97fd2d757d1abc9203d665aadde77b5627097b4c67a7c187b4e43",
+    "README.md": "2432d632473520270f20eeb0ac88c3fd09bfa6511b4c1d8c2dd50b6ee52a4f99"
   },
-  "plans": {
-    "q2": {
-      "explore_seed": 2024,
-      "confirm_seed": 12024,
-      "initial_draws": 2048,
-      "batch_size": 2048,
-      "draw_chunk": 512,
-      "max_draws": 262144,
-      "confirm_draws": 32768,
-      "min_batches": 8,
-      "stable_checkpoints": 3,
-      "epsilon_profit": 0.056,
-      "epsilon_prob": 0.005,
-      "quantile_reservoir_draws": 2048,
-      "crn_diagnostic_draws": 2048
-    },
-    "q3": {
-      "explore_seed": 2024,
-      "confirm_seed": 12024,
-      "initial_draws": 2048,
-      "batch_size": 2048,
-      "draw_chunk": 8,
-      "max_draws": 65536,
-      "confirm_draws": 16384,
-      "min_batches": 8,
-      "stable_checkpoints": 3,
-      "epsilon_profit": 0.2,
-      "epsilon_prob": 0.005,
-      "quantile_reservoir_draws": 256,
-      "crn_diagnostic_draws": 1024
-    }
-  },
-  "priors": {
-    "uniform": [
-      1.0,
-      1.0
-    ],
-    "jeffreys": [
-      0.5,
-      0.5
-    ]
-  },
-  "robust_coverages": [
-    90,
-    95
-  ]
+  "git_commit": "ac9b71e868f2096ccb2c6d75eca13d06cae68d82",
+  "git_dirty": true
 }

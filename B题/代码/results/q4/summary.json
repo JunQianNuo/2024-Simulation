@@ -1,926 +1,681 @@
 {
-  "schema_version": "q4-results-v2",
+  "schema_version": "q4-results-v3",
   "models": [
+    "Q4-M4",
     "Q4-M2",
     "Q4-M3"
   ],
   "algorithms": [
+    "Q4-A3",
     "Q4-A1",
     "Q4-A2"
   ],
   "evidence_marker": "DEMO_ONLY_NOT_OFFICIAL_DATA",
-  "claim_scope": "题面无真实 N,K；默认输出使用明确标记的模拟证据，只能说明算法流程和该模拟情景。",
-  "policy_domains": {
-    "q2_per_case": 16,
-    "q3": 65536
-  },
   "quick": false,
-  "q2_bayesian": {
-    "case_1": {
-      "uniform": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1101",
-        "confirm_best": "1101",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 1.2735112584922277,
-        "explore_paired_halfwidth_95": 0.025757806118258352,
-        "confirm_paired_halfwidth_95": 0.01231068569014499,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 1.1394372272476112,
-          "independent_difference_variance": 7.263253425469536,
-          "variance_ratio_paired_over_independent": 0.15687697516543034
-        },
-        "near_optimal": [
-          "1101"
-        ]
-      },
-      "jeffreys": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1101",
-        "confirm_best": "1101",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 1.081776374354181,
-        "explore_paired_halfwidth_95": 0.026462189511168684,
-        "confirm_paired_halfwidth_95": 0.01213844693107249,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 1.1582944357124245,
-          "independent_difference_variance": 6.54483744986475,
-          "variance_ratio_paired_over_independent": 0.17697833515122072
-        },
-        "near_optimal": [
-          "1101"
-        ]
-      }
+  "claim_scope": "题面未给实际 N,K、先验强度和完整抽样成本；默认结果仅为显式情景算法演示。",
+  "q2_initial_decisions": [
+    {
+      "case": 1,
+      "prior": "uniform",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 17.011111111111095,
+      "policy_value": 17.011111111111095,
+      "NVSI": 0.0,
+      "EVPI": 0.0443859029670719,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3582.988888888889,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1101",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 1.7763568394002505e-14,
+      "posterior_optimal_probability": 0.8762734303712744,
+      "posterior_mean_regret": 0.044385902967063136,
+      "negative_profit_probability": 8.32627938977687e-15,
+      "posterior_profit_p05": 14.930980730815177,
+      "posterior_profit_p50": 17.126229352531286,
+      "posterior_profit_p95": 18.836270598943084,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 17.011111111111095, \"p1\": 15.011111111111099, \"p2\": 14.011111111111104, \"pf\": -13.988888888888892}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1101\": 1.0}"
     },
-    "case_2": {
-      "uniform": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1101",
-        "confirm_best": "1101",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 2.20962100951256,
-        "explore_paired_halfwidth_95": 0.0030037313145578576,
-        "confirm_paired_halfwidth_95": 0.002117704541319533,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 0.03744883042582291,
-          "independent_difference_variance": 7.500776867627255,
-          "variance_ratio_paired_over_independent": 0.004992660238627951
-        },
-        "near_optimal": [
-          "1101"
-        ]
-      },
-      "jeffreys": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1101",
-        "confirm_best": "1101",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 2.2239423274044476,
-        "explore_paired_halfwidth_95": 0.002932657726582617,
-        "confirm_paired_halfwidth_95": 0.002358785120440914,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 0.03688186880914821,
-          "independent_difference_variance": 7.389455861303475,
-          "variance_ratio_paired_over_independent": 0.004991148130715321
-        },
-        "near_optimal": [
-          "1101"
-        ]
-      }
+    {
+      "case": 1,
+      "prior": "jeffreys",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 17.25139664804468,
+      "policy_value": 17.25139664804468,
+      "NVSI": 0.0,
+      "EVPI": 0.06746520449046045,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3582.7486033519554,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1101",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 1.4210854715202004e-14,
+      "posterior_optimal_probability": 0.8503246649888465,
+      "posterior_mean_regret": 0.06746520449045419,
+      "negative_profit_probability": 4.734611673300181e-15,
+      "posterior_profit_p05": 15.15499651188985,
+      "posterior_profit_p50": 17.337446563407894,
+      "posterior_profit_p95": 18.98307330722388,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 17.25139664804468, \"p1\": 15.251396648044699, \"p2\": 14.251396648044693, \"pf\": -13.748603351955312}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1101\": 1.0}"
     },
-    "case_3": {
-      "uniform": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1111",
-        "confirm_best": "1111",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 0.3067600403249209,
-        "explore_paired_halfwidth_95": 0.0248735603992983,
-        "confirm_paired_halfwidth_95": 0.013299721302511735,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 1.1591895069188876,
-          "independent_difference_variance": 5.590398902766271,
-          "variance_ratio_paired_over_independent": 0.2073536302293726
-        },
-        "near_optimal": [
-          "1111"
-        ]
-      },
-      "jeffreys": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1111",
-        "confirm_best": "1111",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 0.1724327833274728,
-        "explore_paired_halfwidth_95": 0.022495618102907768,
-        "confirm_paired_halfwidth_95": 0.01053141246993795,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 1.110522289259356,
-          "independent_difference_variance": 5.126890752686167,
-          "variance_ratio_paired_over_independent": 0.21660736357167595
-        },
-        "near_optimal": [
-          "1111"
-        ]
-      }
+    {
+      "case": 2,
+      "prior": "uniform",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 10.137499999999989,
+      "policy_value": 10.137499999999989,
+      "NVSI": 0.0,
+      "EVPI": 8.850609134469778e-10,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3589.8625,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1101",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 7.105427357601002e-14,
+      "posterior_optimal_probability": 0.9999999967094253,
+      "posterior_mean_regret": 8.85059154777156e-10,
+      "negative_profit_probability": 3.8656638534284655e-05,
+      "posterior_profit_p05": 6.518750265327229,
+      "posterior_profit_p50": 10.25646184796806,
+      "posterior_profit_p95": 13.141582005073829,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 10.137499999999989, \"p1\": 8.137499999999992, \"p2\": 7.137499999999999, \"pf\": -20.862500000000004}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1101\": 1.0}"
     },
-    "case_4": {
-      "uniform": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1111",
-        "confirm_best": "1111",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 5.376870577882771,
-        "explore_paired_halfwidth_95": 0.028034825602543792,
-        "confirm_paired_halfwidth_95": 0.019765242385648734,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 3.262209228205019,
-          "independent_difference_variance": 11.868607927843675,
-          "variance_ratio_paired_over_independent": 0.2748603078000325
-        },
-        "near_optimal": [
-          "1111"
-        ]
-      },
-      "jeffreys": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1111",
-        "confirm_best": "1111",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 5.243204944225155,
-        "explore_paired_halfwidth_95": 0.027371472114772446,
-        "confirm_paired_halfwidth_95": 0.022015327790781268,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 3.212820571819138,
-          "independent_difference_variance": 11.694522714589791,
-          "variance_ratio_paired_over_independent": 0.27472866146225056
-        },
-        "near_optimal": [
-          "1111"
-        ]
-      }
+    {
+      "case": 2,
+      "prior": "jeffreys",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 10.364779874213845,
+      "policy_value": 10.364779874213845,
+      "NVSI": 0.0,
+      "EVPI": 1.3741221494001365e-09,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3589.635220125786,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1101",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 3.730349362740526e-14,
+      "posterior_optimal_probability": 0.9999999961024459,
+      "posterior_mean_regret": 1.3741267557584667e-09,
+      "negative_profit_probability": 2.6561285136087998e-05,
+      "posterior_profit_p05": 6.828550825641842,
+      "posterior_profit_p50": 10.472685234437902,
+      "posterior_profit_p95": 13.415704733397574,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 10.364779874213845, \"p1\": 8.364779874213843, \"p2\": 7.364779874213835, \"pf\": -20.635220125786155}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1101\": 1.0}"
     },
-    "case_5": {
-      "uniform": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "0110",
-        "confirm_best": "0110",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 0.08196895275656502,
-        "explore_paired_halfwidth_95": 0.010951397987675547,
-        "confirm_paired_halfwidth_95": 0.006790975799791674,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 0.23462566469382298,
-          "independent_difference_variance": 18.437373717697476,
-          "variance_ratio_paired_over_independent": 0.012725546939942586
-        },
-        "near_optimal": [
-          "0110"
-        ]
-      },
-      "jeffreys": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "0100",
-        "confirm_best": "0100",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 0.009192925970715748,
-        "explore_paired_halfwidth_95": 0.008245061508603208,
-        "confirm_paired_halfwidth_95": 0.006509286775138904,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 0.2203591715936739,
-          "independent_difference_variance": 17.385856921453048,
-          "variance_ratio_paired_over_independent": 0.012674622400795478
-        },
-        "near_optimal": [
-          "0100",
-          "0110"
-        ]
-      }
+    {
+      "case": 3,
+      "prior": "uniform",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 14.377777777777773,
+      "policy_value": 14.377777777777773,
+      "NVSI": 0.0,
+      "EVPI": 0.2994029517563668,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3585.6222222222223,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1111",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 1.687538997430238e-14,
+      "posterior_optimal_probability": 0.5486275603692732,
+      "posterior_mean_regret": 0.2994029517563652,
+      "negative_profit_probability": 3.149559651986805e-13,
+      "posterior_profit_p05": 12.42080707493299,
+      "posterior_profit_p50": 14.45897581012224,
+      "posterior_profit_p95": 16.10337229623244,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 14.377777777777773, \"p1\": 12.377777777777776, \"p2\": 11.377777777777759, \"pf\": -16.622222222222227}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1111\": 1.0}"
     },
-    "case_6": {
-      "uniform": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "1000",
-        "confirm_best": "1000",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 0.02546062994627718,
-        "explore_paired_halfwidth_95": 0.010500211660023852,
-        "confirm_paired_halfwidth_95": 0.01140763275417761,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 0.8928901350532878,
-          "independent_difference_variance": 6.5554320258328,
-          "variance_ratio_paired_over_independent": 0.13620614652622462
-        },
-        "near_optimal": [
-          "0000",
-          "1000"
-        ]
-      },
-      "jeffreys": {
-        "status": "SUCCESS_MC_TOL",
-        "explore_best": "0000",
-        "confirm_best": "0000",
-        "explore_draws": 16384,
-        "confirm_draws": 32768,
-        "stable_checkpoints": 8,
-        "explore_stop_reason": "precision_and_stability_reached",
-        "explore_gap": 0.1601986022683981,
-        "explore_paired_halfwidth_95": 0.011934803030998963,
-        "confirm_paired_halfwidth_95": 0.012425525028409028,
-        "quantile_method": "common-draw reservoir n=2048",
-        "crn_diagnostic": {
-          "draws": 2048,
-          "paired_difference_variance": 0.7997663222389915,
-          "independent_difference_variance": 5.600816728683664,
-          "variance_ratio_paired_over_independent": 0.14279458889328042
-        },
-        "near_optimal": [
-          "0000"
-        ]
-      }
+    {
+      "case": 3,
+      "prior": "jeffreys",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 14.603351955307254,
+      "policy_value": 14.603351955307254,
+      "NVSI": 0.0,
+      "EVPI": 0.3601686152427206,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3585.396648044693,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1111",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 2.842170943040401e-14,
+      "posterior_optimal_probability": 0.49165941948279657,
+      "posterior_mean_regret": 0.36016861524271443,
+      "negative_profit_probability": 1.3880307572057795e-13,
+      "posterior_profit_p05": 12.608118178791122,
+      "posterior_profit_p50": 14.69815392333883,
+      "posterior_profit_p95": 16.235544748692767,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 14.603351955307254, \"p1\": 12.603351955307263, \"p2\": 11.603351955307268, \"pf\": -16.396648044692736}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1111\": 1.0}"
+    },
+    {
+      "case": 4,
+      "prior": "uniform",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 13.762499999999985,
+      "policy_value": 13.762499999999985,
+      "NVSI": 0.0,
+      "EVPI": 5.329070518200751e-15,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3200.0,
+      "net_value_after_past_sampling": -3186.2375,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1111",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 8.171241461241152e-14,
+      "posterior_optimal_probability": 0.9999999999999996,
+      "posterior_mean_regret": 0.0,
+      "negative_profit_probability": 4.385159436293483e-09,
+      "posterior_profit_p05": 10.887008429522519,
+      "posterior_profit_p50": 13.86011245717481,
+      "posterior_profit_p95": 16.135250455900444,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 13.762499999999985, \"p1\": 12.762500000000003, \"p2\": 12.762499999999976, \"pf\": -16.237500000000004}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1111\": 1.0}"
+    },
+    {
+      "case": 4,
+      "prior": "jeffreys",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 13.943396226415093,
+      "policy_value": 13.943396226415093,
+      "NVSI": 0.0,
+      "EVPI": 3.552713678800501e-15,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3200.0,
+      "net_value_after_past_sampling": -3186.056603773585,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1111",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 9.592326932761353e-14,
+      "posterior_optimal_probability": 1.0,
+      "posterior_mean_regret": 0.0,
+      "negative_profit_probability": 3.4125367142471534e-09,
+      "posterior_profit_p05": 11.049275600910542,
+      "posterior_profit_p50": 14.065544647203044,
+      "posterior_profit_p95": 16.33096369117551,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 13.943396226415093, \"p1\": 12.943396226415091, \"p2\": 12.943396226415091, \"pf\": -16.056603773584904}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1111\": 1.0}"
+    },
+    {
+      "case": 5,
+      "prior": "uniform",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 10.67796450617283,
+      "policy_value": 10.67796450617283,
+      "NVSI": 0.0,
+      "EVPI": 0.22965129265708306,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3900.0,
+      "net_value_after_past_sampling": -3889.322035493827,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "0110",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 3.730349362740526e-14,
+      "posterior_optimal_probability": 0.38954185301543753,
+      "posterior_mean_regret": 0.2296512926570811,
+      "negative_profit_probability": 0.0007707240130482428,
+      "posterior_profit_p05": 6.038821073482181,
+      "posterior_profit_p50": 10.84176412236353,
+      "posterior_profit_p95": 14.386999641968247,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 10.67796450617283, \"p1\": 2.677964506172838, \"p2\": 9.67796450617283, \"pf\": -19.322035493827155}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"0110\": 1.0}"
+    },
+    {
+      "case": 5,
+      "prior": "jeffreys",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 11.196003783674175,
+      "policy_value": 11.196003783674175,
+      "NVSI": 0.0,
+      "EVPI": 0.23690109268087056,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3900.0,
+      "net_value_after_past_sampling": -3888.8039962163257,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "0100",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 2.6867397195928788e-14,
+      "posterior_optimal_probability": 0.5425944733366835,
+      "posterior_mean_regret": 0.2369010926808688,
+      "negative_profit_probability": 0.0018363150019641615,
+      "posterior_profit_p05": 5.847783542861542,
+      "posterior_profit_p50": 11.359309877426158,
+      "posterior_profit_p95": 15.858027206374953,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 11.196003783674175, \"p1\": 3.2050562322541403, \"p2\": 10.196003783674174, \"pf\": -18.794943767745856}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"0100\": 1.0}"
+    },
+    {
+      "case": 6,
+      "prior": "uniform",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 20.359485639306047,
+      "policy_value": 20.359485639306047,
+      "NVSI": 0.0,
+      "EVPI": 0.36333918137740184,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3579.640514360694,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "1000",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 3.552713678800501e-14,
+      "posterior_optimal_probability": 0.34276938780428545,
+      "posterior_mean_regret": 0.3633391813773997,
+      "negative_profit_probability": 1.0920495238391078e-10,
+      "posterior_profit_p05": 17.465641263112154,
+      "posterior_profit_p50": 20.616629992858755,
+      "posterior_profit_p95": 22.62654124144267,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 20.359485639306047, \"p1\": 18.359485639306044, \"p2\": 17.359485639306023, \"pf\": -10.640514360693981}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"1000\": 1.0}"
+    },
+    {
+      "case": 6,
+      "prior": "jeffreys",
+      "status": "SUCCESS_VOI_DP_TOL",
+      "optimality_label": "exact-DP-to-tolerance",
+      "horizon": 4,
+      "initial_action": "STOP",
+      "stop_value": 20.971428334436098,
+      "policy_value": 20.971428334436098,
+      "NVSI": 0.0,
+      "EVPI": 0.30363372296007185,
+      "expected_additional_samples": 0.0,
+      "expected_additional_sampling_cost": 0.0,
+      "past_sampling_cost": 3600.0,
+      "net_value_after_past_sampling": -3579.028571665564,
+      "P50_samples": 0,
+      "P90_samples": 0,
+      "P99_samples": 0,
+      "terminal_policy": "0000",
+      "terminal_value_status": "VALUE_INTEGRATION_CONVERGED",
+      "terminal_integration_order": 12,
+      "terminal_integration_error": 3.552713678800501e-14,
+      "posterior_optimal_probability": 0.683407181526685,
+      "posterior_mean_regret": 0.30363372296007607,
+      "negative_profit_probability": 6.827948070233335e-10,
+      "posterior_profit_p05": 17.66140972930654,
+      "posterior_profit_p50": 21.144038799292716,
+      "posterior_profit_p95": 23.553302762973825,
+      "state_count": 210,
+      "bellman_residual": 0.0,
+      "initial_action_values": "{\"STOP\": 20.971428334436098, \"p1\": 18.98368858909753, \"p2\": 17.971428334436116, \"pf\": -10.028571665563888}",
+      "expected_allocation": "{\"p1\": 0.0, \"p2\": 0.0, \"pf\": 0.0}",
+      "terminal_policy_probabilities": "{\"0000\": 1.0}"
     }
-  },
-  "q3_bayesian": {
-    "uniform": {
-      "status": "SUCCESS_MC_TOL",
-      "explore_best": 63487,
-      "confirm_best": 63487,
-      "explore_draws": 16384,
-      "confirm_draws": 16384,
-      "stable_checkpoints": 8,
-      "explore_stop_reason": "precision_and_stability_reached",
-      "explore_gap": 1.8333352644954601,
-      "explore_paired_halfwidth_95": 0.017178362108132093,
-      "confirm_paired_halfwidth_95": 0.010654116245056975,
-      "quantile_method": "common-draw reservoir n=256",
-      "crn_diagnostic": {
-        "draws": 1024,
-        "paired_difference_variance": 1.8415259401086566,
-        "independent_difference_variance": 17.804463518390385,
-        "variance_ratio_paired_over_independent": 0.10343057729352689
-      },
-      "near_optimal": [
-        63487
-      ]
+  ],
+  "q3_initial_decisions": [
+    {
+      "prior": "uniform",
+      "action": "STOP",
+      "action_value": 55.31248366431049,
+      "action_SE": 0.03489055603763222,
+      "net_KG": 0.0,
+      "net_KG_CI_lower": 0.0,
+      "net_KG_CI_upper": 0.0,
+      "recommended": true,
+      "status": "STOP_NO_POSITIVE_NET_VOI",
+      "optimality_label": "myopic-KG",
+      "draws_per_scramble": 16,
+      "scrambles": 8,
+      "seed": 2024,
+      "confirm_seed": 12024,
+      "stop_production_policy": 63487,
+      "stop_value": 55.3124836643105,
+      "EVPI": 0.09530504720943611,
+      "posterior_optimal_probability": 0.90625,
+      "posterior_mean_regret": 0.09530504720944144
     },
-    "jeffreys": {
-      "status": "SUCCESS_MC_TOL",
-      "explore_best": 63487,
-      "confirm_best": 63487,
-      "explore_draws": 16384,
-      "confirm_draws": 16384,
-      "stable_checkpoints": 8,
-      "explore_stop_reason": "precision_and_stability_reached",
-      "explore_gap": 1.9548495297404287,
-      "explore_paired_halfwidth_95": 0.016870244487372392,
-      "confirm_paired_halfwidth_95": 0.01755910850215184,
-      "quantile_method": "common-draw reservoir n=256",
-      "crn_diagnostic": {
-        "draws": 1024,
-        "paired_difference_variance": 0.4023965363633073,
-        "independent_difference_variance": 25.2625786198547,
-        "variance_ratio_paired_over_independent": 0.015928561467080424
-      },
-      "near_optimal": [
-        63487
-      ]
+    {
+      "prior": "jeffreys",
+      "action": "STOP",
+      "action_value": 56.34277031291813,
+      "action_SE": 0.03432229596292951,
+      "net_KG": 0.0,
+      "net_KG_CI_lower": 0.0,
+      "net_KG_CI_upper": 0.0,
+      "recommended": true,
+      "status": "STOP_NO_POSITIVE_NET_VOI",
+      "optimality_label": "myopic-KG",
+      "draws_per_scramble": 16,
+      "scrambles": 8,
+      "seed": 2024,
+      "confirm_seed": 12024,
+      "stop_production_policy": 63487,
+      "stop_value": 56.34277031291813,
+      "EVPI": 0.07638596159466005,
+      "posterior_optimal_probability": 0.90625,
+      "posterior_mean_regret": 0.07638596159466493
     }
-  },
-  "q2_robust": {
-    "case_1_90": {
-      "bounds": {
-        "p1": [
-          0.045870556724087796,
-          0.18307901081197567
-        ],
-        "p2": [
-          0.045870556724087796,
-          0.18307901081197567
-        ],
-        "pf": [
-          0.045870556724087796,
-          0.18307901081197567
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.033333333333333326,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+  ],
+  "robust_audit": [
+    {
+      "domain": "q2",
+      "coverage": 90,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1101",
+      "bayesian_policy_nominal_profit": 17.555555555555557,
+      "bayesian_policy_worst_profit": 12.018679102977423,
+      "robust_policy": "1101",
+      "robust_policy_worst_profit": 12.018679102977423,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 1
     },
-    "case_1_95": {
-      "bounds": {
-        "p1": [
-          0.04119586025090358,
-          0.19418377920641908
-        ],
-        "p2": [
-          0.04119586025090358,
-          0.19418377920641908
-        ],
-        "pf": [
-          0.04119586025090358,
-          0.19418377920641908
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.01666666666666668,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 95,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1101",
+      "bayesian_policy_nominal_profit": 17.555555555555557,
+      "bayesian_policy_worst_profit": 11.19209028611511,
+      "robust_policy": "1101",
+      "robust_policy_worst_profit": 11.19209028611511,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 1
     },
-    "case_2_90": {
-      "bounds": {
-        "p1": [
-          0.12150361354262602,
-          0.2997658618400198
-        ],
-        "p2": [
-          0.12150361354262602,
-          0.2997658618400198
-        ],
-        "pf": [
-          0.12150361354262602,
-          0.2997658618400198
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.033333333333333326,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 90,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1101",
+      "bayesian_policy_nominal_profit": 10.75,
+      "bayesian_policy_worst_profit": 2.0234059870912304,
+      "robust_policy": "1101",
+      "robust_policy_worst_profit": 2.0234059870912304,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 2
     },
-    "case_2_95": {
-      "bounds": {
-        "p1": [
-          0.113616750586099,
-          0.31245182531573273
-        ],
-        "p2": [
-          0.113616750586099,
-          0.31245182531573273
-        ],
-        "pf": [
-          0.113616750586099,
-          0.31245182531573273
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.01666666666666668,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 95,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1101",
+      "bayesian_policy_nominal_profit": 10.75,
+      "bayesian_policy_worst_profit": 0.7322666189877509,
+      "robust_policy": "1101",
+      "robust_policy_worst_profit": 0.7322666189877509,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 2
     },
-    "case_3_90": {
-      "bounds": {
-        "p1": [
-          0.045870556724087796,
-          0.18307901081197567
-        ],
-        "p2": [
-          0.045870556724087796,
-          0.18307901081197567
-        ],
-        "pf": [
-          0.045870556724087796,
-          0.18307901081197567
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.033333333333333326,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 90,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1111",
+      "bayesian_policy_nominal_profit": 14.888888888888886,
+      "bayesian_policy_worst_profit": 9.691004872182887,
+      "robust_policy": "1111",
+      "robust_policy_worst_profit": 9.691004872182887,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 3
     },
-    "case_3_95": {
-      "bounds": {
-        "p1": [
-          0.04119586025090358,
-          0.19418377920641908
-        ],
-        "p2": [
-          0.04119586025090358,
-          0.19418377920641908
-        ],
-        "pf": [
-          0.04119586025090358,
-          0.19418377920641908
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.01666666666666668,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 95,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1111",
+      "bayesian_policy_nominal_profit": 14.888888888888886,
+      "bayesian_policy_worst_profit": 8.915023533903977,
+      "robust_policy": "1111",
+      "robust_policy_worst_profit": 8.915023533903977,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 3
     },
-    "case_4_90": {
-      "bounds": {
-        "p1": [
-          0.12150361354262602,
-          0.2997658618400198
-        ],
-        "p2": [
-          0.12150361354262602,
-          0.2997658618400198
-        ],
-        "pf": [
-          0.12150361354262602,
-          0.2997658618400198
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.033333333333333326,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 90,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1111",
+      "bayesian_policy_nominal_profit": 14.25,
+      "bayesian_policy_worst_profit": 7.304343540746082,
+      "robust_policy": "1111",
+      "robust_policy_worst_profit": 7.304343540746082,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 4
     },
-    "case_4_95": {
-      "bounds": {
-        "p1": [
-          0.113616750586099,
-          0.31245182531573273
-        ],
-        "p2": [
-          0.113616750586099,
-          0.31245182531573273
-        ],
-        "pf": [
-          0.113616750586099,
-          0.31245182531573273
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.01666666666666668,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 95,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1111",
+      "bayesian_policy_nominal_profit": 14.25,
+      "bayesian_policy_worst_profit": 6.2767020028678004,
+      "robust_policy": "1111",
+      "robust_policy_worst_profit": 6.2767020028678004,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 4
     },
-    "case_5_90": {
-      "bounds": {
-        "p1": [
-          0.045870556724087796,
-          0.18307901081197567
-        ],
-        "p2": [
-          0.12150361354262602,
-          0.2997658618400198
-        ],
-        "pf": [
-          0.045870556724087796,
-          0.18307901081197567
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.033333333333333326,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 90,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "0110",
+      "bayesian_policy_nominal_profit": 11.864197530864203,
+      "bayesian_policy_worst_profit": -2.6396953141653725,
+      "robust_policy": "1101",
+      "robust_policy_worst_profit": 1.4536578791792891,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 5
     },
-    "case_5_95": {
-      "bounds": {
-        "p1": [
-          0.04119586025090358,
-          0.19418377920641908
-        ],
-        "p2": [
-          0.113616750586099,
-          0.31245182531573273
-        ],
-        "pf": [
-          0.04119586025090358,
-          0.19418377920641908
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.01666666666666668,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 95,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "0110",
+      "bayesian_policy_nominal_profit": 11.864197530864203,
+      "bayesian_policy_worst_profit": -5.038039477530013,
+      "robust_policy": "1101",
+      "robust_policy_worst_profit": 0.2445073015837096,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 5
     },
-    "case_6_90": {
-      "bounds": {
-        "p1": [
-          0.014769078866146411,
-          0.11871223214172384
-        ],
-        "p2": [
-          0.014769078866146411,
-          0.11871223214172384
-        ],
-        "pf": [
-          0.014769078866146411,
-          0.11871223214172384
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.033333333333333326,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 90,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1000",
+      "bayesian_policy_nominal_profit": 21.328765126111676,
+      "bayesian_policy_worst_profit": 13.457327920462276,
+      "robust_policy": "1000",
+      "robust_policy_worst_profit": 13.457327920462276,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 6
     },
-    "case_6_95": {
-      "bounds": {
-        "p1": [
-          0.012393591163241435,
-          0.12833698620661416
-        ],
-        "p2": [
-          0.012393591163241435,
-          0.12833698620661416
-        ],
-        "pf": [
-          0.012393591163241435,
-          0.12833698620661416
-        ]
-      },
-      "interval_methods": {
-        "p1": "clopper_pearson_fixed_n",
-        "p2": "clopper_pearson_fixed_n",
-        "pf": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.01666666666666668,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 270,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
+    {
+      "domain": "q2",
+      "coverage": 95,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": "1000",
+      "bayesian_policy_nominal_profit": 21.328765126111676,
+      "bayesian_policy_worst_profit": 12.19164617066172,
+      "robust_policy": "1000",
+      "robust_policy_worst_profit": 12.19164617066172,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": 6
+    },
+    {
+      "domain": "q3",
+      "coverage": 90,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": 63487,
+      "bayesian_policy_nominal_profit": 57.666666666666686,
+      "bayesian_policy_worst_profit": 26.964296714157513,
+      "robust_policy": 65535,
+      "robust_policy_worst_profit": 29.712934389008183,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": ""
+    },
+    {
+      "domain": "q3",
+      "coverage": 95,
+      "status": "ROBUST_NUMERICAL",
+      "bayesian_policy": 63487,
+      "bayesian_policy_nominal_profit": 57.666666666666686,
+      "bayesian_policy_worst_profit": 23.6188447580285,
+      "robust_policy": 65535,
+      "robust_policy_worst_profit": 26.90912703530006,
+      "worst_parameter_location": "all rectangular upper endpoints",
+      "inner_gap": null,
+      "claim_scope": "endpoint result supported by structural monotonicity and numerical checks; no interval BnB certificate",
+      "case": ""
     }
-  },
-  "q3_robust": {
-    "90": {
-      "bounds": {
-        "part_1": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "part_2": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "part_3": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "part_4": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "part_5": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "part_6": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "part_7": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "part_8": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "semi_1": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "semi_2": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "semi_3": [
-          0.037201814163155066,
-          0.20465301704801628
-        ],
-        "final": [
-          0.037201814163155066,
-          0.20465301704801628
-        ]
-      },
-      "interval_methods": {
-        "part_1": "clopper_pearson_fixed_n",
-        "part_2": "clopper_pearson_fixed_n",
-        "part_3": "clopper_pearson_fixed_n",
-        "part_4": "clopper_pearson_fixed_n",
-        "part_5": "clopper_pearson_fixed_n",
-        "part_6": "clopper_pearson_fixed_n",
-        "part_7": "clopper_pearson_fixed_n",
-        "part_8": "clopper_pearson_fixed_n",
-        "semi_1": "clopper_pearson_fixed_n",
-        "semi_2": "clopper_pearson_fixed_n",
-        "semi_3": "clopper_pearson_fixed_n",
-        "final": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.008333333333333331,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 1842480,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
-    },
-    "95": {
-      "bounds": {
-        "part_1": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "part_2": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "part_3": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "part_4": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "part_5": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "part_6": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "part_7": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "part_8": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "semi_1": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "semi_2": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "semi_3": [
-          0.033740730985233024,
-          0.21460433585920963
-        ],
-        "final": [
-          0.033740730985233024,
-          0.21460433585920963
-        ]
-      },
-      "interval_methods": {
-        "part_1": "clopper_pearson_fixed_n",
-        "part_2": "clopper_pearson_fixed_n",
-        "part_3": "clopper_pearson_fixed_n",
-        "part_4": "clopper_pearson_fixed_n",
-        "part_5": "clopper_pearson_fixed_n",
-        "part_6": "clopper_pearson_fixed_n",
-        "part_7": "clopper_pearson_fixed_n",
-        "part_8": "clopper_pearson_fixed_n",
-        "semi_1": "clopper_pearson_fixed_n",
-        "semi_2": "clopper_pearson_fixed_n",
-        "semi_3": "clopper_pearson_fixed_n",
-        "final": "clopper_pearson_fixed_n"
-      },
-      "alpha_per_parameter": 0.00416666666666667,
-      "structural_monotonicity_proof": "fixed-policy expected cost is recursively composed from nonnegative costs, quality products and geometric-retry denominators; increasing any defect rate cannot decrease cost",
-      "automatic_derivative_counterexample_search": {
-        "points": 9,
-        "comparisons": 1842480,
-        "violations": 0,
-        "maximum_profit_increase": 0.0
-      },
-      "interval_derivative_certificate": "recursive expression grammar certifies d(cost)/d(p_j)>=0 on the full box",
-      "interval_certificate": true,
-      "inner_gap": 0.0,
-      "worst_point": "all simultaneous upper endpoints",
-      "claim_limit": "ROBUST_CERTIFIED applies only to the declared fixed-policy domain and the saved rectangular confidence set"
-    }
-  },
-  "robust_claim": "对当前固定策略闭式评价式已完成结构单调性、数值反例搜索和递归区间导数证书；矩形集最坏点为全部上端点。认证范围不扩展到历史自适应策略或其他不确定集。",
+  ],
   "checks": {
-    "q2_full_policy_coverage": true,
-    "q3_full_policy_coverage": true,
-    "q2_robust_full_policy_coverage": true,
-    "q3_robust_full_policy_coverage": true,
-    "bayesian_all_runs_converged": true,
-    "optimal_probabilities_sum_to_one": true,
-    "regret_nonnegative": true,
-    "certified_rows_have_zero_inner_gap": true
+    "q2_bellman_nonnegative_nvsi": true,
+    "q2_value_below_stop_plus_evpi": true,
+    "q2_binary_actions": true,
+    "q3_full_production_policy_domain": true,
+    "sample_and_production_cost_accounts_separate": true
   },
-  "runtime_seconds": 422.81440852099695
+  "optimality_labels": {
+    "q2": "exact-DP-to-tolerance",
+    "q3": "myopic-KG or ambiguous after independent confirmation",
+    "robust": "numerical endpoint audit"
+  },
+  "runtime_seconds": 112.60506199599968
 }

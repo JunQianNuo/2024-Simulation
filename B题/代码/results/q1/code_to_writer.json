@@ -1,41 +1,35 @@
 {
-  "status": "SUCCESS_EXACT",
-  "claim": "exact Pareto front within the declared 34-candidate finite grid only",
-  "balanced_reference": {
-    "t_opt": 200,
-    "N_max": 800,
-    "ASN_w_equal": 393.3277610424072,
-    "U_w_equal": 0.3384570869778877
-  },
-  "alternative_recommendations": {
-    "sample_saving": {
-      "t_opt": 25,
-      "N_max": 50,
-      "ASN_w_equal": 43.130885676793206,
-      "U_w_equal": 0.7282583996646002
-    },
-    "low_undecided": {
-      "t_opt": 1600,
-      "N_max": 3200,
-      "ASN_w_equal": 1035.5164520675278,
-      "U_w_equal": 0.17459872281721636
-    }
-  },
-  "knee_selection": {
-    "criteria_agree": false,
-    "ideal_index": 8,
-    "geometric_curvature_index": 10,
-    "geometric_curvature": 63.27528479092445,
-    "curvature_definition": "three-point Menger curvature on min-max normalized Pareto coordinates"
+  "status": "SUCCESS_LOCAL_CALIBRATION",
+  "model": "Q1-M6",
+  "algorithm": "Q1-A2",
+  "claim_scope": "predeclared truncated-SPRT calibration grid; gray-zone ASN supremum evaluated on an adaptive grid",
+  "main_scenario": {
+    "p0": 0.1,
+    "p1": 0.13,
+    "kappa": 1.0,
+    "status": "SUCCESS_LOCAL_CALIBRATION",
+    "family": "calibrated-truncated-sprt",
+    "plan_hash": "097cee36c394fece",
+    "n_fixed": 968,
+    "c_fixed": 112,
+    "N_max": 968,
+    "c_N": 112,
+    "h_accept": -5.251291798606495,
+    "h_reject": 4.8903717578961645,
+    "producer_risk": 0.04891319629510894,
+    "consumer_risk": 0.09959663865398771,
+    "J_ASN_grid": 923.1034983747957,
+    "p_worst_grid": 0.112375,
+    "endpoint_max_ASN": 838.6178931022558,
+    "endpoint_mean_ASN": 805.5137360005792,
+    "ASN_saving_vs_fixed": 0.046380683497111885,
+    "candidate_count": 5
   },
   "evidence": {
-    "candidate_objectives": "results/q1/candidate_objectives.csv",
-    "operating_characteristics": "results/q1/operating_characteristics.csv",
-    "decision_boundary": "results/q1/decision_boundary.csv",
-    "all_candidate_boundaries": "results/q1/all_candidate_boundaries.csv",
-    "crosscheck": "results/q1/cs_crosscheck.csv",
-    "sensitivity": "results/q1/sensitivity_recommendations.csv",
-    "figure": "results/q1/pareto_front.svg"
+    "fixed_baselines": "results/q1/fixed_binomial_baselines.csv",
+    "plans": "results/q1/sequential_plans.csv",
+    "boundaries": "results/q1/decision_boundaries.csv",
+    "oc_asn": "results/q1/operating_characteristics.csv"
   },
-  "warning": "The three recommendations represent different operating preferences; none is a unique problem-given optimum. UNDECIDED_CAP is evidence insufficiency."
+  "warning": "p1=0.13 and kappa=1 are declared scenarios. The rule always ends in accept or reject; old undecided/Pareto conclusions are stale."
 }

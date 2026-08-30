@@ -2,101 +2,73 @@ from __future__ import annotations
 
 import itertools
 import unittest
-from pathlib import Path
 
 import numpy as np
 
-from .confidence_sequence import crosscheck_endpoints, fixed_sample_baselines, official_boundaries
-from .run_q1 import candidates, evaluate_cutoffs, load_config, menger_curvatures, recommendations
+from .exact_path_dp import BoundaryPlan, evaluate, fixed_plan_as_boundary, llr_boundaries
+from .fixed_binomial_plan import minimum_plan, risks
 
 
 class Q1Tests(unittest.TestCase):
-    @classmethod
-    def setUpClass(cls):
-        cls.cfg = load_config(Path(__file__).with_name("config.json"))
+    def test_fixed_plan_oracles(self):
+        expected = {
+            .12: (2096, 232, .0493657550, .0995398380),
+            .13: (968, 112, .0486497073, .0997558579),
+            .15: (368, 46, .0496448526, .0999328161),
+            .20: (109, 16, .0432080762, .0990770489),
+        }
+        for p1, oracle in expected.items():
+            plan = minimum_plan(.10, p1, .05, .10)
+            self.assertEqual((plan["n_fixed"], plan["c_fixed"]), oracle[:2])
+            self.assertAlmostEqual(plan["producer_risk"], oracle[2], places=9)
+            self.assertAlmostEqual(plan["consumer_risk"], oracle[3], places=9)
 
-    def test_fixed_sample_baselines(self):
-        values = fixed_sample_baselines()
-        self.assertAlmostEqual(values["U_0.90(22,0)"], 1 - 0.1 ** (1 / 22), places=12)
-        self.assertAlmostEqual(values["L_0.95(2,2)"], 0.05 ** 0.5, places=12)
+    def test_fixed_plan_is_binary_and_exact(self):
+        plan = fixed_plan_as_boundary(.1, .13, 968, 112)
+        for p in (0, .1, .13, .5, 1):
+            row = evaluate(plan, p)
+            self.assertLess(row["mass_residual"], 1e-12)
+            self.assertAlmostEqual(row["P_accept"] + row["P_reject"], 1, places=12)
+            self.assertEqual(row["ASN"], 968)
+        oracle = risks(968, 112, .1, .13)
+        actual = evaluate(plan, .1)["P_reject"], evaluate(plan, .13)["P_accept"]
+        self.assertAlmostEqual(oracle[0], actual[0], places=12)
+        self.assertAlmostEqual(oracle[1], actual[1], places=12)
 
-    def test_declared_grid_has_34_candidates(self):
-        self.assertEqual(len(candidates(self.cfg)), 34)
+    def test_llr_boundaries_are_disjoint(self):
+        accept, reject = llr_boundaries(200, .1, .13, -2.3, 2.9)
+        self.assertTrue(all(a < r for a, r in zip(accept[:-1], reject[:-1])))
 
-    def test_menger_curvature_definition(self):
-        quarter_circle = np.array([[1.0, 0.0], [2 ** -0.5, 2 ** -0.5], [0.0, 1.0]])
-        self.assertAlmostEqual(menger_curvatures(quarter_circle)[1], 1.0, places=12)
-        line = np.array([[0.0, 0.0], [0.5, 0.5], [1.0, 1.0]])
-        self.assertEqual(menger_curvatures(line)[1], 0.0)
-
-    def test_v2_knee_regression(self):
-        path = Path(__file__).parents[1] / "results" / "q1" / "pareto_front.csv"
-        import csv
-        with path.open(encoding="utf-8-sig", newline="") as f:
-            front = [{k: float(v) if k.startswith(("ASN_w", "U_w")) else v
-                      for k, v in row.items()} for row in csv.DictReader(f)]
-        result = recommendations(front)
-        self.assertEqual(result["ideal_index"], 8)
-        self.assertEqual(result["geometric_curvature_index"], 10)
-        self.assertFalse(result["knee_agreement"])
-
-    def test_official_reference_value(self):
-        from confseq import boundaries
-
-        value = boundaries.beta_binomial_log_mixture(10, 100, 100, 0.2, 0.8)
-        self.assertAlmostEqual(value, -0.07134019, places=7)
-
-    def test_endpoint_crosscheck(self):
-        rows = crosscheck_endpoints(100, [(25, 0), (50, 5), (200, 20), (800, 100)], 0.05, 0.10)
-        self.assertLess(max(row["max_abs_error"] for row in rows), 1e-8)
-
-    def test_boundaries_are_disjoint_and_monotone(self):
-        accept, reject = official_boundaries(400, 0.1, 0.05, 0.10, 100)
-        self.assertTrue(np.all(accept < reject))
-        self.assertGreaterEqual(np.flatnonzero(accept >= 0)[0], 22)
-
-    def test_probability_conservation_and_error_constraints(self):
-        accept, reject = official_boundaries(800, 0.1, 0.05, 0.10, 100)
-        for p in (0.01, 0.05, 0.10, 0.100001, 0.15, 0.30):
-            row = evaluate_cutoffs(p, accept, reject, [800])[800]
-            self.assertLess(row["mass_residual"], 1e-10)
-            if p <= 0.10:
-                self.assertLessEqual(row["P_reject"], 0.05 + 1e-10)
-            else:
-                self.assertLessEqual(row["P_accept"], 0.10 + 1e-10)
-
-    def test_dp_against_path_enumeration(self):
-        n_max, p = 10, 0.23
-        accept = np.full(n_max + 1, -1)
-        reject = np.full(n_max + 1, n_max + 1)
-        accept[4:] = 0
-        reject[3:] = np.arange(3, n_max + 1)
-        got = evaluate_cutoffs(p, accept, reject, [n_max])[n_max]
-        acc = rej = und = asn = 0.0
-        prefixes = set()
-        for bits in itertools.product((0, 1), repeat=n_max):
+    def test_path_dp_against_complete_enumeration(self):
+        n, p = 8, .23
+        accept = [-1] * (n + 1); reject = [n + 1] * (n + 1)
+        accept[3:5] = [0, 0]; reject[3:5] = [3, 4]
+        plan = BoundaryPlan(.1, .2, n, 1, tuple(accept), tuple(reject), -2, 3, "test")
+        got = evaluate(plan, p)
+        accepted = rejected = asn = 0.0
+        for bits in itertools.product((0, 1), repeat=n):
             k = 0
+            probability = 1.0
             for t, bit in enumerate(bits, 1):
-                k += bit
-                if k <= accept[t] or k >= reject[t] or t == n_max:
-                    prefix = bits[:t]
-                    if prefix in prefixes:
-                        break
-                    prefixes.add(prefix)
-                    prob = p ** sum(prefix) * (1 - p) ** (t - sum(prefix))
-                    asn += prob * t
-                    if k <= accept[t]:
-                        acc += prob
-                    elif k >= reject[t]:
-                        rej += prob
-                    else:
-                        und += prob
+                k += bit; probability *= p if bit else 1 - p
+                decision = None
+                if t == n:
+                    decision = "A" if k <= plan.terminal_cutoff else "R"
+                elif k <= plan.accept_max[t]:
+                    decision = "A"
+                elif k >= plan.reject_min[t]:
+                    decision = "R"
+                if decision:
+                    suffix_probability = p ** sum(bits[t:]) * (1 - p) ** (n - t - sum(bits[t:]))
+                    path_probability = probability * suffix_probability
+                    asn += t * path_probability
+                    accepted += path_probability if decision == "A" else 0
+                    rejected += path_probability if decision == "R" else 0
                     break
-        self.assertAlmostEqual(got["P_accept"], acc, places=12)
-        self.assertAlmostEqual(got["P_reject"], rej, places=12)
-        self.assertAlmostEqual(got["P_undecided"], und, places=12)
+        self.assertAlmostEqual(got["P_accept"], accepted, places=12)
+        self.assertAlmostEqual(got["P_reject"], rejected, places=12)
         self.assertAlmostEqual(got["ASN"], asn, places=12)
 
 
 if __name__ == "__main__":
-    unittest.main()
+    unittest.main(verbosity=2)

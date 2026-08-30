@@ -1,35 +1,21 @@
-# 2024 CUMCM B 题 Q1
+# 2024 CUMCM B 题问题一
 
-代码实现已锁定的 Q1-M5 / Q1-A1：用官方 `confseq` Beta–Binomial 单侧 Bernoulli 置信序列生成逐时刻接收/拒收边界，用 SciPy 独立反演核验端点，再以有限状态 DP 精确评价 34 个 $(t_{opt},N_{max})$ 候选并求 ASN—未决率 Pareto 前沿。
+当前实现对应 `Q1-M6 / Q1-A2`：在 AQL `p0=0.10` 与 LTPD `p1>p0` 两个质量点下，构造生产方风险不超过 0.05、使用方风险不超过 0.10 的二元序贯验收规则。
 
-建议在 Python 3.10 环境安装：
-
-```bash
-python -m pip install -r q1/requirements-q1.txt
-python -m q1.run_q1
-python -m unittest q1.test_q1 -v
-```
-
-完整运行会在 `results/q1/` 生成候选目标、OC 表、Pareto 表、三类推荐、主推荐边界、34 个候选的全部行动边界、CS 交叉核验、外部五阶段基线、图与复现元数据。拐点辅助指标是对归一化 Pareto 坐标计算的三点 Menger 几何曲率，不再使用二阶差分范数。`UNDECIDED_CAP` 表示到上限仍证据不足，不允许临时追加抽检后继续“看到满意为止”。
-
-在项目根目录可使用 Linux 容器复现：
-
-```bash
-docker build -f B题/代码/q1/Dockerfile -t cumcm-q1 .
-docker run --rm cumcm-q1
-```
-
-`repro_manifest.json` 保存 Git 工作区状态和 Q1 核心源文件 SHA-256；当工作区不干净时，以源文件哈希作为精确代码快照标识。
-
-## 论文候选图
-
-绘图入口只读取已生成的 CSV/JSON，不重新执行 Q1 模型：
+主流程包括：精确二项固定样本基线、Wald LLR 边界初始化、预声明阈值/截尾网格校准、有限状态路径 DP 精确风险核验，以及 `p1 × kappa` 敏感性。所有路径最迟在 `N_max` 接收或拒收，不存在未决类别。
 
 ```bash
 cd B题/代码
-python -m q1.plot_q1
+uv run --with-requirements q1/requirements-q1.txt python -m q1.run_q1
+uv run --with-requirements q1/requirements-q1.txt python -m unittest q1.test_q1 -v
 ```
 
-新增图保存在 `results/q1/figures/`，改进后的 Pareto 图仍保存为 `results/q1/pareto_front.svg/.png`。图表数据源、结论边界、中文图注与渲染检查状态见 `results/q1/figure_index.json`。中文字体优先使用 `Noto Serif CJK SC`，不可加载时回退为 `FandolSong`；英文衬线回退为 `Liberation Serif`，数学符号使用 STIX。
+快速数据流检查可加 `--quick`。正式输出位于 `results/q1/`：
 
-结果的“精确 Pareto”仅指预先声明的 34 个有限候选内无 Monte Carlo 误差，不代表连续参数域或所有停止规则中的全局最优。批次有限且抽样比不可忽略时，应改用不放回抽样的置信序列。
+- `fixed_binomial_baselines.csv`：四个 LTPD 情景的固定样本 oracle；
+- `sequential_plans.csv`：16 个 `p1 × kappa` 情景的推荐截尾规则与风险、ASN；
+- `decision_boundaries.csv`：逐时刻接收/拒收边界；
+- `operating_characteristics.csv`：OC、ASN、停止分位数和概率守恒；
+- `calibration_search_audit.csv`：阈值和截尾候选的可行性审计。
+
+当前搜索严格标记为 `SUCCESS_LOCAL_CALIBRATION`：风险与路径概率为精确 DP 值，但阈值族是报告前声明的校准网格，灰区 ASN 上确界是自适应网格评价，不能称连续边界族全局最优。`p1=0.13,kappa=1` 是报告指定的主情景，不是题面唯一给定参数。
