@@ -4,7 +4,9 @@ clear; close all; clc;
 
 here = fileparts(mfilename('fullpath'));
 dataDir = fullfile(here, '..', '..', 'results', 'q3');
-T = readtable(fullfile(dataDir, 'top10_policies.csv'), 'VariableNamingRule', 'preserve');
+opts = detectImportOptions(fullfile(dataDir, 'top10_policies.csv'), 'VariableNamingRule', 'preserve');
+opts = setvartype(opts, {'strategy_id','strategy_bits'}, 'string');
+T = readtable(fullfile(dataDir, 'top10_policies.csv'), opts);
 T = T(strcmp(string(T.status), 'SUCCESS_EXACT'), :);
 T = sortrows(T, 'expected_profit', 'descend');
 T = T(1:min(5,height(T)), :);

@@ -25,10 +25,10 @@ for q=1:2
                     'HorizontalAlignment','center','FontName','Times New Roman','FontSize',8,'Color',ink);
             end
         end
-        if q==1, legend(ax,{'Bayesian 终止策略','数值稳健策略'},'Location','best','FontName',fontNameCN(),'Box','off','TextColor',ink,'Color','w'); end
+        if q==1, legend(ax,{'均匀主先验终止策略','数值稳健策略'},'Location','best','FontName',fontNameCN(),'Box','off','TextColor',ink,'Color','w'); end
     end
 end
-sgtitle(fig,'演示抽样情景下 Bayesian 与数值稳健策略的最坏利润比较','FontName',fontNameCN(),'FontWeight','normal','Color',ink);
+sgtitle(fig,'演示抽样情景下均匀主先验终止策略与数值稳健策略的最坏利润比较','FontName',fontNameCN(),'FontWeight','normal','Color',ink);
 annotation(fig,'textbox',[.12 .005 .76 .035],'String','稳健审计状态为 ROBUST_NUMERICAL；结果基于矩形联合区间端点数值评价，不表示严格认证的全局稳健最优。','EdgeColor','none','HorizontalAlignment','center','FontName',fontNameCN(),'FontSize',9,'Color',ink);
 
 function name=fontNameCN()

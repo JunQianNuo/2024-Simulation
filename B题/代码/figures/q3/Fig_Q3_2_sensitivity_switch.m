@@ -1,5 +1,5 @@
 %% Fig.Q3-2  关键参数敏感性与策略切换
-% 官方缺陷率范围与人为设置的 +/-25%% 成本压力测试分面显示。
+% 题面表中出现的离散缺陷率水平与人为设置的 +/-25%% 成本压力测试分面显示。
 clear; close all; clc;
 
 here = fileparts(mfilename('fullpath'));
@@ -42,16 +42,16 @@ for i = 1:numel(costNames)
 end
 
 fig = figure('Color','w', 'Name','Fig.Q3-2 敏感性与策略切换', 'NumberTitle','off');
-tiledlayout(fig,1,2,'TileSpacing','compact','Padding','compact');
+tiledlayout(fig,1,2,'TileSpacing','compact','Padding','loose');
 
 ax1 = nexttile; imagesc(ax1, defectGap); set(ax1,'YDir','normal');
 colormap(ax1, parula(256)); caxis(ax1,[0 max(defectGap(:),[],'omitnan')]);
 set(ax1,'XTick',1:2,'XTickLabel',{'5%','20%'},'YTick',1:numel(rowNames), ...
     'YTickLabel',rowLabels,'FontName',fontNameCN(),'FontSize',9,'Box','off','Color','w', ...
     'XColor',[0.12 0.12 0.12],'YColor',[0.12 0.12 0.12]);
-xlabel(ax1,'缺陷率取值','FontName',fontNameCN(),'Color',[0.12 0.12 0.12]); ylabel(ax1,'质量参数','FontName',fontNameCN(),'Color',[0.12 0.12 0.12]);
-title(ax1,'(a) 缺陷率敏感性','FontName',fontNameCN(),'FontWeight','normal','Color',[0.12 0.12 0.12]);
-cb1=colorbar(ax1); cb1.Label.String='利润间隔 \\Delta\\Pi（元/件）'; cb1.FontName='Times New Roman'; cb1.Color=[0.12 0.12 0.12];
+xlabel(ax1,'题面表中出现的离散缺陷率水平','FontName',fontNameCN(),'Color',[0.12 0.12 0.12]); ylabel(ax1,'质量参数','FontName',fontNameCN(),'Color',[0.12 0.12 0.12]);
+title(ax1,'(a) 离散缺陷率情景敏感性','FontName',fontNameCN(),'FontWeight','normal','Color',[0.12 0.12 0.12]);
+cb1=colorbar(ax1); cb1.Label.String='利润间隔 \Delta\Pi（元/件）'; cb1.Label.Interpreter='tex'; cb1.FontName='Times New Roman'; cb1.Color=[0.12 0.12 0.12];
 annotateHeatmap(ax1, defectGap, defectSwitch);
 
 ax2 = nexttile; imagesc(ax2, costGap); set(ax2,'YDir','normal');
@@ -60,12 +60,12 @@ set(ax2,'XTick',1:2,'XTickLabel',{'-25%','+25%'},'YTick',1:numel(costNames), ...
     'YTickLabel',costLabels,'FontName',fontNameCN(),'FontSize',9,'Box','off','Color','w', ...
     'XColor',[0.12 0.12 0.12],'YColor',[0.12 0.12 0.12]);
 xlabel(ax2,'成本相对基准的变化','FontName',fontNameCN(),'Color',[0.12 0.12 0.12]); ylabel(ax2,'成本参数','FontName',fontNameCN(),'Color',[0.12 0.12 0.12]);
-title(ax2,'(b) 成本压力测试','FontName',fontNameCN(),'FontWeight','normal','Color',[0.12 0.12 0.12]);
-cb2=colorbar(ax2); cb2.Label.String='利润间隔 \\Delta\\Pi（元/件）'; cb2.FontName='Times New Roman'; cb2.Color=[0.12 0.12 0.12];
+title(ax2,'(b) 人为成本压力测试（±25%）','FontName',fontNameCN(),'FontWeight','normal','Color',[0.12 0.12 0.12]);
+cb2=colorbar(ax2); cb2.Label.String='利润间隔 \Delta\Pi（元/件）'; cb2.Label.Interpreter='tex'; cb2.FontName='Times New Roman'; cb2.Color=[0.12 0.12 0.12];
 annotateHeatmap(ax2, costGap, costSwitch);
 sgtitle(fig,'问题三关键参数敏感性与策略切换','FontName',fontNameCN(),'FontWeight','normal','Color',[0.12 0.12 0.12]);
-annotation(fig,'textbox',[0.17 0.005 0.67 0.035],'String', ...
-    '数值为最优策略与次优策略的利润间隔；★表示该场景相对名义策略发生切换。', ...
+annotation(fig,'textbox',[0.17 0.005 0.67 0.02],'String', ...
+    '5%与20%为题面参数表中出现的离散缺陷率水平；±25%为人为成本压力测试，不代表题面给定范围。数值为最优与次优利润间隔；★表示相对名义策略发生切换。', ...
     'EdgeColor','none','HorizontalAlignment','center','FontName',fontNameCN(),'FontSize',9,'Color',[0.12 0.12 0.12]);
 
 function annotateHeatmap(ax, values, switches)
